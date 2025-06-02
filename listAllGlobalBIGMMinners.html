@@ -3,7 +3,152 @@
 <head>
   <meta charset="UTF-8">
   <title>All Global $BIGM minners</title>
+  <style>
+    body {
+      background-color: #0b0c10;
+      color: #66fcf1;
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      margin: 0.5rem 0;
+    }
+  </style>
 </head>
 <body>
+  <h1>All Global $BIGM minners</h1>
+  <h2 id="activeCount">Total Active Senders: 0</h2>
+  <ul id="minnerList"></ul>
+
+  <script>
+    const ADDRESS_TO_WATCH = "0x622233a1ee1d1B1775010225Ef29d0aB1B916959";
+    const BASE_URL = "https://mainnet.cotiscan.io/api/v2/addresses";
+    const TIMEOUT_SECONDS = 60;
+    const STORAGE_KEY = "activeBIGMSenders";
+
+    async function getTransactions(address) {
+      const url = `${BASE_URL}/${address}/transactions`;
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        return data.items || [];
+      } catch (err) {
+        console.error("Failed to fetch transactions:", err);
+        return [];
+      }
+    }
+
+    function parseTimestampToLocal(timestampStr) {
+      try {
+        const utcDate = new Date(timestampStr);
+        return utcDate.toLocaleString();
+      } catch (e) {
+        return "unknown";
+      }
+    }
+
+    async function getLatestSuccessTimestamp(sender) {
+      const txs = await getTransactions(sender);
+      const successTxs = txs.filter(tx => tx.result === "success" && tx.timestamp);
+      if (successTxs.length === 0) return null;
+
+      successTxs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      return successTxs[0].timestamp;
+    }
+
+    function loadStoredSenders() {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        return stored ? new Set(JSON.parse(stored)) : new Set();
+      } catch (e) {
+        return new Set();
+      }
+    }
+
+    function saveStoredSenders(sendersSet) {
+      const uniqueList = Array.from(sendersSet);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(uniqueList));
+    }
+
+    function displaySenders(sendersMap) {
+      const list = document.getElementById("minnerList");
+      const countDisplay = document.getElementById("activeCount");
+      list.innerHTML = "";
+      countDisplay.textContent = `Total Active Senders: ${sendersMap.size}`;
+
+      for (const [sender, time] of sendersMap.entries()) {
+        const li = document.createElement("li");
+        li.textContent = `${sender} (last seen: ${time})`;
+        list.appendChild(li);
+      }
+    }
+
+    async function main() {
+      const storedSenders = loadStoredSenders();
+      const activeSenders = new Map();
+      const validatedSenders = new Set();
+
+      async function validateStoredSenders() {
+        for (const sender of storedSenders) {
+          const timestampStr = await getLatestSuccessTimestamp(sender);
+          if (!timestampStr) continue;
+
+          const seen = new Date(timestampStr).getTime();
+          const now = new Date().getTime();
+          const delta = (now - seen) / 1000;
+
+          if (delta <= TIMEOUT_SECONDS) {
+            validatedSenders.add(sender);
+            activeSenders.set(sender, parseTimestampToLocal(timestampStr));
+	    displaySenders(activeSenders);
+          }
+        }
+        saveStoredSenders(validatedSenders);
+        displaySenders(activeSenders);
+      }
+
+      async function checkNewSenders() {
+        const txs = await getTransactions(ADDRESS_TO_WATCH);
+        const pendingTxs = txs.filter(tx => tx.result === "pending");
+
+        for (const tx of pendingTxs) {
+          const sender = tx.from?.hash;
+          if (!sender || validatedSenders.has(sender)) continue;
+
+          const timestampStr = await getLatestSuccessTimestamp(sender);
+          if (!timestampStr) continue;
+
+          const seen = new Date(timestampStr).getTime();
+          const now = new Date().getTime();
+          const delta = (now - seen) / 1000;
+
+          if (delta <= TIMEOUT_SECONDS) {
+            validatedSenders.add(sender);
+            activeSenders.set(sender, parseTimestampToLocal(timestampStr));
+            saveStoredSenders(validatedSenders);
+            displaySenders(activeSenders);
+          }
+        }
+      }
+
+      await validateStoredSenders();
+      await checkNewSenders();
+      setInterval(checkNewSenders, 5000);
+    }
+
+    main();
+  </script>
 </body>
 </html>
