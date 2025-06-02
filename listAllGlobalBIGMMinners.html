@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>All Global $BIGM minners</title>
+  <title>Total Active $BIGM Minners</title>
   <style>
     body {
       background-color: #0b0c10;
@@ -39,9 +39,8 @@
   </style>
 </head>
 <body>
-  <h1>All Global $BIGM minners</h1>
   <div id="status">Initializing...</div>
-  <h2 id="activeCount">Total Active Senders: 0</h2>
+  <h2 id="activeCount">Total Active $BIGM Minners: 0</h2>
   <ul id="minnerList"></ul>
 
   <script>
@@ -100,7 +99,7 @@
       const list = document.getElementById("minnerList");
       const countDisplay = document.getElementById("activeCount");
       list.innerHTML = "";
-      countDisplay.textContent = `Total Active Senders: ${sendersMap.size}`;
+      countDisplay.textContent = `Total Active $BIGM Minners: ${sendersMap.size}`;
 
       for (const [sender, time] of sendersMap.entries()) {
         const li = document.createElement("li");
@@ -118,12 +117,12 @@
       const activeSenders = new Map();
 
       async function validateStoredSenders() {
-        statusDisplay.textContent = "Validating stored senders...";
+        statusDisplay.textContent = "Validating stored minners...";
         const updatedStoredSenders = new Set();
         let counter = 0;
 
         for (const sender of storedSenders) {
-          statusDisplay.textContent = `Validating sender ${++counter} of ${storedSenders.size}...`;
+          statusDisplay.textContent = `Validating minner ${++counter} of ${storedSenders.size}...`;
           const timestampStr = await getLatestSuccessTimestamp(sender);
           if (!timestampStr) continue;
 
@@ -139,7 +138,7 @@
         }
         storedSenders = updatedStoredSenders;
         saveStoredSenders(storedSenders);
-        statusDisplay.textContent = "Checking new senders...";
+        statusDisplay.textContent = "Checking new minners...";
       }
 
       async function checkNewSenders() {
