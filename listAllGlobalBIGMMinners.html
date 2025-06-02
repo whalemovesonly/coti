@@ -25,10 +25,17 @@
     li {
       margin: 0.5rem 0;
     }
+    #status {
+      text-align: center;
+      margin-bottom: 1rem;
+      color: #45a29e;
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
   <h1>All Global $BIGM minners</h1>
+  <div id="status">Initializing...</div>
   <h2 id="activeCount">Total Active Senders: 0</h2>
   <ul id="minnerList"></ul>
 
@@ -37,6 +44,8 @@
     const BASE_URL = "https://mainnet.cotiscan.io/api/v2/addresses";
     const TIMEOUT_SECONDS = 60;
     const STORAGE_KEY = "activeBIGMSenders";
+
+    const statusDisplay = document.getElementById("status");
 
     async function getTransactions(address) {
       const url = `${BASE_URL}/${address}/transactions`;
@@ -96,12 +105,16 @@
     }
 
     async function main() {
-      const storedSenders = loadStoredSenders();
+      let storedSenders = loadStoredSenders();
       const activeSenders = new Map();
-      const validatedSenders = new Set();
 
       async function validateStoredSenders() {
+        statusDisplay.textContent = "Validating stored senders...";
+        const updatedStoredSenders = new Set();
+        let counter = 0;
+
         for (const sender of storedSenders) {
+          statusDisplay.textContent = `Validating sender ${++counter} of ${storedSenders.size}...`;
           const timestampStr = await getLatestSuccessTimestamp(sender);
           if (!timestampStr) continue;
 
@@ -110,13 +123,14 @@
           const delta = (now - seen) / 1000;
 
           if (delta <= TIMEOUT_SECONDS) {
-            validatedSenders.add(sender);
+            updatedStoredSenders.add(sender);
             activeSenders.set(sender, parseTimestampToLocal(timestampStr));
-	    displaySenders(activeSenders);
           }
+          displaySenders(activeSenders);
         }
-        saveStoredSenders(validatedSenders);
-        displaySenders(activeSenders);
+        storedSenders = updatedStoredSenders;
+        saveStoredSenders(storedSenders);
+        statusDisplay.textContent = "Checking new senders...";
       }
 
       async function checkNewSenders() {
@@ -125,7 +139,7 @@
 
         for (const tx of pendingTxs) {
           const sender = tx.from?.hash;
-          if (!sender || validatedSenders.has(sender)) continue;
+          if (!sender || storedSenders.has(sender)) continue;
 
           const timestampStr = await getLatestSuccessTimestamp(sender);
           if (!timestampStr) continue;
@@ -135,17 +149,21 @@
           const delta = (now - seen) / 1000;
 
           if (delta <= TIMEOUT_SECONDS) {
-            validatedSenders.add(sender);
+            storedSenders.add(sender);
             activeSenders.set(sender, parseTimestampToLocal(timestampStr));
-            saveStoredSenders(validatedSenders);
+            saveStoredSenders(storedSenders);
             displaySenders(activeSenders);
           }
         }
+        statusDisplay.textContent = "Idle...";
       }
 
       await validateStoredSenders();
       await checkNewSenders();
-      setInterval(checkNewSenders, 5000);
+      setInterval(async () => {
+        await validateStoredSenders();
+        await checkNewSenders();
+      }, 15000);
     }
 
     main();
