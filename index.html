@@ -1,45 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>WhaleMovesOnly.coti</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #0b0c10;
+      background-color: #0b0c10;
       color: #66fcf1;
+      font-family: Arial, sans-serif;
+      padding: 2rem;
       text-align: center;
-      padding: 5rem 1rem;
     }
     h1 {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-    }
-    p {
-      font-size: 1.2rem;
-      color: #c5c6c7;
+      margin-bottom: 2rem;
     }
     a {
-      display: inline-block;
-      margin-top: 2rem;
-      font-size: 1.1rem;
-      color: #45a29e;
-      text-decoration: none;
-      border: 1px solid #45a29e;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      transition: background 0.3s;
+      display: block;
+      color: #66fcf1;
+      text-decoration: underline;
+      font-size: 1.2rem;
+      margin-top: 1.5rem;
     }
-    a:hover {
-      background: #1f2833;
+    #addCotiBtn {
+      display: inline-flex;
+      align-items: center;
+      background-color: #f6851b;
+      color: white;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-bottom: 2rem;
+    }
+    #addCotiBtn img {
+      width: 20px;
+      height: 20px;
+      margin-right: 8px;
     }
   </style>
 </head>
 <body>
   <h1>WhaleMovesOnly.coti</h1>
-  <p>Tracking massive moves in the $COTI ecosystem 🐋</p>
+
+  <button id="addCotiBtn" onclick="addCotiMainnet()">
+    <img src="https://metamask.io/favicon.ico" alt="MetaMask Icon">
+    Add COTI MAINNET
+  </button>
 
   <a href="listAllGlobalBIGMMinners.html">All Global $BIGM minners</a>
+
+  <script>
+    async function addCotiMainnet() {
+      if (typeof window.ethereum === 'undefined') {
+        alert("MetaMask is not detected. Please install MetaMask.");
+        return;
+      }
+
+      try {
+        await window.ethereum.request({
+          method: 'wallet_addEthereumChain',
+          params: [{
+            chainId: '2632500',
+            chainName: 'COTI MAINNET',
+            nativeCurrency: {
+              name: 'COTI',
+              symbol: 'COTI',
+              decimals: 18
+            },
+            rpcUrls: ['https://mainnet.coti.io/rpc'],
+            blockExplorerUrls: ['https://mainnet.cotiscan.io']
+          }]
+        });
+      } catch (error) {
+        console.error("Failed to add COTI network:", error);
+      }
+    }
+  </script>
 </body>
 </html>
