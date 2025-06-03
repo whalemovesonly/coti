@@ -22,61 +22,11 @@
       font-size: 1.2rem;
       margin-top: 1.5rem;
     }
-    #addCotiBtn {
-      display: inline-flex;
-      align-items: center;
-      background-color: #f6851b;
-      color: white;
-      padding: 10px 16px;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      margin-bottom: 2rem;
-    }
-    #addCotiBtn img {
-      width: 20px;
-      height: 20px;
-      margin-right: 8px;
-    }
   </style>
 </head>
 <body>
   <h1>WhaleMovesOnly.coti</h1>
 
-  <button id="addCotiBtn" onclick="addCotiMainnet()">
-    <img src="https://metamask.io/favicon.ico" alt="MetaMask Icon">
-    Add COTI MAINNET
-  </button>
-
   <a href="listAllGlobalBIGMMinners.html">All Global $BIGM minners</a>
-
-  <script>
-    async function addCotiMainnet() {
-      if (typeof window.ethereum === 'undefined') {
-        alert("MetaMask is not detected. Please install MetaMask.");
-        return;
-      }
-
-      try {
-        await window.ethereum.request({
-          method: 'wallet_addEthereumChain',
-          params: [{
-            chainId: '2632500',
-            chainName: 'COTI MAINNET',
-            nativeCurrency: {
-              name: 'COTI',
-              symbol: 'COTI',
-              decimals: 18
-            },
-            rpcUrls: ['https://mainnet.coti.io/rpc'],
-            blockExplorerUrls: ['https://mainnet.cotiscan.io']
-          }]
-        });
-      } catch (error) {
-        console.error("Failed to add COTI network:", error);
-      }
-    }
-  </script>
 </body>
 </html>
