@@ -17,17 +17,9 @@
       margin-bottom: 2rem;
     }
 
-    a {
-      display: block;
-      color: #66fcf1;
-      text-decoration: underline;
-      font-size: 1.2rem;
-      margin-top: 1.5rem;
-    }
-
     .button-link {
-      display: inline-block;
-      margin-top: 2rem;
+      display: block;
+      margin: 1rem auto;
       padding: 0.8rem 1.5rem;
       background-color: #1f2833;
       color: #66fcf1;
@@ -36,14 +28,22 @@
       font-size: 1rem;
       cursor: pointer;
       text-decoration: none;
+      max-width: 320px;
+    }
+
+    .title-link {
+      text-decoration: none;
+      font-size: 2rem;
+      color: #66fcf1;
     }
   </style>
 </head>
 <body>
-  <h1>WhaleMovesOnly.coti</h1>
+  <a href="https://x.com/WhaleMovesOnly" target="_blank" class="title-link">
+    <h1>WhaleMovesOnly.coti</h1>
+  </a>
 
-  <a href="listAllGlobalBIGMMinners.html">All Global $BIGM minners</a>
-
+  <a href="listAllGlobalBIGMMinners.html" class="button-link">All Global $BIGM minners</a>
   <a href="addCOTINetworkToMetamaskInstrucions.html" class="button-link">Add $COTI network to MetaMask Instruction</a>
 </body>
 </html>
