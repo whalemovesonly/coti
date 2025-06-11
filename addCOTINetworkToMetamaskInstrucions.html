@@ -2,30 +2,81 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Add COTI Network to MetaMask</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
-    .slide-enter {
-      opacity: 0;
-      transform: translateY(10px);
+    * {
+      box-sizing: border-box;
     }
-    .slide-enter-active {
-      opacity: 1;
-      transform: translateY(0);
-      transition: all 0.5s ease;
+
+    body {
+      background-color: #0b0c10;
+      color: #66fcf1;
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 2rem;
+      font-size: clamp(1.5rem, 6vw, 2.5rem);
+    }
+
+    .step-box {
+      background-color: #1f2833;
+      border: 2px solid #66fcf1;
+      border-radius: 12px;
+      padding: 2rem;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .step-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    .step-text {
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    .nav-buttons {
+      margin-top: 2rem;
+      display: flex;
+      justify-content: space-between;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .button-link {
+      padding: 0.8rem 1.5rem;
+      background-color: #1f2833;
+      color: #66fcf1;
+      border: 2px solid #66fcf1;
+      border-radius: 8px;
+      font-size: clamp(1rem, 4vw, 1.2rem);
+      cursor: pointer;
+      text-decoration: none;
+      min-width: 100px;
+    }
+
+    .button-link:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
   </style>
 </head>
-<body class="bg-gray-900 text-white min-h-screen flex flex-col items-center justify-center p-4">
-  <div class="w-full max-w-xl">
-    <div id="slide-container" class="bg-gray-800 rounded-2xl shadow-xl p-6 relative overflow-hidden">
-      <div id="slide-content" class="transition-all duration-500"></div>
-      <div class="flex justify-between mt-6">
-        <button id="prev" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded hidden">Back</button>
-        <button id="next" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded">Next</button>
-      </div>
-    </div>
+<body>
+  <h1>Add COTI Network to MetaMask</h1>
+
+  <div id="slide-content" class="step-box"></div>
+
+  <div class="nav-buttons">
+    <button id="prev" class="button-link" style="visibility: hidden;">Back</button>
+    <button id="next" class="button-link">Next</button>
   </div>
 
   <script>
@@ -36,7 +87,7 @@
       },
       {
         title: "Step 2: Enter COTI Mainnet Info",
-        text: `Fill in the fields with:<br>
+        text: `Fill in the fields with:<br><br>
           <strong>Network Name:</strong> COTI<br>
           <strong>RPC URL:</strong> https://mainnet.coti.io/rpc<br>
           <strong>Chain ID:</strong> 2632500<br>
@@ -62,13 +113,13 @@
     function updateSlide() {
       const step = steps[current];
       container.innerHTML = `
-        <div class="slide-enter slide-enter-active">
-          <h2 class="text-2xl font-bold mb-4">${step.title}</h2>
-          <p class="text-lg leading-relaxed">${step.text}</p>
+        <div>
+          <div class="step-title">${step.title}</div>
+          <div class="step-text">${step.text}</div>
         </div>
       `;
-      prevBtn.disabled = current === 0;
-      prevBtn.classList.toggle("hidden", current === 0);
+
+      prevBtn.style.visibility = current === 0 ? "hidden" : "visible";
       nextBtn.innerText = current === steps.length - 1 ? "Finish" : "Next";
     }
 
