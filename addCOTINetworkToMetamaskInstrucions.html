@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add COTI Network to MetaMask</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .slide-enter {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    .slide-enter-active {
+      opacity: 1;
+      transform: translateY(0);
+      transition: all 0.5s ease;
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex flex-col items-center justify-center p-4">
+  <div class="w-full max-w-xl">
+    <div id="slide-container" class="bg-gray-800 rounded-2xl shadow-xl p-6 relative overflow-hidden">
+      <div id="slide-content" class="transition-all duration-500"></div>
+      <div class="flex justify-between mt-6">
+        <button id="prev" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded hidden">Back</button>
+        <button id="next" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded">Next</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const steps = [
+      {
+        title: "Step 1: Open MetaMask",
+        text: "Click the network dropdown at the top left of MetaMask and select 'Add a custom network'."
+      },
+      {
+        title: "Step 2: Enter COTI Mainnet Info",
+        text: `Fill in the fields with:<br>
+          <strong>Network Name:</strong> COTI<br>
+          <strong>RPC URL:</strong> https://mainnet.coti.io/rpc<br>
+          <strong>Chain ID:</strong> 2632500<br>
+          <strong>Symbol:</strong> COTI<br>
+          <strong>Block Explorer:</strong> https://mainnet.cotiscan.io`
+      },
+      {
+        title: "Step 3: Save & Switch",
+        text: "Click 'Save'. MetaMask will switch to the COTI network automatically."
+      },
+      {
+        title: "You're All Set!",
+        text: "You’ve added the COTI network to MetaMask. You can now bridge tokens or interact with dApps on COTI V2."
+      }
+    ];
+
+    let current = 0;
+
+    const container = document.getElementById("slide-content");
+    const nextBtn = document.getElementById("next");
+    const prevBtn = document.getElementById("prev");
+
+    function updateSlide() {
+      const step = steps[current];
+      container.innerHTML = `
+        <div class="slide-enter slide-enter-active">
+          <h2 class="text-2xl font-bold mb-4">${step.title}</h2>
+          <p class="text-lg leading-relaxed">${step.text}</p>
+        </div>
+      `;
+      prevBtn.disabled = current === 0;
+      prevBtn.classList.toggle("hidden", current === 0);
+      nextBtn.innerText = current === steps.length - 1 ? "Finish" : "Next";
+    }
+
+    nextBtn.addEventListener("click", () => {
+      if (current < steps.length - 1) {
+        current++;
+        updateSlide();
+      } else {
+        alert("Tutorial complete!");
+      }
+    });
+
+    prevBtn.addEventListener("click", () => {
+      if (current > 0) {
+        current--;
+        updateSlide();
+      }
+    });
+
+    updateSlide();
+  </script>
+</body>
+</html>
