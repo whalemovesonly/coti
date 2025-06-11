@@ -5,71 +5,85 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Add COTI V2 Token to MetaMask</title>
   <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f4f6f8;
-      color: #333;
+    * {
+      box-sizing: border-box;
     }
-    header {
-      background-color: #0047ab;
-      color: white;
-      padding: 1rem;
+
+    body {
+      background-color: #0b0c10;
+      color: #66fcf1;
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      margin: 0;
       text-align: center;
     }
-    .container {
-      max-width: 800px;
-      margin: auto;
-      padding: 1rem;
+
+    header {
+      margin-bottom: 2rem;
     }
+
+    h1 {
+      font-size: clamp(1.5rem, 6vw, 2.5rem);
+      margin: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+    }
+
     .step {
       display: none;
-      background: white;
+      background-color: #1f2833;
+      border: 2px solid #66fcf1;
       border-radius: 12px;
-      padding: 1rem;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
       animation: fadeIn 0.5s ease-in-out;
     }
+
     .step.active {
       display: block;
     }
+
     .step h2 {
-      font-size: 1.25rem;
-      color: #0047ab;
+      font-size: clamp(1.2rem, 5vw, 1.5rem);
+      margin-bottom: 1rem;
     }
+
     .step p {
-      font-size: 1rem;
+      font-size: clamp(1rem, 4vw, 1.2rem);
     }
+
+    .step a {
+      color: #66fcf1;
+      text-decoration: underline;
+    }
+
     .nav-buttons {
-      text-align: center;
-      margin-top: 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
     }
+
     button {
-      background-color: #0047ab;
-      color: white;
-      border: none;
-      padding: 0.6rem 1.2rem;
+      background-color: #1f2833;
+      color: #66fcf1;
+      border: 2px solid #66fcf1;
       border-radius: 8px;
-      margin: 0 0.5rem;
+      padding: 0.8rem 1.5rem;
+      font-size: clamp(1rem, 4vw, 1.2rem);
       cursor: pointer;
-      font-size: 1rem;
     }
+
     button:disabled {
-      background-color: #ccc;
+      opacity: 0.5;
       cursor: not-allowed;
     }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
-    }
-    @media (max-width: 600px) {
-      .step h2 {
-        font-size: 1.1rem;
-      }
-      .step p {
-        font-size: 0.95rem;
-      }
     }
   </style>
 </head>
