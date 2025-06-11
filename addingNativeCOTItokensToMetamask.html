@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add COTI V2 Token to MetaMask</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f6f8;
+      color: #333;
+    }
+    header {
+      background-color: #0047ab;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 1rem;
+    }
+    .step {
+      display: none;
+      background: white;
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    .step.active {
+      display: block;
+    }
+    .step h2 {
+      font-size: 1.25rem;
+      color: #0047ab;
+    }
+    .step p {
+      font-size: 1rem;
+    }
+    .nav-buttons {
+      text-align: center;
+      margin-top: 1rem;
+    }
+    button {
+      background-color: #0047ab;
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      margin: 0 0.5rem;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 600px) {
+      .step h2 {
+        font-size: 1.1rem;
+      }
+      .step p {
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>How to Add a COTI V2 Token to MetaMask</h1>
+  </header>
+  <div class="container">
+    <div class="step active">
+      <h2>Step 1: Go to COTI Token Explorer</h2>
+      <p>Visit <a href="https://mainnet.cotiscan.io/tokens" target="_blank">mainnet.cotiscan.io/tokens</a></p>
+    </div>
+    <div class="step">
+      <h2>Step 2: Search and Select Your Token</h2>
+      <p>Type the name of the token you want to import and click on it to open the token page.</p>
+    </div>
+    <div class="step">
+      <h2>Step 3: Copy the Token Address</h2>
+      <p>On the token's page, copy the token contract address to your clipboard.</p>
+    </div>
+    <div class="step">
+      <h2>Step 4: Open MetaMask</h2>
+      <p>Launch your MetaMask extension or mobile app.</p>
+    </div>
+    <div class="step">
+      <h2>Step 5: Click the 3 Dots and Choose "Import Tokens"</h2>
+      <p>In the Tokens tab, tap the 3 dots icon, then select <strong>Import Tokens</strong>.</p>
+    </div>
+    <div class="step">
+      <h2>Step 6: Select Network & Paste Address</h2>
+      <p>Select the COTI network, then paste the token address into the input field.</p>
+    </div>
+    <div class="step">
+      <h2>Step 7: Click Next</h2>
+      <p>Click the <strong>Next</strong> button to continue.</p>
+    </div>
+    <div class="step">
+      <h2>Step 8: Click Import</h2>
+      <p>Click <strong>Import</strong> to finish adding the token.</p>
+    </div>
+    <div class="step">
+      <h2>Step 9: Done!</h2>
+      <p>The token should now appear in your MetaMask wallet.</p>
+    </div>
+    <div class="nav-buttons">
+      <button id="prevBtn" disabled>Previous</button>
+      <button id="nextBtn">Next</button>
+    </div>
+  </div>
+  <script>
+    const steps = document.querySelectorAll('.step');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    let currentStep = 0;
+
+    function showStep(index) {
+      steps.forEach((step, i) => {
+        step.classList.toggle('active', i === index);
+      });
+      prevBtn.disabled = index === 0;
+      nextBtn.textContent = index === steps.length - 1 ? 'Finish' : 'Next';
+    }
+
+    prevBtn.addEventListener('click', () => {
+      if (currentStep > 0) {
+        currentStep--;
+        showStep(currentStep);
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (currentStep < steps.length - 1) {
+        currentStep++;
+        showStep(currentStep);
+      } else {
+        alert('You have completed all the steps!');
+      }
+    });
+  </script>
+</body>
+</html>
