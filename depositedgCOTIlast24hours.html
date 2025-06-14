@@ -111,7 +111,7 @@
   </div>
 
   <script>
-    const ADDRESS_TO_WATCH = "0x7637C7838EC4Ec6b85080F28A678F8E234bB83D1".toLowerCase();
+    const ADDRESS_TO_WATCH = "0x61BF10A1a27B2d99De0a59a06200A62ED579D685".toLowerCase();
     const BASE_URL = "https://mainnet.cotiscan.io/api/v2/addresses";
 
     async function fetchTransactionsWithin24h(address) {
@@ -121,7 +121,7 @@
       let params = null;
 
       while (true) {
-        let fullUrl = `${BASE_URL}/${address}/transactions`;
+        let fullUrl = `${BASE_URL}/${address}/token-transfers?token=0x7637C7838EC4Ec6b85080F28A678F8E234bB83D1`;
         if (params) {
           const paramStr = Object.entries(params)
             .map(([k, v]) => `${k}=${v}`)
@@ -144,7 +144,6 @@
 
           for (const tx of transactions) {
             if (
-              tx.result === "success" &&
               tx.to?.hash?.toLowerCase() === address
             ) {
               const txTime = new Date(tx.timestamp);
@@ -164,23 +163,18 @@
           break;
         }
       }
-
       return allTransactions;
     }
 
     function sumTransactionValues(transactions) {
       let total = 0;
       for (const tx of transactions) {
-        const parameters = tx.decoded_input?.parameters || [];
-        for (const param of parameters) {
-          if (param.name === "value") {
-            try {
-              total += parseInt(param.value || "0");
+        const totalDic = tx.total;
+        try {
+              total += parseInt(totalDic.value || "0");
             } catch (e) {
-              console.warn(`Error parsing value: ${param.value}`, e);
+              console.warn(`Error parsing value: ${totalDic.value}`, e);
             }
-          }
-        }
       }
       return total;
     }
