@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -27,9 +27,15 @@
       color: #66fcf1;
     }
 
+    .button-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      max-width: 800px;
+      margin: 0 auto 2rem;
+    }
+
     .button-link {
-      display: block;
-      margin: 1rem auto;
       padding: 0.8rem 1.5rem;
       background-color: #1f2833;
       color: #66fcf1;
@@ -38,8 +44,13 @@
       font-size: clamp(1rem, 4vw, 1.2rem);
       cursor: pointer;
       text-decoration: none;
-      width: 100%;
-      max-width: 400px;
+      text-align: center;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .button-link:hover {
+      background-color: #66fcf1;
+      color: #0b0c10;
     }
 
     .security-note {
@@ -89,11 +100,17 @@
     <h1>WhaleMovesOnly.coti</h1>
   </a>
 
-  <a href="listAllGlobalBIGMMinners.html" class="button-link">All Global $BIGM minners</a>
-  <a href="addCOTINetworkToMetamaskInstrucions.html" class="button-link">Add $COTI network to MetaMask Instruction</a>
-  <a href="addingNativeCOTItokensToMetamask.html" class="button-link">Add $COTI native tokens into MetaMask</a>
-  <a href="whereToBuygCOTI.html" class="button-link">Where to buy $gCOTI</a>
-  <a href="bridgeHack.html" class="button-link">Bridge Hack</a>
+  <div class="button-grid">
+    <a href="listAllGlobalBIGMMinners.html" class="button-link">All Global $BIGM minners</a>
+    <a href="addCOTINetworkToMetamaskInstrucions.html" class="button-link">Add $COTI network to MetaMask Instruction</a>
+    <a href="addingNativeCOTItokensToMetamask.html" class="button-link">Add $COTI native tokens into MetaMask</a>
+    <a href="whereToBuygCOTI.html" class="button-link">Where to buy $gCOTI</a>
+    <a href="bridgeHack.html" class="button-link">Bridge Hack</a>
+    <!-- Add more buttons below as needed -->
+    <!-- Example:
+    <a href="newFeature.html" class="button-link">New Feature</a>
+    -->
+  </div>
 
   <div class="security-note">
     <h2>⚠️ Security Note for COTI Users</h2>
