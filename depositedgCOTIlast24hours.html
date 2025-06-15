@@ -3,11 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>$gCOTI Deposits (24h)</title>
+  <title>$gCOTI Deposits (Custom Range)</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       background-color: #0b0c10;
@@ -22,19 +20,14 @@
       font-size: clamp(1.5rem, 6vw, 2.5rem);
     }
 
-    .button-link {
-      display: block;
-      margin: 1rem auto;
-      padding: 0.8rem 1.5rem;
+    select {
       background-color: #1f2833;
       color: #66fcf1;
       border: 2px solid #66fcf1;
+      padding: 0.6rem;
+      font-size: 1rem;
       border-radius: 8px;
-      font-size: clamp(1rem, 4vw, 1.2rem);
-      cursor: pointer;
-      text-decoration: none;
-      width: 100%;
-      max-width: 400px;
+      margin-bottom: 1.5rem;
     }
 
     .status {
@@ -61,39 +54,28 @@
       margin-right: auto;
     }
 
-    .security-note h2 {
-      margin-bottom: 0.8rem;
-      font-size: 1.2rem;
-      font-weight: bold;
-    }
-
-    .security-note ul {
-      padding-left: 1.2rem;
-      margin-top: 0.5rem;
-    }
-
-    .security-note li {
-      margin-bottom: 0.5rem;
-    }
-
-    .security-note a {
-      color: #f7dc6f;
-      text-decoration: underline;
-    }
-
-    .security-note a:hover {
-      color: #fff9c4;
-    }
-
-    .security-note p {
-      margin-top: 1rem;
-    }
+    .security-note h2 { font-size: 1.2rem; margin-bottom: 0.8rem; font-weight: bold; }
+    .security-note ul { padding-left: 1.2rem; margin-top: 0.5rem; }
+    .security-note li { margin-bottom: 0.5rem; }
+    .security-note a { color: #f7dc6f; text-decoration: underline; }
+    .security-note a:hover { color: #fff9c4; }
+    .security-note p { margin-top: 1rem; }
   </style>
 </head>
 <body>
 
-  <h1>🕒 Last 24h $gCOTI Deposits</h1>
-  <div id="status" class="status">Loading data from COTI network...</div>
+  <h1>📊 $gCOTI Treasury Deposits</h1>
+
+  <label for="timeRange">Select time range:</label>
+  <br />
+  <select id="timeRange">
+    <option value="1">Last 24 hours</option>
+    <option value="3">Last 3 days</option>
+    <option value="7">Last 1 week</option>
+    <option value="21">Last 3 weeks</option>
+  </select>
+
+  <div id="status" class="status">Select a time range above to begin.</div>
   <div id="result" class="result"></div>
 
   <div class="security-note">
@@ -111,85 +93,89 @@
   </div>
 
   <script>
-    const ADDRESS_TO_WATCH = "0x61BF10A1a27B2d99De0a59a06200A62ED579D685".toLowerCase();
-    const BASE_URL = "https://mainnet.cotiscan.io/api/v2/addresses";
+  const ADDRESS_TO_WATCH = "0x61BF10A1a27B2d99De0a59a06200A62ED579D685".toLowerCase();
+  const BASE_URL = "https://mainnet.cotiscan.io/api/v2/addresses";
 
-    async function fetchTransactionsWithin24h(address) {
-      let allTransactions = [];
-      const now = new Date();
-      const timeLimit = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-      let params = null;
+  async function fetchTransactionsWithinDays(address, daysBack) {
+    let allTransactions = [];
+    const now = new Date();
+    const timeLimit = new Date(now.getTime() - daysBack * 24 * 60 * 60 * 1000);
+    let params = null;
 
-      while (true) {
-        let fullUrl = `${BASE_URL}/${address}/token-transfers?token=0x7637C7838EC4Ec6b85080F28A678F8E234bB83D1`;
-        if (params) {
-          const paramStr = Object.entries(params)
-            .map(([k, v]) => `${k}=${v}`)
-            .join("&");
-          fullUrl += `?${paramStr}`;
-        }
+    while (true) {
+      let fullUrl = `${BASE_URL}/${address}/token-transfers?token=0x7637C7838EC4Ec6b85080F28A678F8E234bB83D1`;
+      if (params) {
+        const paramStr = Object.entries(params)
+          .map(([k, v]) => `${k}=${v}`)
+          .join("&");
+        fullUrl += `&${paramStr}`;
+      }
 
-        try {
-          const response = await fetch(fullUrl, {
-            headers: { accept: "application/json" }
-          });
-          if (!response.ok) {
-            document.getElementById("status").innerText = `❌ Failed to fetch: ${response.status}`;
-            break;
-          }
-
-          const data = await response.json();
-          const transactions = data.items || [];
-          let stop = false;
-
-          for (const tx of transactions) {
-            if (
-              tx.to?.hash?.toLowerCase() === address
-            ) {
-              const txTime = new Date(tx.timestamp);
-              if (txTime < timeLimit) {
-                stop = true;
-                break;
-              }
-              allTransactions.push(tx);
-            }
-          }
-
-          if (stop || !data.next_page_params) break;
-          params = data.next_page_params;
-
-        } catch (err) {
-          document.getElementById("status").innerText = `❌ Error: ${err.message}`;
+      try {
+        const response = await fetch(fullUrl, {
+          headers: { accept: "application/json" }
+        });
+        if (!response.ok) {
+          document.getElementById("status").innerText = `❌ Failed to fetch: ${response.status}`;
           break;
         }
-      }
-      return allTransactions;
-    }
 
-    function sumTransactionValues(transactions) {
-      let total = 0;
-      for (const tx of transactions) {
-        const totalDic = tx.total;
-        try {
-              total += parseInt(totalDic.value || "0");
-            } catch (e) {
-              console.warn(`Error parsing value: ${totalDic.value}`, e);
+        const data = await response.json();
+        const transactions = data.items || [];
+        let stop = false;
+
+        for (const tx of transactions) {
+          if (tx.to?.hash?.toLowerCase() === address) {
+            const txTime = new Date(tx.timestamp);
+            if (txTime < timeLimit) {
+              stop = true;
+              break;
             }
+            allTransactions.push(tx);
+          }
+        }
+
+        if (stop || !data.next_page_params) break;
+        params = data.next_page_params;
+
+      } catch (err) {
+        document.getElementById("status").innerText = `❌ Error: ${err.message}`;
+        break;
       }
-      return total;
     }
 
-    async function main() {
-      const transactions = await fetchTransactionsWithin24h(ADDRESS_TO_WATCH);
-      const totalValueRaw = sumTransactionValues(transactions);
-      const totalValue = totalValueRaw / 1e18;
+    return allTransactions;
+  }
 
-      document.getElementById("status").innerText = "✅ Data fetched successfully!";
-      document.getElementById("result").innerText = `🌍 A total of ${totalValue.toFixed(6)} $gCOTI was deposited into the Treasury in the last 24 hours.`;
+  function sumTransactionValues(transactions) {
+    let total = 0;
+    for (const tx of transactions) {
+      const totalDic = tx.total;
+      try {
+        total += parseInt(totalDic.value || "0");
+      } catch (e) {
+        console.warn(`Error parsing value: ${totalDic.value}`, e);
+      }
     }
+    return total;
+  }
 
-    main();
-  </script>
+  async function updateData() {
+    const select = document.getElementById("timeRange");
+    const daysBack = parseInt(select.value);
+    document.getElementById("status").innerText = "⏳ Fetching data from COTI network...";
+    document.getElementById("result").innerText = "";
 
+    const transactions = await fetchTransactionsWithinDays(ADDRESS_TO_WATCH, daysBack);
+    const totalValueRaw = sumTransactionValues(transactions);
+    const totalValue = totalValueRaw / 1e18;
+
+    document.getElementById("status").innerText = "✅ Data fetched successfully!";
+    document.getElementById("result").innerText = `🌍 A total of ${totalValue.toFixed(6)} $gCOTI was deposited into the Treasury in the last ${daysBack} day(s).`;
+  }
+
+  document.getElementById("timeRange").addEventListener("change", updateData);
+  updateData(); // 👈 Auto-load 24h data when the page loads
+</script>
 </body>
 </html>
