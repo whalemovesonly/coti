@@ -15,16 +15,38 @@
       font-family: Arial, sans-serif;
       padding: 2rem;
       text-align: center;
+      margin: 0;
+    }
+
+    .home-button-container {
+      width: 100%;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .home-button {
+      padding: 0.8rem 1.5rem;
+      background-color: #1f2833;
+      color: #66fcf1;
+      border: 2px solid #66fcf1;
+      border-radius: 8px;
+      font-size: clamp(1rem, 4vw, 1.2rem);
+      cursor: pointer;
+      text-decoration: none;
+      min-width: 100px;
+      text-align: center;
+      display: inline-block;
+      margin-bottom: 1.5rem;
+    }
+
+    .home-button:hover {
+      background-color: #66fcf1;
+      color: #0b0c10;
     }
 
     h1 {
       margin-bottom: 2rem;
       font-size: clamp(1.5rem, 6vw, 2.5rem);
-    }
-
-    .title-link {
-      text-decoration: none;
-      color: #66fcf1;
     }
 
     .button-link {
@@ -85,6 +107,10 @@
   </style>
 </head>
 <body>
+  <div class="home-button-container">
+    <a href="index.html" class="home-button">🏠 Home</a>
+  </div>
+
   <h1>Where to buy $gCOTI:</h1>
   <a href="https://www.mexc.com/exchange/gCOTI_USDT" target="_blank" class="button-link">Buy $gCOTI on MEXC</a>
   <a href="https://www.bitrue.com/trade/gCOTI_USDT" target="_blank" class="button-link">Buy $gCOTI on Bitrue</a>

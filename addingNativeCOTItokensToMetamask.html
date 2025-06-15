@@ -24,7 +24,25 @@
       left: 50%;
       transform: translateX(-50%);
     }
+    .home-button {
+      padding: 0.8rem 1.5rem;
+      background-color: #1f2833;
+      color: #66fcf1;
+      border: 2px solid #66fcf1;
+      border-radius: 8px;
+      font-size: clamp(1rem, 4vw, 1.2rem);
+      cursor: pointer;
+      text-decoration: none;
+      min-width: 100px;
+      text-align: center;
+      display: inline-block;
+      margin-bottom: 1.5rem;
+    }
 
+    .home-button:hover {
+      background-color: #66fcf1;
+      color: #0b0c10;
+    }
     .button-link {
       padding: 0.8rem 1.5rem;
       background-color: #1f2833;
@@ -151,7 +169,7 @@
 </head>
 <body>
   <div class="top-center-nav">
-    <a href="index.html" class="button-link">🏠 Home</a>
+    <a href="index.html" class="home-button">🏠 Home</a>
   </div>
 
   <header>

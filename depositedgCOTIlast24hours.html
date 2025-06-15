@@ -17,6 +17,30 @@
       text-align: center;
     }
 
+    .top-nav {
+      margin-bottom: 1.5rem;
+    }
+
+    .home-button {
+      padding: 0.8rem 1.5rem;
+      background-color: #1f2833;
+      color: #66fcf1;
+      border: 2px solid #66fcf1;
+      border-radius: 8px;
+      font-size: clamp(1rem, 4vw, 1.2rem);
+      cursor: pointer;
+      text-decoration: none;
+      min-width: 100px;
+      text-align: center;
+      display: inline-block;
+      margin-bottom: 1.5rem;
+    }
+
+    .home-button:hover {
+      background-color: #66fcf1;
+      color: #0b0c10;
+    }
+
     h1 {
       margin-bottom: 1rem;
       font-size: clamp(1.5rem, 6vw, 2.5rem);
@@ -86,6 +110,10 @@
   </style>
 </head>
 <body>
+
+  <div class="top-nav">
+    <a href="index.html" class="home-button">🏠 Home</a>
+  </div>
 
   <h1>🕒 $gCOTI Treasury Deposits</h1>
 

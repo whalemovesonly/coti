@@ -15,8 +15,43 @@
       font-family: Arial, sans-serif;
       padding: 2rem;
       text-align: center;
+      margin: 0;
     }
 
+    .button-link {
+      padding: 0.8rem 1.5rem;
+      background-color: #1f2833;
+      color: #66fcf1;
+      border: 2px solid #66fcf1;
+      border-radius: 8px;
+      font-size: clamp(1rem, 4vw, 1.2rem);
+      cursor: pointer;
+      text-decoration: none;
+      min-width: 100px;
+      text-align: center;
+      display: inline-block;
+      margin-bottom: 1.5rem;
+    }
+
+    .home-button {
+      padding: 0.8rem 1.5rem;
+      background-color: #1f2833;
+      color: #66fcf1;
+      border: 2px solid #66fcf1;
+      border-radius: 8px;
+      font-size: clamp(1rem, 4vw, 1.2rem);
+      cursor: pointer;
+      text-decoration: none;
+      min-width: 100px;
+      text-align: center;
+      display: inline-block;
+      margin-bottom: 1.5rem;
+    }
+
+    .home-button:hover {
+      background-color: #66fcf1;
+      color: #0b0c10;
+    }
     h1 {
       margin-bottom: 1rem;
       font-size: clamp(1.5rem, 6vw, 2.5rem);
@@ -87,6 +122,11 @@
 </head>
 <body>
 
+  <!-- Home Button -->
+  <div style="text-align: center;">
+    <a href="index.html" class="home-button">🏠 Home</a>
+  </div>
+
   <h1>🕒 $COTI Treasury Deposits</h1>
 
   <label for="timeRange">Choose time range:</label>
@@ -122,60 +162,60 @@
 
     const BASE_URL = "https://mainnet.cotiscan.io/api/v2/addresses";
 
- async function fetchTransactionsWithinDays(address, daysBack) {
-  let allTransactions = [];
-  const now = new Date();
-  const timeLimit = new Date(now.getTime() - daysBack * 24 * 60 * 60 * 1000);
-  let params = null;
+    async function fetchTransactionsWithinDays(address, daysBack) {
+      let allTransactions = [];
+      const now = new Date();
+      const timeLimit = new Date(now.getTime() - daysBack * 24 * 60 * 60 * 1000);
+      let params = null;
 
-  while (true) {
-    let fullUrl = `${BASE_URL}/${address}/transactions`;
+      while (true) {
+        let fullUrl = `${BASE_URL}/${address}/transactions`;
 
-    if (params) {
-      const allowedKeys = ["block_number", "fee", "hash", "index"];
-      const paramStr = Object.entries(params)
-        .filter(([k]) => allowedKeys.includes(k))
-        .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)
-        .join("&");
-      fullUrl += `?${paramStr}`;
-    }
+        if (params) {
+          const allowedKeys = ["block_number", "fee", "hash", "index"];
+          const paramStr = Object.entries(params)
+            .filter(([k]) => allowedKeys.includes(k))
+            .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)
+            .join("&");
+          fullUrl += `?${paramStr}`;
+        }
 
-    try {
-      const response = await fetch(fullUrl, {
-        headers: { accept: "application/json" }
-      });
+        try {
+          const response = await fetch(fullUrl, {
+            headers: { accept: "application/json" }
+          });
 
-      if (!response.ok) {
-        document.getElementById("status").innerText = `❌ Failed to fetch: ${response.status}`;
-        break;
-      }
-
-      const data = await response.json();
-      const transactions = data.items || [];
-      let stop = false;
-
-      for (const tx of transactions) {
-        if (tx.to?.hash?.toLowerCase() === address && tx.result === "success" && tx.transaction_types[0] === "coin_transfer") {
-          const txTime = new Date(tx.timestamp);
-          if (txTime < timeLimit) {
-            stop = true;
+          if (!response.ok) {
+            document.getElementById("status").innerText = `❌ Failed to fetch: ${response.status}`;
             break;
           }
-          allTransactions.push(tx);
+
+          const data = await response.json();
+          const transactions = data.items || [];
+          let stop = false;
+
+          for (const tx of transactions) {
+            if (tx.to?.hash?.toLowerCase() === address && tx.result === "success" && tx.transaction_types[0] === "coin_transfer") {
+              const txTime = new Date(tx.timestamp);
+              if (txTime < timeLimit) {
+                stop = true;
+                break;
+              }
+              allTransactions.push(tx);
+            }
+          }
+
+          if (stop || !data.next_page_params) break;
+          params = data.next_page_params;
+
+        } catch (err) {
+          document.getElementById("status").innerText = `❌ Error: ${err.message}`;
+          break;
         }
       }
 
-      if (stop || !data.next_page_params) break;
-      params = data.next_page_params;
-
-    } catch (err) {
-      document.getElementById("status").innerText = `❌ Error: ${err.message}`;
-      break;
+      return allTransactions;
     }
-  }
-
-  return allTransactions;
-}
 
     function sumTransactionValues(transactions) {
       let total = 0;
@@ -214,8 +254,7 @@
       updateData(); // Always fetch when option selected
     });
 
-    // Load default on page load
-    updateData();
+    updateData(); // Load default on page load
   </script>
 
 </body>
