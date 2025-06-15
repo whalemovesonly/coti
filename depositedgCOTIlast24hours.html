@@ -116,7 +116,11 @@
   </div>
 
   <script>
-    const ADDRESS_TO_WATCH = "0x61BF10A1a27B2d99De0a59a06200A62ED579D685".toLowerCase();
+    const ADDRESSES_TO_WATCH = [
+      "0x61BF10A1a27B2d99De0a59a06200A62ED579D685",
+      "0x5e19f674b3B55dF897C09824a2ddFAD6939e3d1D"
+    ].map(a => a.toLowerCase());
+
     const BASE_URL = "https://mainnet.cotiscan.io/api/v2/addresses";
 
     async function fetchTransactionsWithinDays(address, daysBack) {
@@ -189,22 +193,26 @@
       document.getElementById("status").innerText = "⏳ Fetching data from COTI network...";
       document.getElementById("result").innerText = "";
 
-      const transactions = await fetchTransactionsWithinDays(ADDRESS_TO_WATCH, daysBack);
-      const totalValueRaw = sumTransactionValues(transactions);
+      let combinedTransactions = [];
+
+      for (const address of ADDRESSES_TO_WATCH) {
+        const txs = await fetchTransactionsWithinDays(address, daysBack);
+        combinedTransactions.push(...txs);
+      }
+
+      const totalValueRaw = sumTransactionValues(combinedTransactions);
       const totalValue = totalValueRaw / 1e18;
 
       document.getElementById("status").innerText = "✅ Data fetched successfully!";
-      document.getElementById("result").innerText = `🌍 A total of ${totalValue.toFixed(6)} $gCOTI was deposited into the Treasury in the last ${daysBack} day(s).`;
+      document.getElementById("result").innerText = `🌍 A total of ${totalValue.toFixed(6)} $gCOTI was deposited into the Treasury across ${ADDRESSES_TO_WATCH.length} address(es) in the last ${daysBack} day(s).`;
     }
 
     const selectEl = document.getElementById("timeRange");
-
-    // Always update data when any selection is made (even same)
     selectEl.addEventListener("change", () => {
-      updateData();
+      updateData(); // Always fetch when option selected
     });
 
-    // Load default on first load
+    // Load default on page load
     updateData();
   </script>
 
