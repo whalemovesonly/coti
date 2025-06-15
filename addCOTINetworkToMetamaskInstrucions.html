@@ -15,6 +15,32 @@
       font-family: Arial, sans-serif;
       padding: 2rem;
       text-align: center;
+      position: relative;
+    }
+
+    .top-left-nav {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+    }
+
+    .button-link {
+      padding: 0.8rem 1.5rem;
+      background-color: #1f2833;
+      color: #66fcf1;
+      border: 2px solid #66fcf1;
+      border-radius: 8px;
+      font-size: clamp(1rem, 4vw, 1.2rem);
+      cursor: pointer;
+      text-decoration: none;
+      min-width: 100px;
+      text-align: center;
+      display: inline-block;
+    }
+
+    .button-link:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
 
     h1 {
@@ -49,23 +75,6 @@
       max-width: 700px;
       margin-left: auto;
       margin-right: auto;
-    }
-
-    .button-link {
-      padding: 0.8rem 1.5rem;
-      background-color: #1f2833;
-      color: #66fcf1;
-      border: 2px solid #66fcf1;
-      border-radius: 8px;
-      font-size: clamp(1rem, 4vw, 1.2rem);
-      cursor: pointer;
-      text-decoration: none;
-      min-width: 100px;
-    }
-
-    .button-link:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
     }
 
     .security-note {
@@ -111,6 +120,11 @@
   </style>
 </head>
 <body>
+  <!-- Home button in top-left with house icon -->
+  <div class="top-left-nav">
+    <a href="index.html" class="button-link">🏠 Home</a>
+  </div>
+
   <h1>Add COTI Network to MetaMask</h1>
 
   <div id="slide-content" class="step-box"></div>
