@@ -18,7 +18,28 @@
       text-align: center;
     }
 
+    .top-center-nav {
+      position: absolute;
+      top: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .button-link {
+      padding: 0.8rem 1.5rem;
+      background-color: #1f2833;
+      color: #66fcf1;
+      border: 2px solid #66fcf1;
+      border-radius: 8px;
+      font-size: clamp(1rem, 4vw, 1.2rem);
+      cursor: pointer;
+      text-decoration: none;
+      min-width: 100px;
+      display: inline-block;
+    }
+
     header {
+      margin-top: 4rem;
       margin-bottom: 2rem;
     }
 
@@ -129,9 +150,14 @@
   </style>
 </head>
 <body>
+  <div class="top-center-nav">
+    <a href="index.html" class="button-link">🏠 Home</a>
+  </div>
+
   <header>
     <h1>How to Add a COTI V2 Token to MetaMask</h1>
   </header>
+
   <div class="container">
     <div class="step active">
       <h2>Step 1: Go to COTI Token Explorer</h2>
@@ -169,6 +195,7 @@
       <h2>Step 9: Done!</h2>
       <p>The token should now appear in your MetaMask wallet.</p>
     </div>
+
     <div class="nav-buttons">
       <button id="prevBtn" disabled>Previous</button>
       <button id="nextBtn">Next</button>
