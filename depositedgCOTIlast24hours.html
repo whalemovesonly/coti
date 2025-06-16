@@ -68,15 +68,15 @@
     }
 
     .refresh-button {
-      background: none;
-      border: none;
+      font-size: 1.3rem;
+      background-color: transparent;
       color: #66fcf1;
-      font-size: 1.5rem;
+      border: none;
       cursor: pointer;
     }
 
     .refresh-button:disabled {
-      color: #888;
+      opacity: 0.5;
       cursor: not-allowed;
     }
 
@@ -131,11 +131,6 @@
     .security-note p {
       margin-top: 1rem;
     }
-    .refresh-button:disabled {
-  color: #888;
-  cursor: not-allowed;
-  filter: blur(1px); /* 👈 Add this line */
-}
   </style>
 </head>
 <body>
@@ -154,7 +149,7 @@
       <option value="7">Last 1 Week</option>
       <option value="21">Last 3 Weeks</option>
     </select>
-    <button id="refreshBtn" class="refresh-button" title="Refresh data">🔄</button>
+    <button id="refreshBtn" class="refresh-button" title="Refresh">🔄</button>
   </div>
 
   <div id="status" class="status">⏳ Loading data from COTI network...</div>
