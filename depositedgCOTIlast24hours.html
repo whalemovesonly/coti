@@ -46,8 +46,14 @@
       font-size: clamp(1.5rem, 6vw, 2.5rem);
     }
 
-    select {
+    .controls {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
       margin-top: 1rem;
+    }
+
+    select {
       padding: 0.6rem 1.2rem;
       font-size: 1rem;
       border-radius: 8px;
@@ -58,6 +64,19 @@
 
     select:disabled {
       opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .refresh-button {
+      background: none;
+      border: none;
+      color: #66fcf1;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .refresh-button:disabled {
+      color: #888;
       cursor: not-allowed;
     }
 
@@ -112,6 +131,11 @@
     .security-note p {
       margin-top: 1rem;
     }
+    .refresh-button:disabled {
+  color: #888;
+  cursor: not-allowed;
+  filter: blur(1px); /* 👈 Add this line */
+}
   </style>
 </head>
 <body>
@@ -123,13 +147,15 @@
   <h1>🕒 $gCOTI Treasury Deposits</h1>
 
   <label for="timeRange">Choose time range:</label>
-  <br />
-  <select id="timeRange">
-    <option value="1">Last 24 Hours</option>
-    <option value="3">Last 3 Days</option>
-    <option value="7">Last 1 Week</option>
-    <option value="21">Last 3 Weeks</option>
-  </select>
+  <div class="controls">
+    <select id="timeRange">
+      <option value="1">Last 24 Hours</option>
+      <option value="3">Last 3 Days</option>
+      <option value="7">Last 1 Week</option>
+      <option value="21">Last 3 Weeks</option>
+    </select>
+    <button id="refreshBtn" class="refresh-button" title="Refresh data">🔄</button>
+  </div>
 
   <div id="status" class="status">⏳ Loading data from COTI network...</div>
   <div id="result" class="result"></div>
@@ -221,7 +247,9 @@
 
     async function updateData() {
       const select = document.getElementById("timeRange");
-      select.disabled = true; // 🚫 Disable dropdown while loading
+      const refreshBtn = document.getElementById("refreshBtn");
+      select.disabled = true;
+      refreshBtn.disabled = true;
 
       const daysBack = parseInt(select.value);
       document.getElementById("status").innerText = "⏳ Fetching data from COTI network...";
@@ -240,15 +268,20 @@
       document.getElementById("status").innerText = "✅ Data fetched successfully!";
       document.getElementById("result").innerText = `🌍 A total of ${totalValue.toFixed(6)} $gCOTI was deposited into the Treasury in the last ${daysBack} day(s).`;
 
-      select.disabled = false; // ✅ Re-enable dropdown after loading
+      select.disabled = false;
+      refreshBtn.disabled = false;
     }
 
-    const selectEl = document.getElementById("timeRange");
-    selectEl.addEventListener("change", () => {
+    document.getElementById("timeRange").addEventListener("change", () => {
       updateData();
     });
 
-    updateData(); // Initial load
+    document.getElementById("refreshBtn").addEventListener("click", () => {
+      updateData();
+    });
+
+    // Initial load
+    updateData();
   </script>
 
 </body>
