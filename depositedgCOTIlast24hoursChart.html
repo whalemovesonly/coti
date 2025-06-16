@@ -112,18 +112,21 @@
       }
     }
 
-    .refresh-button {
-      font-size: 1.3rem;
-      background-color: transparent;
-      color: #66fcf1;
-      border: none;
-      cursor: pointer;
-    }
+.refresh-button {
+  font-size: 1.3rem;
+  background: none !important;
+  border: none !important;
+  color: #66fcf1;
+  cursor: pointer;
+  padding: 0.3rem;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.refresh-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 
-    .refresh-button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
     .button-link, .home-button {
       padding: 0.8rem 1.5rem;
       background-color: #1f2833;
