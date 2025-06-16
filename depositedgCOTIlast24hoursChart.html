@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>$gCOTI Chart: Deposits vs Withdrawals</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      background-color: #0b0c10;
+      color: #66fcf1;
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      text-align: center;
+    }
+    canvas {
+      margin-top: 2rem;
+      max-width: 100%;
+    }
+    select, button {
+      padding: 0.6rem 1rem;
+      margin: 0.5rem;
+      border-radius: 8px;
+      border: 1px solid #66fcf1;
+      background-color: #1f2833;
+      color: #66fcf1;
+      font-size: 1rem;
+    }
+    .status {
+      margin-top: 1rem;
+      color: #f1c40f;
+    }
+  </style>
+</head>
+<body>
+  <h1>📊 $gCOTI Treasury: Deposits vs Withdrawals</h1>
+
+  <label for="timeRange">Choose time range:</label>
+  <select id="timeRange" onchange="updateData()">
+    <option value="1">Last 24 Hours</option>
+    <option value="3">Last 3 Days</option>
+    <option value="7">Last 1 Week</option>
+    <option value="21">Last 3 Weeks</option>
+    <option value="30">Last 1 Month</option>
+    <option value="90">Last 3 Months</option>
+    <option value="365">Last 1 Year</option>
+    <option value="1095">Last 3 Years</option>
+  </select>
+  <button onclick="updateData()">🔄 Refresh</button>
+  <div id="status" class="status">⏳ Ready</div>
+
+  <canvas id="gcotiChart"></canvas>
+
+  <script>
+    const ADDRESSES_TO_WATCH = ["0x5e19f674b3B55dF897C09824a2ddFAD6939e3d1D"].map(a => a.toLowerCase());
+    const BASE_URL = "https://mainnet.cotiscan.io/api/v2/addresses";
+    const TOKEN_ADDRESS = "0x7637C7838EC4Ec6b85080F28A678F8E234bB83D1";
+
+    async function fetchTransactionsWithinDays(address, daysBack) {
+      let allTransactions = [];
+      const now = new Date();
+      const timeLimit = new Date(now.getTime() - daysBack * 24 * 60 * 60 * 1000);
+      let params = null;
+
+      while (true) {
+        let fullUrl = `${BASE_URL}/${address}/token-transfers?token=${TOKEN_ADDRESS}`;
+        if (params) {
+          const paramStr = Object.entries(params).map(([k, v]) => `${k}=${v}`).join("&");
+          fullUrl += `&${paramStr}`;
+        }
+
+        try {
+          const response = await fetch(fullUrl, {
+            headers: { accept: "application/json" },
+          });
+          if (!response.ok) break;
+
+          const data = await response.json();
+          const transactions = data.items || [];
+          let stop = false;
+
+          for (const tx of transactions) {
+            const txTime = new Date(tx.timestamp);
+            if (txTime < timeLimit) {
+              stop = true;
+              break;
+            }
+            allTransactions.push(tx);
+          }
+
+          if (stop || !data.next_page_params) break;
+          params = data.next_page_params;
+        } catch (err) {
+          break;
+        }
+      }
+
+      return allTransactions;
+    }
+
+    function groupTransactionsByDay(transactions, daysBack) {
+      const result = {};
+      const now = new Date();
+      for (let i = 0; i < daysBack; i++) {
+        const d = new Date(now);
+        d.setDate(now.getDate() - i);
+        const key = d.toISOString().slice(0, 10);
+        result[key] = { deposits: 0, withdrawals: 0 };
+      }
+
+      for (const tx of transactions) {
+        const dateKey = new Date(tx.timestamp).toISOString().slice(0, 10);
+        const value = parseFloat(tx.total?.value || "0") / 1e18;
+        if (!result[dateKey]) continue;
+
+        const isDeposit = ADDRESSES_TO_WATCH.includes(tx.to?.hash?.toLowerCase());
+        const isWithdraw = ADDRESSES_TO_WATCH.includes(tx.from?.hash?.toLowerCase());
+
+        if (isDeposit) result[dateKey].deposits += value;
+        if (isWithdraw) result[dateKey].withdrawals += value;
+      }
+
+      return result;
+    }
+
+    async function updateData() {
+      const select = document.getElementById("timeRange");
+      const daysBack = parseInt(select.value);
+      document.getElementById("status").innerText = "⏳ Fetching data...";
+
+      let allTransactions = [];
+      for (const address of ADDRESSES_TO_WATCH) {
+        const txs = await fetchTransactionsWithinDays(address, daysBack);
+        allTransactions.push(...txs);
+      }
+
+      const dailyData = groupTransactionsByDay(allTransactions, daysBack);
+      const labels = Object.keys(dailyData).sort();
+      const deposits = labels.map(date => dailyData[date].deposits);
+      const withdrawals = labels.map(date => dailyData[date].withdrawals);
+
+      drawChart(labels, deposits, withdrawals);
+      document.getElementById("status").innerText = `✅ Showing data for last ${daysBack} day(s)`;
+    }
+
+    let chart;
+    function drawChart(labels, deposits, withdrawals) {
+      const ctx = document.getElementById("gcotiChart").getContext("2d");
+      if (chart) chart.destroy();
+
+      chart = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels,
+          datasets: [
+            {
+              label: "$gCOTI Deposited",
+              data: deposits,
+              backgroundColor: "rgba(102, 252, 241, 0.6)",
+            },
+            {
+              label: "$gCOTI Withdrawn",
+              data: withdrawals,
+              backgroundColor: "rgba(241, 76, 94, 0.6)",
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: val => val.toLocaleString(),
+              },
+            },
+          },
+        },
+      });
+    }
+
+    updateData();
+  </script>
+</body>
+</html>
