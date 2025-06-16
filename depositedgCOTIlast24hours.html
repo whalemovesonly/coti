@@ -56,6 +56,11 @@
       color: #66fcf1;
     }
 
+    select:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
     .status {
       font-size: 1.2rem;
       color: #f1c40f;
@@ -216,6 +221,8 @@
 
     async function updateData() {
       const select = document.getElementById("timeRange");
+      select.disabled = true; // 🚫 Disable dropdown while loading
+
       const daysBack = parseInt(select.value);
       document.getElementById("status").innerText = "⏳ Fetching data from COTI network...";
       document.getElementById("result").innerText = "";
@@ -232,15 +239,16 @@
 
       document.getElementById("status").innerText = "✅ Data fetched successfully!";
       document.getElementById("result").innerText = `🌍 A total of ${totalValue.toFixed(6)} $gCOTI was deposited into the Treasury in the last ${daysBack} day(s).`;
+
+      select.disabled = false; // ✅ Re-enable dropdown after loading
     }
 
     const selectEl = document.getElementById("timeRange");
     selectEl.addEventListener("change", () => {
-      updateData(); // Always fetch when option selected
+      updateData();
     });
 
-    // Load default on page load
-    updateData();
+    updateData(); // Initial load
   </script>
 
 </body>
