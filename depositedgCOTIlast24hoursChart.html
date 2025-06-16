@@ -16,7 +16,7 @@
 
     .top-bar {
       display: flex;
-      justify-content: flex-start;
+      justify-content: center;
       align-items: center;
       margin-bottom: 1rem;
     }
@@ -111,6 +111,7 @@
         justify-content: center;
       }
     }
+
     .refresh-button {
       font-size: 1.3rem;
       background-color: transparent;
@@ -123,11 +124,30 @@
       opacity: 0.5;
       cursor: not-allowed;
     }
+    .button-link, .home-button {
+      padding: 0.8rem 1.5rem;
+      background-color: #1f2833;
+      color: #66fcf1;
+      border: 2px solid #66fcf1;
+      border-radius: 8px;
+      font-size: clamp(1rem, 4vw, 1.2rem);
+      cursor: pointer;
+      text-decoration: none;
+      min-width: 100px;
+      text-align: center;
+      display: inline-block;
+      margin-bottom: 1.5rem;
+    }
+
+    .home-button:hover {
+      background-color: #66fcf1;
+      color: #0b0c10;
+    }
   </style>
 </head>
 <body>
   <div class="top-bar">
-    <button onclick="window.location.href='index.html'">🔙 Home</button>
+    <button onclick="window.location.href='index.html'"  class="home-button">🏠 Home</a>
   </div>
 
   <h1>📊 $gCOTI Treasury: Deposits vs Withdrawals</h1>
