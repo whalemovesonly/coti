@@ -56,7 +56,6 @@
   <div class="controls">
     <label for="timeRange">Choose time range:</label>
     <select id="timeRange" onchange="updateData()">
-      <option value="1">Last 24 Hours</option>
       <option value="3">Last 3 Days</option>
       <option value="7">Last 1 Week</option>
       <option value="21">Last 3 Weeks</option>
@@ -118,20 +117,12 @@
       return allTransactions;
     }
 
-    function groupTransactionsByDay(transactions, daysBack) {
+    function groupTransactionsByDay(transactions) {
       const result = {};
-      const now = new Date();
-      for (let i = 0; i < daysBack; i++) {
-        const d = new Date(now);
-        d.setDate(now.getDate() - i);
-        const key = d.toISOString().slice(0, 10);
-        result[key] = { deposits: 0, withdrawals: 0 };
-      }
-
       for (const tx of transactions) {
         const dateKey = new Date(tx.timestamp).toISOString().slice(0, 10);
         const value = parseFloat(tx.total?.value || "0") / 1e18;
-        if (!result[dateKey]) continue;
+        if (!result[dateKey]) result[dateKey] = { deposits: 0, withdrawals: 0 };
 
         const isDeposit = ADDRESSES_TO_WATCH.includes(tx.to?.hash?.toLowerCase());
         const isWithdraw = ADDRESSES_TO_WATCH.includes(tx.from?.hash?.toLowerCase());
@@ -154,13 +145,13 @@
         allTransactions.push(...txs);
       }
 
-      const dailyData = groupTransactionsByDay(allTransactions, daysBack);
-      const labels = Object.keys(dailyData).sort();
-      const deposits = labels.map(date => dailyData[date].deposits);
-      const withdrawals = labels.map(date => dailyData[date].withdrawals);
+      const groupedData = groupTransactionsByDay(allTransactions);
+      const labels = Object.keys(groupedData).sort();
+      const deposits = labels.map(date => groupedData[date].deposits);
+      const withdrawals = labels.map(date => groupedData[date].withdrawals);
 
       drawChart(labels, deposits, withdrawals);
-      document.getElementById("status").innerText = `✅ Showing data for last ${daysBack} day(s)`;
+      document.getElementById("status").innerText = labels.length > 0 ? `✅ Showing data from ${labels[0]} to ${labels[labels.length - 1]}` : "ℹ️ No data available in selected time range.";
     }
 
     let chart;
