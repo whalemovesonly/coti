@@ -49,7 +49,19 @@
       font-size: 1rem;
       cursor: pointer;
     }
+    select {
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #66fcf1;
+      background-color: #1f2833;
+      color: #66fcf1;
+    }
 
+    select:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
     .status {
       margin-top: 1rem;
       color: #f1c40f;
@@ -251,24 +263,35 @@
     }
 
     async function updateData() {
-      const select = document.getElementById("timeRange");
-      const daysBack = parseInt(select.value);
-      document.getElementById("status").innerText = "⏳ Fetching data...";
+  const select = document.getElementById("timeRange");
+  const refreshBtn = document.getElementById("refreshBtn");
 
-      let allTransactions = [];
-      for (const address of ADDRESSES_TO_WATCH) {
-        const txs = await fetchTransactionsWithinDays(address, daysBack);
-        allTransactions.push(...txs);
-      }
+  // Disable during loading
+  select.disabled = true;
+  refreshBtn.disabled = true;
+  document.getElementById("status").innerText = "⏳ Fetching data...";
 
-      const groupedData = groupTransactionsByDay(allTransactions);
-      const labels = Object.keys(groupedData).sort();
-      const deposits = labels.map(date => groupedData[date].deposits);
-      const withdrawals = labels.map(date => groupedData[date].withdrawals);
+  let allTransactions = [];
+  for (const address of ADDRESSES_TO_WATCH) {
+    const txs = await fetchTransactionsWithinDays(address, parseInt(select.value));
+    allTransactions.push(...txs);
+  }
 
-      drawChart(labels, deposits, withdrawals);
-      document.getElementById("status").innerText = labels.length > 0 ? `✅ Showing data from ${labels[0]} to ${labels[labels.length - 1]}` : "ℹ️ No data available in selected time range.";
-    }
+  const groupedData = groupTransactionsByDay(allTransactions);
+  const labels = Object.keys(groupedData).sort();
+  const deposits = labels.map(date => groupedData[date].deposits);
+  const withdrawals = labels.map(date => groupedData[date].withdrawals);
+
+  drawChart(labels, deposits, withdrawals);
+
+  document.getElementById("status").innerText = labels.length > 0
+    ? `✅ Showing data from ${labels[0]} to ${labels[labels.length - 1]}`
+    : "ℹ️ No data available in selected time range.";
+
+  // Re-enable after loading
+  select.disabled = false;
+  refreshBtn.disabled = false;
+}
 
     let chart;
     function drawChart(labels, deposits, withdrawals) {
