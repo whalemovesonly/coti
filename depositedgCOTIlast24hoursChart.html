@@ -10,45 +10,65 @@
       background-color: #0b0c10;
       color: #66fcf1;
       font-family: Arial, sans-serif;
-      padding: 2rem;
+      padding: 1rem;
       text-align: center;
     }
-    canvas {
-      margin-top: 2rem;
-      max-width: 100%;
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
     }
+
     select, button {
       padding: 0.6rem 1rem;
-      margin: 0.5rem;
       border-radius: 8px;
       border: 1px solid #66fcf1;
       background-color: #1f2833;
       color: #66fcf1;
       font-size: 1rem;
     }
+
     .status {
       margin-top: 1rem;
       color: #f1c40f;
+    }
+
+    canvas {
+      margin-top: 2rem;
+      max-width: 100%;
+    }
+
+    @media (max-width: 480px) {
+      select, button {
+        width: 100%;
+        font-size: 1rem;
+      }
     }
   </style>
 </head>
 <body>
   <h1>📊 $gCOTI Treasury: Deposits vs Withdrawals</h1>
 
-  <label for="timeRange">Choose time range:</label>
-  <select id="timeRange" onchange="updateData()">
-    <option value="1">Last 24 Hours</option>
-    <option value="3">Last 3 Days</option>
-    <option value="7">Last 1 Week</option>
-    <option value="21">Last 3 Weeks</option>
-    <option value="30">Last 1 Month</option>
-    <option value="90">Last 3 Months</option>
-    <option value="365">Last 1 Year</option>
-    <option value="1095">Last 3 Years</option>
-  </select>
-  <button onclick="updateData()">🔄 Refresh</button>
-  <div id="status" class="status">⏳ Ready</div>
+  <div class="controls">
+    <label for="timeRange">Choose time range:</label>
+    <select id="timeRange" onchange="updateData()">
+      <option value="1">Last 24 Hours</option>
+      <option value="3">Last 3 Days</option>
+      <option value="7">Last 1 Week</option>
+      <option value="21">Last 3 Weeks</option>
+      <option value="30">Last 1 Month</option>
+      <option value="90">Last 3 Months</option>
+      <option value="365">Last 1 Year</option>
+      <option value="1095">Last 3 Years</option>
+    </select>
+    <button onclick="updateData()">🔄 Refresh</button>
+  </div>
 
+  <div id="status" class="status">⏳ Ready</div>
   <canvas id="gcotiChart"></canvas>
 
   <script>
