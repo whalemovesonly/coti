@@ -18,22 +18,7 @@
       margin: 0;
     }
 
-    .button-link {
-      padding: 0.8rem 1.5rem;
-      background-color: #1f2833;
-      color: #66fcf1;
-      border: 2px solid #66fcf1;
-      border-radius: 8px;
-      font-size: clamp(1rem, 4vw, 1.2rem);
-      cursor: pointer;
-      text-decoration: none;
-      min-width: 100px;
-      text-align: center;
-      display: inline-block;
-      margin-bottom: 1.5rem;
-    }
-
-    .home-button {
+    .button-link, .home-button {
       padding: 0.8rem 1.5rem;
       background-color: #1f2833;
       color: #66fcf1;
@@ -52,6 +37,7 @@
       background-color: #66fcf1;
       color: #0b0c10;
     }
+
     h1 {
       margin-bottom: 1rem;
       font-size: clamp(1.5rem, 6vw, 2.5rem);
@@ -66,7 +52,10 @@
       background-color: #1f2833;
       color: #66fcf1;
     }
-
+    select:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
     .status {
       font-size: 1.2rem;
       color: #f1c40f;
@@ -231,6 +220,8 @@
 
     async function updateData() {
       const select = document.getElementById("timeRange");
+      select.disabled = true; // Disable during loading
+
       const daysBack = parseInt(select.value);
       document.getElementById("status").innerText = "⏳ Fetching data from COTI network...";
       document.getElementById("result").innerText = "";
@@ -247,6 +238,8 @@
 
       document.getElementById("status").innerText = "✅ Data fetched successfully!";
       document.getElementById("result").innerText = `🌍 A total of ${totalValue.toFixed(6)} $COTI was deposited into the Treasury in the last ${daysBack} day(s).`;
+
+      select.disabled = false; // Re-enable after loading
     }
 
     const selectEl = document.getElementById("timeRange");
