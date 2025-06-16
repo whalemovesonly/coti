@@ -14,6 +14,23 @@
       text-align: center;
     }
 
+    .top-bar {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .top-bar button {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      border: 1px solid #66fcf1;
+      background-color: #1f2833;
+      color: #66fcf1;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
     .controls {
       display: flex;
       flex-wrap: wrap;
@@ -23,13 +40,14 @@
       margin-top: 1rem;
     }
 
-    select, button {
+    select, .controls button {
       padding: 0.6rem 1rem;
       border-radius: 8px;
       border: 1px solid #66fcf1;
       background-color: #1f2833;
       color: #66fcf1;
       font-size: 1rem;
+      cursor: pointer;
     }
 
     .status {
@@ -42,15 +60,76 @@
       max-width: 100%;
     }
 
+    .security-note {
+      background-color: #3d2e00;
+      color: #f1e58d;
+      border-left: 6px solid #f1c40f;
+      padding: 1.5rem;
+      margin-top: 3rem;
+      border-radius: 10px;
+      text-align: left;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .security-note h2 {
+      margin-bottom: 0.8rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    .security-note ul {
+      padding-left: 1.2rem;
+      margin-top: 0.5rem;
+    }
+
+    .security-note li {
+      margin-bottom: 0.5rem;
+    }
+
+    .security-note a {
+      color: #f7dc6f;
+      text-decoration: underline;
+    }
+
+    .security-note a:hover {
+      color: #fff9c4;
+    }
+
+    .security-note p {
+      margin-top: 1rem;
+    }
+
     @media (max-width: 480px) {
-      select, button {
+      select, .controls button {
         width: 100%;
         font-size: 1rem;
       }
+
+      .top-bar {
+        justify-content: center;
+      }
+    }
+    .refresh-button {
+      font-size: 1.3rem;
+      background-color: transparent;
+      color: #66fcf1;
+      border: none;
+      cursor: pointer;
+    }
+
+    .refresh-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
   </style>
 </head>
 <body>
+  <div class="top-bar">
+    <button onclick="window.location.href='index.html'">🔙 Home</button>
+  </div>
+
   <h1>📊 $gCOTI Treasury: Deposits vs Withdrawals</h1>
 
   <div class="controls">
@@ -64,11 +143,25 @@
       <option value="365">Last 1 Year</option>
       <option value="1095">Last 3 Years</option>
     </select>
-    <button onclick="updateData()">🔄 Refresh</button>
+    <button id="refreshBtn" onclick="updateData()" class="refresh-button" title="Refresh">🔄</button>
   </div>
 
   <div id="status" class="status">⏳ Ready</div>
   <canvas id="gcotiChart"></canvas>
+
+  <div class="security-note">
+    <h2>⚠️ Security Note for COTI Users</h2>
+    <p>This website is <strong>100% open-source</strong> and created for the COTI community to share technical instructions.</p>
+    <ul>
+      <li>All source code is available publicly on 
+        <a href="https://github.com/whalemovesonly/coti" target="_blank" rel="noopener noreferrer">GitHub</a>.
+      </li>
+      <li>The site loads directly from GitHub Pages — no hidden code or injected content.</li>
+      <li><strong>No wallet connection is required</strong> to view or use this site.</li>
+      <li>We understand crypto users are cautious. Please feel free to inspect the code before clicking any links.</li>
+    </ul>
+    <p>✅ Stay safe, stay informed, and explore the COTI ecosystem with confidence.</p>
+  </div>
 
   <script>
     const ADDRESSES_TO_WATCH = ["0x5e19f674b3B55dF897C09824a2ddFAD6939e3d1D"].map(a => a.toLowerCase());
