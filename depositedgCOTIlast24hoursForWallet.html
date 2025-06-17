@@ -269,6 +269,8 @@
 
       if (!transactions.length) {
         statusDiv.innerText = "✅ No $gCOTI Treasury deposits found in the selected time range.";
+        select.disabled = false;
+        refreshBtn.disabled = false;
         return;
       }
 
