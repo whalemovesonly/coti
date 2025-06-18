@@ -274,13 +274,11 @@
         }
       }
 
-      const remaining = totalDeposits - totalWithdrawals;
 
       statusDiv.innerText = "✅ Data fetched successfully!";
       resultDiv.innerText =
         `🌍 Total Deposited: ${totalDeposits.toFixed(6)} $gCOTI\n` +
-        `📤 Total Withdrawn: ${totalWithdrawals.toFixed(6)} $gCOTI\n` +
-        `🏦 Remaining in Treasury: ${remaining.toFixed(6)} $gCOTI`;
+        `📤 Total Withdrawn: ${totalWithdrawals.toFixed(6)} $gCOTI`;
       resultDiv.style.display = "block";
       chartContainer.style.display = "block";
 
