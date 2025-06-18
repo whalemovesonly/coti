@@ -279,7 +279,7 @@
     const txs = await fetchTransactionsWithinDays(address, parseInt(select.value));
     allTransactions.push(...txs);
   }
-  console.info(allTransactions.length)
+
   const groupedData = groupTransactionsByDay(allTransactions);
   const labels = Object.keys(groupedData).sort();
   const deposits = labels.map(date => groupedData[date].deposits);
