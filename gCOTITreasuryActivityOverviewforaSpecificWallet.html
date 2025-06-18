@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>$gCOTI Deposits</title>
+  <title>📊 $gCOTI Treasury Activity Overview for a Specific Wallet</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -60,18 +61,6 @@
       margin-top: 1rem;
       flex-wrap: wrap;
     }
-    select {
-      padding: 0.6rem 1.2rem;
-      font-size: 1rem;
-      border-radius: 8px;
-      border: 1px solid #66fcf1;
-      background-color: #1f2833;
-      color: #66fcf1;
-    }
-    select:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
     .refresh-button {
       font-size: 1.3rem;
       background-color: transparent;
@@ -91,6 +80,7 @@
     .result {
       font-size: 1.6rem;
       margin-top: 1.5rem;
+      white-space: pre-line;
     }
     .security-note {
       background-color: #3d2e00;
@@ -127,41 +117,29 @@
       margin-top: 1rem;
     }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-
   <div class="top-nav">
     <a href="index.html" class="home-button">🏠 Home</a>
   </div>
 
-  <h1>🕒 $gCOTI Treasury Deposits for a Specific Wallet</h1>
+  <h1>📊 $gCOTI Treasury Activity Overview for a Specific Wallet</h1>
 
   <div class="wallet-input">
     <label for="walletAddress">Enter Wallet</label>
     <input type="text" id="walletAddress" />
   </div>
 
-  <label for="timeRange">Choose time range:</label>
   <div class="controls">
-    <select id="timeRange">
-      <option value="1">Last 24 Hours</option>
-      <option value="3">Last 3 Days</option>
-      <option value="7">Last 1 Week</option>
-      <option value="21">Last 3 Weeks</option>
-      <option value="30">Last 1 Month</option>
-      <option value="90">Last 3 Months</option>
-      <option value="365">Last 1 Year</option>
-      <option value="1095">Last 3 Years</option>
-    </select>
     <button id="refreshBtn" class="refresh-button" title="Refresh">🔄</button>
   </div>
 
   <div id="status" class="status">⏳ Loading data from COTI network...</div>
   <div id="result" class="result" style="display: none;"></div>
 
-  <!-- Chart placeholder -->
-  <canvas id="depositChart" style="max-width: 100%; margin-top: 2rem;"></canvas>
+  <div id="chartContainer" style="margin-top: 2rem; display: none;">
+    <canvas id="gCOTIChart"></canvas>
+  </div>
 
   <div class="security-note">
     <h2>⚠️ Security Note for COTI Users</h2>
@@ -179,180 +157,142 @@
 
   <script>
     const BASE_URL = "https://mainnet.cotiscan.io/api/v2/addresses";
-    let chart = null;
+    const treasuryWallet = "0x5e19f674b3B55dF897C09824a2ddFAD6939e3d1D";
+    const token = "0x7637C7838EC4Ec6b85080F28A678F8E234bB83D1";
 
-    async function fetchTransactionsWithinDays(address, daysBack) {
+    async function fetchAllTransactions(address) {
       let allTransactions = [];
-      const now = new Date();
-      const timeLimit = new Date(now.getTime() - daysBack * 24 * 60 * 60 * 1000);
       let params = null;
-      let cotiTreasuryWallet = "0x5e19f674b3B55dF897C09824a2ddFAD6939e3d1D";
 
       while (true) {
-        let fullUrl = `${BASE_URL}/${address}/token-transfers?token=0x7637C7838EC4Ec6b85080F28A678F8E234bB83D1`;
+        let url = `${BASE_URL}/${address}/token-transfers?token=${token}`;
         if (params) {
           const paramStr = Object.entries(params).map(([k, v]) => `${k}=${v}`).join("&");
-          fullUrl += `&${paramStr}`;
+          url += `&${paramStr}`;
         }
 
         try {
-          const response = await fetch(fullUrl, { headers: { accept: "application/json" } });
-          if (!response.ok) {
-            document.getElementById("status").innerText = `❌ Failed to fetch: ${response.status}`;
-            break;
-          }
+          const response = await fetch(url, { headers: { accept: "application/json" } });
+          if (!response.ok) break;
 
           const data = await response.json();
-          const transactions = data.items || [];
-          let stop = false;
+          allTransactions = allTransactions.concat(data.items || []);
+          if (!data.next_page_params) break;
 
-          for (const tx of transactions) {
-            if (tx.to?.hash?.toLowerCase() === cotiTreasuryWallet.toLowerCase()) {
-              const txTime = new Date(tx.timestamp);
-              if (txTime < timeLimit) {
-                stop = true;
-                break;
-              }
-              allTransactions.push(tx);
-            }
-          }
-
-          if (stop || !data.next_page_params) break;
           params = data.next_page_params;
-
         } catch (err) {
-          document.getElementById("status").innerText = `❌ Error: ${err.message}`;
           break;
         }
       }
-
       return allTransactions;
     }
 
-    function sumTransactionValues(transactions) {
-      let total = 0;
-      for (const tx of transactions) {
-        try {
-          total += parseInt(tx.total?.value || "0");
-        } catch (e) {
-          console.warn(`Error parsing value: ${tx.total?.value}`, e);
-        }
-      }
-      return total;
-    }
+    function drawChart(labels, deposits, withdrawals) {
+      const ctx = document.getElementById("gCOTIChart").getContext("2d");
+      if (window.gCOTIChartInstance) window.gCOTIChartInstance.destroy();
 
-    function groupByDate(transactions) {
-      const dailyTotals = {};
-      for (const tx of transactions) {
-        const dateStr = new Date(tx.timestamp).toISOString().split("T")[0];
-        const value = parseInt(tx.total?.value || "0") / 1e18;
-        dailyTotals[dateStr] = (dailyTotals[dateStr] || 0) + value;
-      }
-      return dailyTotals;
-    }
-
-function drawChart(dataMap) {
-  const ctx = document.getElementById("depositChart").getContext("2d");
-
-  // Sort dates in ascending order
-  const sortedDates = Object.keys(dataMap).sort();
-  const sortedValues = sortedDates.map(date => dataMap[date]);
-
-  if (chart) chart.destroy();
-
-  chart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: sortedDates,
-      datasets: [{
-        label: '$gCOTI Deposited',
-        data: sortedValues,
-        backgroundColor: '#66fcf1',
-        borderRadius: 4,
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            label: ctx => `${ctx.parsed.y.toFixed(6)} $gCOTI`
+      window.gCOTIChartInstance = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels,
+          datasets: [
+            {
+              label: "Deposits",
+              data: deposits,
+              borderColor: "#2ecc71",
+              backgroundColor: "rgba(46,204,113,0.2)",
+              fill: true
+            },
+            {
+              label: "Withdrawals",
+              data: withdrawals,
+              borderColor: "#e74c3c",
+              backgroundColor: "rgba(231,76,60,0.2)",
+              fill: true
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              labels: { color: "#fff" }
+            }
+          },
+          scales: {
+            x: { ticks: { color: "#fff" } },
+            y: { ticks: { color: "#fff" } }
           }
         }
-      },
-      scales: {
-        x: { ticks: { color: '#66fcf1' } },
-        y: {
-          ticks: { color: '#66fcf1' },
-          beginAtZero: true
-        }
-      }
+      });
     }
-  });
-}
 
     async function updateData() {
-      const select = document.getElementById("timeRange");
-      const refreshBtn = document.getElementById("refreshBtn");
+      const address = document.getElementById("walletAddress").value.trim();
       const resultDiv = document.getElementById("result");
       const statusDiv = document.getElementById("status");
-      const address = document.getElementById("walletAddress").value.trim();
+      const chartContainer = document.getElementById("chartContainer");
 
       if (address === "") {
         statusDiv.innerText = "❌ Please enter a wallet address.";
-        resultDiv.innerText = "";
         resultDiv.style.display = "none";
+        chartContainer.style.display = "none";
         return;
       }
-
       if (!/^0x[a-fA-F0-9]{40}$/.test(address)) {
         statusDiv.innerText = "❌ Invalid wallet address format.";
-        resultDiv.innerText = "";
         resultDiv.style.display = "none";
+        chartContainer.style.display = "none";
         return;
       }
 
-      select.disabled = true;
-      refreshBtn.disabled = true;
-
-      const daysBack = parseInt(select.value);
       statusDiv.innerText = "⏳ Fetching data from COTI network...";
-      resultDiv.innerText = "";
       resultDiv.style.display = "none";
+      chartContainer.style.display = "none";
 
-      const transactions = await fetchTransactionsWithinDays(address, daysBack);
+      const txs = await fetchAllTransactions(address);
+      const deposits = [], withdrawals = [], labels = [];
+      let totalDeposits = 0, totalWithdrawals = 0;
 
-      if (!transactions.length) {
-        statusDiv.innerText = "✅ No $gCOTI Treasury deposits found in the selected time range.";
-        select.disabled = false;
-        refreshBtn.disabled = false;
-        drawChart({});
-        return;
+      const sorted = txs.filter(tx => tx.timestamp).sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+      for (const tx of sorted) {
+        const val = parseInt(tx.total?.value || "0") / 1e18;
+        const dateLabel = new Date(tx.timestamp).toLocaleDateString();
+        labels.push(dateLabel);
+
+        if (tx.to?.hash?.toLowerCase() === treasuryWallet.toLowerCase()) {
+          deposits.push(val);
+          withdrawals.push(0);
+          totalDeposits += val;
+        } else if (tx.from?.hash?.toLowerCase() === treasuryWallet.toLowerCase()) {
+          withdrawals.push(val);
+          deposits.push(0);
+          totalWithdrawals += val;
+        } else {
+          deposits.push(0);
+          withdrawals.push(0);
+        }
       }
 
-      const totalValueRaw = sumTransactionValues(transactions);
-      const totalValue = totalValueRaw / 1e18;
+      const remaining = totalDeposits - totalWithdrawals;
 
       statusDiv.innerText = "✅ Data fetched successfully!";
-      resultDiv.innerText = `🌍 A total of ${totalValue.toFixed(6)} $gCOTI was deposited into the Treasury in the last ${daysBack} day(s).`;
+      resultDiv.innerText =
+        `🌍 Total Deposited: ${totalDeposits.toFixed(6)} $gCOTI\n` +
+        `📤 Total Withdrawn: ${totalWithdrawals.toFixed(6)} $gCOTI\n` +
+        `🏦 Remaining in Treasury: ${remaining.toFixed(6)} $gCOTI`;
       resultDiv.style.display = "block";
+      chartContainer.style.display = "block";
 
-      const grouped = groupByDate(transactions);
-      drawChart(grouped);
-
-      select.disabled = false;
-      refreshBtn.disabled = false;
+      drawChart(labels, deposits, withdrawals);
     }
 
-    document.getElementById("timeRange").addEventListener("change", updateData);
     document.getElementById("refreshBtn").addEventListener("click", updateData);
-    document.getElementById("walletAddress").addEventListener("keypress", (e) => {
+    document.getElementById("walletAddress").addEventListener("keypress", e => {
       if (e.key === "Enter") updateData();
     });
 
     updateData();
   </script>
-
 </body>
 </html>
