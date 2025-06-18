@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>📊 $COTI Treasury Activity Overview for a Specific Wallet</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      background-color: #0b0c10;
+      color: #66fcf1;
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      text-align: center;
+    }
+    .top-nav { margin-bottom: 1.5rem; }
+    .home-button {
+      padding: 0.8rem 1.5rem;
+      background-color: #1f2833;
+      color: #66fcf1;
+      border: 2px solid #66fcf1;
+      border-radius: 8px;
+      font-size: clamp(1rem, 4vw, 1.2rem);
+      cursor: pointer;
+      text-decoration: none;
+      min-width: 100px;
+      text-align: center;
+      display: inline-block;
+      margin-bottom: 1.5rem;
+    }
+    .home-button:hover {
+      background-color: #66fcf1;
+      color: #0b0c10;
+    }
+    h1 {
+      margin-bottom: 1rem;
+      font-size: clamp(1.5rem, 6vw, 2.5rem);
+    }
+    .wallet-input {
+      margin-bottom: 1rem;
+    }
+    .wallet-input label {
+      margin-right: 0.5rem;
+      font-size: 1rem;
+    }
+    .wallet-input input {
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      border: 1px solid #66fcf1;
+      background-color: #1f2833;
+      color: #66fcf1;
+      font-size: 1rem;
+      width: 300px;
+      max-width: 90%;
+    }
+    .controls {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+    .refresh-button {
+      font-size: 1.3rem;
+      background-color: transparent;
+      color: #66fcf1;
+      border: none;
+      cursor: pointer;
+    }
+    .refresh-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .status {
+      font-size: 1.2rem;
+      color: #f1c40f;
+      margin-top: 1.5rem;
+    }
+    .result {
+      font-size: 1.6rem;
+      margin-top: 1.5rem;
+      white-space: pre-line;
+    }
+    .security-note {
+      background-color: #3d2e00;
+      color: #f1e58d;
+      border-left: 6px solid #f1c40f;
+      padding: 1.5rem;
+      margin-top: 3rem;
+      border-radius: 10px;
+      text-align: left;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .security-note h2 {
+      margin-bottom: 0.8rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    .security-note ul {
+      padding-left: 1.2rem;
+      margin-top: 0.5rem;
+    }
+    .security-note li {
+      margin-bottom: 0.5rem;
+    }
+    .security-note a {
+      color: #f7dc6f;
+      text-decoration: underline;
+    }
+    .security-note a:hover {
+      color: #fff9c4;
+    }
+    .security-note p {
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-nav">
+    <a href="index.html" class="home-button">🏠 Home</a>
+  </div>
+
+  <h1>📊 $COTI Treasury Activity Overview for a Specific Wallet</h1>
+
+  <div class="wallet-input">
+    <label for="walletAddress">Enter Wallet</label>
+    <input type="text" id="walletAddress" />
+  </div>
+
+  <div class="controls">
+    <button id="refreshBtn" class="refresh-button" title="Refresh">🔄</button>
+  </div>
+
+  <div id="status" class="status">⏳ Loading data from COTI network...</div>
+  <div id="result" class="result" style="display: none;"></div>
+
+  <div id="chartContainer" style="margin-top: 2rem; display: none;">
+    <canvas id="COTIChart"></canvas>
+  </div>
+
+  <div class="security-note">
+    <h2>⚠️ Security Note for COTI Users</h2>
+    <p>This website is <strong>100% open-source</strong> and created for the COTI community to share technical instructions.</p>
+    <ul>
+      <li>All source code is available publicly on 
+        <a href="https://github.com/whalemovesonly/coti" target="_blank" rel="noopener noreferrer">GitHub</a>.
+      </li>
+      <li>The site loads directly from GitHub Pages — no hidden code or injected content.</li>
+      <li><strong>No wallet connection is required</strong> to view or use this site.</li>
+      <li>We understand crypto users are cautious. Please feel free to inspect the code before clicking any links.</li>
+    </ul>
+    <p>✅ Stay safe, stay informed, and explore the COTI ecosystem with confidence.</p>
+  </div>
+
+  <script>
+    const BASE_URL = "https://mainnet.cotiscan.io/api/v2/addresses";
+    const treasuryWallet = "0x5e19f674b3B55dF897C09824a2ddFAD6939e3d1D";
+
+    async function fetchAllTransactions(address) {
+      let allTransactions = [];
+      let params = null;
+
+      while (true) {
+        let fullUrl = `${BASE_URL}/${address}/transactions`;
+	if (params) {
+          const allowedKeys = ["block_number", "fee", "hash", "index"];
+          const paramStr = Object.entries(params)
+            .filter(([k]) => allowedKeys.includes(k))
+            .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)
+            .join("&");
+          fullUrl += `?${paramStr}`;
+        }
+        try {
+          const response = await fetch(fullUrl, { headers: { accept: "application/json" } });
+          if (!response.ok) {
+            document.getElementById("status").innerText = `❌ Failed to fetch: ${response.status}`;
+            break;
+          }
+
+          const data = await response.json();
+          const transactions = data.items || [];
+          for (const tx of transactions) {
+            if (tx.result === "success" && tx.transaction_types[0] === "coin_transfer") {
+              allTransactions.push(tx);
+            }
+          }
+
+          if (!data.next_page_params) break;
+
+          params = data.next_page_params;
+        } catch (err) {
+          break;
+        }
+      }
+      return allTransactions;
+    }
+
+    function drawChart(labels, deposits, withdrawals) {
+      const ctx = document.getElementById("COTIChart").getContext("2d");
+      if (window.COTIChartInstance) window.COTIChartInstance.destroy();
+
+      window.COTIChartInstance = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels,
+          datasets: [
+            {
+              label: "Deposits",
+              data: deposits,
+              borderColor: "#2ecc71",
+              backgroundColor: "rgba(46,204,113,0.2)",
+              fill: true
+            },
+            {
+              label: "Withdrawals",
+              data: withdrawals,
+              borderColor: "#e74c3c",
+              backgroundColor: "rgba(231,76,60,0.2)",
+              fill: true
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              labels: { color: "#fff" }
+            }
+          },
+          scales: {
+            x: { ticks: { color: "#fff" } },
+            y: { ticks: { color: "#fff" } }
+          }
+        }
+      });
+    }
+
+    async function updateData() {
+      const address = document.getElementById("walletAddress").value.trim();
+      const resultDiv = document.getElementById("result");
+      const statusDiv = document.getElementById("status");
+      const chartContainer = document.getElementById("chartContainer");
+
+      if (address === "") {
+        statusDiv.innerText = "❌ Please enter a wallet address.";
+        resultDiv.style.display = "none";
+        chartContainer.style.display = "none";
+        return;
+      }
+      if (!/^0x[a-fA-F0-9]{40}$/.test(address)) {
+        statusDiv.innerText = "❌ Invalid wallet address format.";
+        resultDiv.style.display = "none";
+        chartContainer.style.display = "none";
+        return;
+      }
+
+      statusDiv.innerText = "⏳ Fetching data from COTI network...";
+      resultDiv.style.display = "none";
+      chartContainer.style.display = "none";
+
+      const txs = await fetchAllTransactions(address);
+      const deposits = [], withdrawals = [], labels = [];
+      let totalDeposits = 0, totalWithdrawals = 0;
+
+      const sorted = txs.filter(tx => tx.timestamp).sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+      for (const tx of sorted) {
+        const val = parseInt(tx.value || "0") / 1e18;
+        const dateLabel = new Date(tx.timestamp).toLocaleDateString();
+        labels.push(dateLabel);
+
+        if (tx.to?.hash?.toLowerCase() === treasuryWallet.toLowerCase()) {
+          deposits.push(val);
+          withdrawals.push(0);
+          totalDeposits += val;
+        } else if (tx.from?.hash?.toLowerCase() === treasuryWallet.toLowerCase()) {
+          withdrawals.push(val);
+          deposits.push(0);
+          totalWithdrawals += val;
+        } else {
+          deposits.push(0);
+          withdrawals.push(0);
+        }
+      }
+
+      const remaining = totalDeposits - totalWithdrawals;
+
+      statusDiv.innerText = "✅ Data fetched successfully!";
+      resultDiv.innerText =
+        `🌍 Total Deposited: ${totalDeposits.toFixed(6)} $COTI\n` +
+        `📤 Total Withdrawn: ${totalWithdrawals.toFixed(6)} $COTI\n` +
+        `🏦 Remaining in Treasury: ${remaining.toFixed(6)} $COTI`;
+      resultDiv.style.display = "block";
+      chartContainer.style.display = "block";
+
+      drawChart(labels, deposits, withdrawals);
+    }
+
+    document.getElementById("refreshBtn").addEventListener("click", updateData);
+    document.getElementById("walletAddress").addEventListener("keypress", e => {
+      if (e.key === "Enter") updateData();
+    });
+
+    updateData();
+  </script>
+</body>
+</html>
