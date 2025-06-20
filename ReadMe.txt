@@ -1,6 +1,5 @@
 ⚠️ Security Note for COTI Users
 This website is 100% open-source and created for the COTI community to share technical instructions.
-
 All source code is available publicly on GitHub - https://github.com/whalemovesonly/coti.
 The site loads directly from GitHub Pages — no hidden code or injected content.
 No wallet connection is required to view or use this site.
