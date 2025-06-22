@@ -295,7 +295,7 @@
 
   document.getElementById("gCOTICount").style.display = "block"
   document.getElementById("gCOTICount").innerText = labels.length > 0
-    ? `💰Deposited $gCOTI: ${Object.values(deposits).reduce((acc, val) => acc + val, 0)}\n📤Withdrawn $gCOTI ${Object.values(withdrawals).reduce((acc, val) => acc + val, 0)}`
+    ? `🌍 Total Deposited: ${Object.values(deposits).reduce((acc, val) => acc + val, 0)} $gCOTI\n📤 Total Withdrawn: ${Object.values(withdrawals).reduce((acc, val) => acc + val, 0)} $gCOTI`
     : document.getElementById("gCOTICount").style.display = "none";
 
   // Re-enable after loading
