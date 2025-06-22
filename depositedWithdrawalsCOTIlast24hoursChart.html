@@ -66,7 +66,11 @@
       margin-top: 1rem;
       color: #f1c40f;
     }
-
+    .result {
+      font-size: 1.6rem;
+      margin-top: 1.5rem;
+      white-space: pre-line;
+    }
     canvas {
       margin-top: 2rem;
       max-width: 100%;
@@ -182,6 +186,7 @@
   </div>
 
   <div id="status" class="status">⏳ Ready</div>
+  <div id="gCOTICount" class="result" style="display: none;">⏳ Ready</div>
   <canvas id="gcotiChart"></canvas>
 
   <div class="security-note">
@@ -291,6 +296,10 @@
     ? `✅ Showing data from ${labels[0]} to ${labels[labels.length - 1]}`
     : "ℹ️ No data available in selected time range.";
 
+  document.getElementById("gCOTICount").style.display = "block"
+  document.getElementById("gCOTICount").innerText = labels.length > 0
+    ? `💰Deposited $COTI: ${Object.values(deposits).reduce((acc, val) => acc + val, 0)}\n📤Withdrawn $COTI ${Object.values(withdrawals).reduce((acc, val) => acc + val, 0)}`
+    : document.getElementById("gCOTICount").style.display = "none";
   // Re-enable after loading
   select.disabled = false;
   refreshBtn.disabled = false;
