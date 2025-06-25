@@ -39,7 +39,7 @@ class _AddCOTINetworkToMetaMaskState extends State<AddCOTINetworkToMetaMask> {
         currentStep++;
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(tr('add_coti.tutorial_complete'))),
+          SnackBar(content: Text(tr('add_coti.complete'))),
         );
       }
     });
@@ -68,6 +68,7 @@ class _AddCOTINetworkToMetaMaskState extends State<AddCOTINetworkToMetaMask> {
   Widget build(BuildContext context) {
     final current = steps[currentStep];
     final theme = Theme.of(context);
+    context.locale;
 
     return MainLayout(
       title: tr('add_coti.title'),
