@@ -1,24 +1,8 @@
-# bid_tracker
+⚠️ Security Note for COTI Users
+This website is 100% open-source and created for the COTI community to share technical instructions.
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
-
-
-#Step to deploy flutter to firebase on windows 11:
-flutter build web
-firebase.cmd login
-firebase.cmd init (Set build/web as your public directory->Choose no for single-page app rewrite if unsure->Say no to overwrite index.html (important!))
-firebase.cmd deploy
+All source code is available publicly on GitHub.
+The site loads directly from GitHub Pages — no hidden code or injected content.
+No wallet connection is required to view or use this site.
+We understand crypto users are cautious. Please feel free to inspect the code before clicking any links.
+✅ Stay safe, stay informed, and explore the COTI ecosystem with confidence.
