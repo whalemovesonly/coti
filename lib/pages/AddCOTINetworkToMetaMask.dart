@@ -1,6 +1,8 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../layouts/main_layout.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AddCOTINetworkToMetaMask extends StatefulWidget {
   const AddCOTINetworkToMetaMask({super.key});
@@ -49,6 +51,17 @@ class _AddCOTINetworkToMetaMaskState extends State<AddCOTINetworkToMetaMask> {
         currentStep--;
       }
     });
+  }
+
+  Future<void> _launchGitHub() async {
+    final Uri url = Uri.parse('https://github.com/whalemovesonly/coti');
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not launch GitHub link')),
+      );
+    }
   }
 
   @override
@@ -111,9 +124,11 @@ class _AddCOTINetworkToMetaMaskState extends State<AddCOTINetworkToMetaMask> {
                 ),
                 ElevatedButton(
                   onPressed: goToNext,
-                  child: Text(currentStep == steps.length - 1
-                      ? tr('add_coti.finish')
-                      : tr('add_coti.next')),
+                  child: Text(
+                    currentStep == steps.length - 1
+                        ? tr('add_coti.finish')
+                        : tr('add_coti.next'),
+                  ),
                 ),
               ],
             ),
@@ -144,7 +159,26 @@ class _AddCOTINetworkToMetaMaskState extends State<AddCOTINetworkToMetaMask> {
                     style: TextStyle(color: theme.colorScheme.tertiary),
                   ),
                   const SizedBox(height: 10),
-                  Text(tr('add_coti.note_1'), style: TextStyle(color: theme.colorScheme.tertiary)),
+
+                  // GitHub RichText link in note_1
+                  RichText(
+                    text: TextSpan(
+                      style: TextStyle(color: theme.colorScheme.tertiary),
+                      children: [
+                        TextSpan(text: tr('add_coti.note_1_part1')),
+                        TextSpan(
+                          text: 'GitHub',
+                          style: TextStyle(
+                            color: theme.colorScheme.secondary,
+                            decoration: TextDecoration.underline,
+                          ),
+                          recognizer: TapGestureRecognizer()..onTap = _launchGitHub,
+                        ),
+                        const TextSpan(text: '.'),
+                      ],
+                    ),
+                  ),
+
                   Text(tr('add_coti.note_2'), style: TextStyle(color: theme.colorScheme.tertiary)),
                   Text(tr('add_coti.note_3'), style: TextStyle(color: theme.colorScheme.tertiary)),
                   Text(tr('add_coti.note_4'), style: TextStyle(color: theme.colorScheme.tertiary)),
