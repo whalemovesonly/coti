@@ -5,6 +5,7 @@ import 'theme/theme_notifier.dart';
 import 'theme/themes.dart';
 import 'theme/theme_type.dart';
 import 'pages/AddCOTINetworkToMetaMask.dart';
+import 'pages/addingNativeCOTItokensToMetamask.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,6 +52,9 @@ class MyApp extends StatelessWidget {
         '/': (context) => const AuthWrapper(),
         '/AddCOTINetworkToMetaMask': (context) {
           return AddCOTINetworkToMetaMask();
+        },
+        '/AddCOTITokenToMetaMask': (context) {
+          return AddCOTITokenToMetaMask();
         },
       },
     );

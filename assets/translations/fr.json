@@ -30,5 +30,56 @@
     "note_3": "• Aucune connexion au portefeuille n'est requise pour consulter ou utiliser ce site.",
     "note_4": "• Nous savons que les utilisateurs de crypto sont prudents. N'hésitez pas à inspecter le code avant de cliquer sur un lien.",
     "note_closing": "✅ Restez en sécurité, bien informé et explorez l'écosystème COTI avec confiance."
-  }
+  },
+  "add_token": {
+      "title": "Ajouter le jeton COTI V2",
+      "heading": "Comment ajouter un jeton COTI V2 à MetaMask",
+      "back": "Précédent",
+      "next": "Suivant",
+      "finish": "Terminer",
+      "tutorial_complete": "Vous avez terminé toutes les étapes !",
+      "note_title": "\u26a0\ufe0f Note de sécurité pour les utilisateurs de COTI",
+      "note_intro": "Ce site est 100% open-source et créé pour la communauté COTI afin de partager des instructions techniques.",
+      "note_1": "\u2022 Tout le code source est disponible publiquement sur GitHub.",
+      "note_2": "\u2022 Le site se charge directement depuis GitHub Pages \u2014 aucun code caché ou contenu injecté.",
+      "note_3": "\u2022 Aucune connexion de portefeuille n'est requise pour consulter ou utiliser ce site.",
+      "note_4": "\u2022 Nous comprenons que les utilisateurs de crypto soient prudents. N'hésitez pas à inspecter le code avant de cliquer sur des liens.",
+      "note_closing": "\u2705 Restez en sécurité, bien informé et explorez l'écosystème COTI en toute confiance.",
+      "step1": {
+        "title": "Étape 1 : Accédez à l'explorateur de jetons COTI",
+        "text": "Visitez mainnet.cotiscan.io/tokens"
+      },
+      "step2": {
+        "title": "Étape 2 : Recherchez et sélectionnez votre jeton",
+        "text": "Tapez le nom du jeton que vous souhaitez importer et cliquez dessus pour ouvrir la page du jeton."
+      },
+      "step3": {
+        "title": "Étape 3 : Copiez l'adresse du jeton",
+        "text": "Sur la page du jeton, copiez l'adresse du contrat dans votre presse-papiers."
+      },
+      "step4": {
+        "title": "Étape 4 : Ouvrez MetaMask",
+        "text": "Lancez votre extension MetaMask ou l'application mobile."
+      },
+      "step5": {
+        "title": "Étape 5 : Cliquez sur les 3 points et choisissez \"Importer des jetons\"",
+        "text": "Dans l'onglet Jetons, appuyez sur l'icône à 3 points, puis sélectionnez Importer des jetons."
+      },
+      "step6": {
+        "title": "Étape 6 : Sélectionnez le réseau et collez l'adresse",
+        "text": "Sélectionnez le réseau COTI, puis collez l'adresse du jeton dans le champ prévu."
+      },
+      "step7": {
+        "title": "Étape 7 : Cliquez sur Suivant",
+        "text": "Cliquez sur le bouton Suivant pour continuer."
+      },
+      "step8": {
+        "title": "Étape 8 : Cliquez sur Importer",
+        "text": "Cliquez sur Importer pour terminer l'ajout du jeton."
+      },
+      "step9": {
+        "title": "Étape 9 : Terminé !",
+        "text": "Le jeton devrait maintenant apparaître dans votre portefeuille MetaMask."
+      }
+    }
 }

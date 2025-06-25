@@ -30,5 +30,56 @@
     "note_3": "• No wallet connection is required to view or use this site.",
     "note_4": "• We understand crypto users are cautious. Please feel free to inspect the code before clicking any links.",
     "note_closing": "✅ Stay safe, stay informed, and explore the COTI ecosystem with confidence."
-  }
+  },
+  "add_token": {
+      "title": "Add COTI V2 Token",
+      "heading": "How to Add a COTI V2 Token to MetaMask",
+      "back": "Previous",
+      "next": "Next",
+      "finish": "Finish",
+      "tutorial_complete": "You have completed all the steps!",
+      "note_title": "\u26a0\ufe0f Security Note for COTI Users",
+      "note_intro": "This website is 100% open-source and created for the COTI community to share technical instructions.",
+      "note_1": "\u2022 All source code is available publicly on GitHub.",
+      "note_2": "\u2022 The site loads directly from GitHub Pages \u2014 no hidden code or injected content.",
+      "note_3": "\u2022 No wallet connection is required to view or use this site.",
+      "note_4": "\u2022 We understand crypto users are cautious. Please feel free to inspect the code before clicking any links.",
+      "note_closing": "\u2705 Stay safe, stay informed, and explore the COTI ecosystem with confidence.",
+      "step1": {
+        "title": "Step 1: Go to COTI Token Explorer",
+        "text": "Visit mainnet.cotiscan.io/tokens"
+      },
+      "step2": {
+        "title": "Step 2: Search and Select Your Token",
+        "text": "Type the name of the token you want to import and click on it to open the token page."
+      },
+      "step3": {
+        "title": "Step 3: Copy the Token Address",
+        "text": "On the token's page, copy the token contract address to your clipboard."
+      },
+      "step4": {
+        "title": "Step 4: Open MetaMask",
+        "text": "Launch your MetaMask extension or mobile app."
+      },
+      "step5": {
+        "title": "Step 5: Click the 3 Dots and Choose \"Import Tokens\"",
+        "text": "In the Tokens tab, tap the 3 dots icon, then select Import Tokens."
+      },
+      "step6": {
+        "title": "Step 6: Select Network & Paste Address",
+        "text": "Select the COTI network, then paste the token address into the input field."
+      },
+      "step7": {
+        "title": "Step 7: Click Next",
+        "text": "Click the Next button to continue."
+      },
+      "step8": {
+        "title": "Step 8: Click Import",
+        "text": "Click Import to finish adding the token."
+      },
+      "step9": {
+        "title": "Step 9: Done!",
+        "text": "The token should now appear in your MetaMask wallet."
+      }
+    }
 }
