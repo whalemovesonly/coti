@@ -29,7 +29,7 @@ class MainLayout extends StatelessWidget {
           children: [
             ListTile(
               leading: const Icon(Icons.fiber_manual_record),
-              title: Text(tr('AddCOTINetworkToMetaMask')),
+              title: Text(tr('add_coti.title')),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.pushReplacementNamed(context, '/AddCOTINetworkToMetaMask');
@@ -37,7 +37,7 @@ class MainLayout extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.fiber_manual_record),
-              title: Text(tr('AddCOTITokenToMetaMask')),
+              title: Text(tr('add_token.title')),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.pushReplacementNamed(context, '/AddCOTITokenToMetaMask');
