@@ -21,7 +21,7 @@ class MainLayout extends StatelessWidget {
         ),
         title: Text(title, style: TextStyle(color: Colors.white),),
         elevation: 1,
-        backgroundColor: Colors.blue.shade700,
+        backgroundColor: const Color(0xFF041b46),
       ),
       drawer: Drawer(
         child: ListView(
