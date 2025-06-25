@@ -11,11 +11,11 @@ class AppColors {
 }
 
 class AppColorsLight {
-  static const background = Color(0xFFFFFFFF); // white
-  static const accent = Color(0xFF007C91);     // a bold teal-blue for contrast
-  static const surface = Color(0xFFF1F4F6);     // very light grey-blue surface
-  static const primaryText = Color(0xFF1A1A1A); // dark text for readability
-  static const warningBackground = Color(0xFFFFF9E5); // light yellow warning bg
-  static const warningText = Color(0xFF7A5E00);       // dark amber text
-  static const warningBorder = Color(0xFFFFC107);     // amber border (same hue)
+  static const background = Color(0xFFF9FAFB);         // Gentle light gray-white (not too bright)
+  static const accent = Color(0xFF007ACC);             // Cool, modern blue — strong and clear
+  static const surface = Color(0xFFEAF0F6);             // Subtle soft blue surface for cards
+  static const primaryText = Color(0xFF202124);        // Deep neutral gray (Google-style)
+  static const warningBackground = Color(0xFFFFF7EB);  // Soft creamy background
+  static const warningText = Color(0xFFD17A00);        // Warm deep orange for strong visibility
+  static const warningBorder = Color(0xFFFF9800);      // Material Amber 600 — alert tone
 }
