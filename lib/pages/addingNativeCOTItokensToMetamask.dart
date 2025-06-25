@@ -182,21 +182,20 @@ class _AddCOTITokenToMetaMaskState extends State<AddCOTITokenToMetaMask> {
                     style: TextStyle(color: theme.colorScheme.tertiary),
                   ),
                   const SizedBox(height: 10),
-                  Text(tr('add_token.note_1'), style: TextStyle(color: theme.colorScheme.tertiary)),
-                  Text(tr('add_token.note_2'), style: TextStyle(color: theme.colorScheme.tertiary)),
-                  Text(tr('add_token.note_3'), style: TextStyle(color: theme.colorScheme.tertiary)),
-                  Text(tr('add_token.note_4'), style: TextStyle(color: theme.colorScheme.tertiary)),
-                  const SizedBox(height: 12),
                   GestureDetector(
                     onTap: () => _launchUrl('https://github.com/whalemovesonly/coti'),
                     child: Text(
-                      tr('add_token.note_closing'),
+                      tr('add_token.note_1'),
                       style: TextStyle(
                         color: theme.colorScheme.tertiary,
                         decoration: TextDecoration.underline,
                       ),
                     ),
                   ),
+                  Text(tr('add_token.note_2'), style: TextStyle(color: theme.colorScheme.tertiary)),
+                  Text(tr('add_token.note_3'), style: TextStyle(color: theme.colorScheme.tertiary)),
+                  Text(tr('add_token.note_4'), style: TextStyle(color: theme.colorScheme.tertiary)),
+                  Text(tr('add_token.note_closing'), style: TextStyle(color: theme.colorScheme.tertiary)),
                 ],
               ),
             )
