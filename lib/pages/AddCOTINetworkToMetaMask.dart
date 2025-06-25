@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../layouts/main_layout.dart';
-import '../theme/app_colors.dart';
 
 class AddCOTINetworkToMetaMask extends StatefulWidget {
   const AddCOTINetworkToMetaMask({super.key});
@@ -55,6 +54,7 @@ class _AddCOTINetworkToMetaMaskState extends State<AddCOTINetworkToMetaMask> {
   @override
   Widget build(BuildContext context) {
     final current = steps[currentStep];
+    final theme = Theme.of(context);
 
     return MainLayout(
       title: tr('add_coti.title'),
@@ -64,37 +64,37 @@ class _AddCOTINetworkToMetaMaskState extends State<AddCOTINetworkToMetaMask> {
           children: [
             Text(
               tr('add_coti.title'),
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color: AppColors.accent,
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: theme.textTheme.headlineSmall?.copyWith(
+                color: theme.colorScheme.secondary,
+                fontWeight: FontWeight.bold,
+              ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: AppColors.surface,
-                border: Border.all(color: AppColors.accent, width: 2),
+                color: theme.cardColor,
+                border: Border.all(color: theme.colorScheme.secondary, width: 2),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Column(
                 children: [
                   Text(
                     current['title']!,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.accent,
+                      color: theme.colorScheme.secondary,
                     ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 12),
                   Text(
                     current['text']!,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
-                      color: AppColors.primaryText,
+                      color: theme.textTheme.bodyMedium?.color,
                     ),
                     textAlign: TextAlign.left,
                   ),
@@ -108,20 +108,12 @@ class _AddCOTINetworkToMetaMaskState extends State<AddCOTINetworkToMetaMask> {
                 ElevatedButton(
                   onPressed: currentStep > 0 ? goToPrevious : null,
                   child: Text(tr('add_coti.back')),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.surface,
-                    foregroundColor: AppColors.accent,
-                    side: const BorderSide(color: AppColors.accent),
-                  ),
                 ),
                 ElevatedButton(
                   onPressed: goToNext,
-                  child: Text(currentStep == steps.length - 1 ? tr('add_coti.finish') : tr('add_coti.next')),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.surface,
-                    foregroundColor: AppColors.accent,
-                    side: const BorderSide(color: AppColors.accent),
-                  ),
+                  child: Text(currentStep == steps.length - 1
+                      ? tr('add_coti.finish')
+                      : tr('add_coti.next')),
                 ),
               ],
             ),
@@ -129,10 +121,10 @@ class _AddCOTINetworkToMetaMaskState extends State<AddCOTINetworkToMetaMask> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppColors.warningBackground,
+                color: theme.colorScheme.surfaceVariant,
                 borderRadius: BorderRadius.circular(10),
-                border: const Border(
-                  left: BorderSide(color: AppColors.warningBorder, width: 6),
+                border: Border(
+                  left: BorderSide(color: theme.colorScheme.tertiary, width: 6),
                 ),
               ),
               child: Column(
@@ -140,24 +132,24 @@ class _AddCOTINetworkToMetaMaskState extends State<AddCOTINetworkToMetaMask> {
                 children: [
                   Text(
                     tr('add_coti.note_title'),
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.warningText,
+                      color: theme.colorScheme.tertiary,
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     tr('add_coti.note_intro'),
-                    style: const TextStyle(color: AppColors.warningText),
+                    style: TextStyle(color: theme.colorScheme.tertiary),
                   ),
                   const SizedBox(height: 10),
-                  Text(tr('add_coti.note_1'), style: const TextStyle(color: AppColors.warningText)),
-                  Text(tr('add_coti.note_2'), style: const TextStyle(color: AppColors.warningText)),
-                  Text(tr('add_coti.note_3'), style: const TextStyle(color: AppColors.warningText)),
-                  Text(tr('add_coti.note_4'), style: const TextStyle(color: AppColors.warningText)),
+                  Text(tr('add_coti.note_1'), style: TextStyle(color: theme.colorScheme.tertiary)),
+                  Text(tr('add_coti.note_2'), style: TextStyle(color: theme.colorScheme.tertiary)),
+                  Text(tr('add_coti.note_3'), style: TextStyle(color: theme.colorScheme.tertiary)),
+                  Text(tr('add_coti.note_4'), style: TextStyle(color: theme.colorScheme.tertiary)),
                   const SizedBox(height: 12),
-                  Text(tr('add_coti.note_closing'), style: const TextStyle(color: AppColors.warningText)),
+                  Text(tr('add_coti.note_closing'), style: TextStyle(color: theme.colorScheme.tertiary)),
                 ],
               ),
             ),

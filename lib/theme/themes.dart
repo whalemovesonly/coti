@@ -1,37 +1,72 @@
 import 'package:flutter/material.dart';
 import 'theme_type.dart';
+import 'app_colors.dart'; // dark
 
 final appThemes = {
   AppThemeType.light: ThemeData.light().copyWith(
-    primaryColor: Colors.blue,
-    scaffoldBackgroundColor: Colors.white,
+    colorScheme: ColorScheme.light(
+      primary: AppColorsLight.accent,
+      secondary: AppColorsLight.accent,
+      surface: AppColorsLight.surface,
+      background: AppColorsLight.background,
+      tertiary: AppColorsLight.warningText,
+      surfaceVariant: AppColorsLight.warningBackground,
+    ),
+    primaryColor: AppColorsLight.accent,
+    scaffoldBackgroundColor: AppColorsLight.background,
     textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: Colors.black),
+      bodyLarge: TextStyle(color: AppColorsLight.primaryText),
       bodyMedium: TextStyle(color: Colors.black87),
-      titleLarge: TextStyle(color: Colors.blueAccent),
-      titleMedium: TextStyle(
-                        color: Colors.black,
-                      ),
+      titleLarge: TextStyle(
+        color: AppColorsLight.accent,
+        fontWeight: FontWeight.bold,
+      ),
+      titleMedium: TextStyle(color: AppColorsLight.primaryText),
     ),
     appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.blue,
-      foregroundColor: Colors.white,
+      backgroundColor: AppColorsLight.surface,
+      foregroundColor: AppColorsLight.accent,
+      elevation: 0,
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColorsLight.surface,
+        foregroundColor: AppColorsLight.accent,
+        side: const BorderSide(color: AppColorsLight.accent),
+      ),
     ),
   ),
   AppThemeType.dark: ThemeData.dark().copyWith(
-    primaryColor: Colors.deepPurple,
-    scaffoldBackgroundColor: Colors.black,
+    colorScheme: ColorScheme.dark(
+      primary: AppColors.accent,
+      secondary: AppColors.accent,
+      surface: AppColors.surface,
+      background: AppColors.background,
+      tertiary: AppColors.warningText,
+      surfaceVariant: AppColors.warningBackground,
+    ),
+    primaryColor: AppColors.accent,
+    scaffoldBackgroundColor: AppColors.background,
     textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: Colors.white),
-      bodyMedium: TextStyle(color: Colors.white70),
-      titleLarge: TextStyle(color: Colors.cyanAccent),
-      titleMedium: TextStyle(
-                        color: Colors.white,
-                      ),
+      bodyLarge: TextStyle(color: AppColors.primaryText),
+      bodyMedium: TextStyle(color: AppColors.primaryText),
+      titleLarge: TextStyle(
+        color: AppColors.accent,
+        fontWeight: FontWeight.bold,
+      ),
+      titleMedium: TextStyle(color: AppColors.primaryText),
     ),
     appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.black,
-      foregroundColor: Colors.white,
+      backgroundColor: AppColors.surface,
+      foregroundColor: AppColors.accent,
+      elevation: 0,
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.surface,
+        foregroundColor: AppColors.accent,
+        side: const BorderSide(color: AppColors.accent),
+      ),
     ),
   ),
 };
