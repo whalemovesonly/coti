@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Contract App',
+      title: 'COTI V2 tools',
 
       theme: appThemes[AppThemeType.light],
       darkTheme: appThemes[AppThemeType.dark],
@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const AuthWrapper(),
-        '/dashboard': (context) {
+        '/AddCOTINetworkToMetaMask': (context) {
           return AddCOTINetworkToMetaMask();
         },
       },
