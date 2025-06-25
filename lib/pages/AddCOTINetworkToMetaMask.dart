@@ -12,29 +12,24 @@ class AddCOTINetworkToMetaMask extends StatefulWidget {
 class _AddCOTINetworkToMetaMaskState extends State<AddCOTINetworkToMetaMask> {
   int currentStep = 0;
 
-  final List<Map<String, String>> steps = [
-    {
-      'title': "Step 1: Open MetaMask",
-      'text': "Click the network dropdown at the top left of MetaMask and select 'Add a custom network'."
-    },
-    {
-      'title': "Step 2: Enter COTI Mainnet Info",
-      'text': """Fill in the fields with:\n\n
-Network Name: COTI\n
-RPC URL: https://mainnet.coti.io/rpc\n
-Chain ID: 2632500\n
-Symbol: COTI\n
-Block Explorer: https://mainnet.cotiscan.io"""
-    },
-    {
-      'title': "Step 3: Save & Switch",
-      'text': "Click 'Save'. MetaMask will switch to the COTI network automatically."
-    },
-    {
-      'title': "You're All Set!",
-      'text': "You’ve added the COTI network to MetaMask. You can now bridge tokens or interact with dApps on COTI V2."
-    },
-  ];
+  List<Map<String, String>> get steps => [
+        {
+          'title': tr('add_coti.step1.title'),
+          'text': tr('add_coti.step1.text'),
+        },
+        {
+          'title': tr('add_coti.step2.title'),
+          'text': tr('add_coti.step2.text'),
+        },
+        {
+          'title': tr('add_coti.step3.title'),
+          'text': tr('add_coti.step3.text'),
+        },
+        {
+          'title': tr('add_coti.step4.title'),
+          'text': tr('add_coti.step4.text'),
+        },
+      ];
 
   void goToNext() {
     setState(() {
@@ -42,7 +37,7 @@ Block Explorer: https://mainnet.cotiscan.io"""
         currentStep++;
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Tutorial complete!')),
+          SnackBar(content: Text(tr('add_coti.tutorial_complete'))),
         );
       }
     });
@@ -61,11 +56,19 @@ Block Explorer: https://mainnet.cotiscan.io"""
     final current = steps[currentStep];
 
     return MainLayout(
-      title: tr('AddCOTINetworkToMetaMask_title'),
+      title: tr('add_coti.title'),
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
+            Text(
+              tr('add_coti.title'),
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    color: const Color(0xFF66fcf1),
+                    fontWeight: FontWeight.bold,
+                  ),
+              textAlign: TextAlign.center,
+            ),
             const SizedBox(height: 24),
             Container(
               padding: const EdgeInsets.all(20),
@@ -100,7 +103,7 @@ Block Explorer: https://mainnet.cotiscan.io"""
               children: [
                 ElevatedButton(
                   onPressed: currentStep > 0 ? goToPrevious : null,
-                  child: const Text("Back"),
+                  child: Text(tr('add_coti.back')),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF1f2833),
                     foregroundColor: const Color(0xFF66fcf1),
@@ -109,7 +112,7 @@ Block Explorer: https://mainnet.cotiscan.io"""
                 ),
                 ElevatedButton(
                   onPressed: goToNext,
-                  child: Text(currentStep == steps.length - 1 ? "Finish" : "Next"),
+                  child: Text(currentStep == steps.length - 1 ? tr('add_coti.finish') : tr('add_coti.next')),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF1f2833),
                     foregroundColor: const Color(0xFF66fcf1),
@@ -131,42 +134,22 @@ Block Explorer: https://mainnet.cotiscan.io"""
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "⚠️ Security Note for COTI Users",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFFF1E58D)),
+                  Text(
+                    tr('add_coti.note_title'),
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFFF1E58D)),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    "This website is 100% open-source and created for the COTI community to share technical instructions.",
-                    style: TextStyle(color: Color(0xFFF1E58D)),
+                  Text(
+                    tr('add_coti.note_intro'),
+                    style: const TextStyle(color: Color(0xFFF1E58D)),
                   ),
                   const SizedBox(height: 10),
-                  const Text("• All source code is available publicly on GitHub:", style: TextStyle(color: Color(0xFFF1E58D))),
-                  GestureDetector(
-                    onTap: () {
-                      // TODO: use url_launcher to open external link if needed
-                    },
-                    child: const Text(
-                      "https://github.com/whalemovesonly/coti",
-                      style: TextStyle(
-                        color: Color(0xFFF7DC6F),
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  const Text("• The site loads directly from GitHub Pages — no hidden code or injected content.",
-                      style: TextStyle(color: Color(0xFFF1E58D))),
-                  const Text("• No wallet connection is required to view or use this site.",
-                      style: TextStyle(color: Color(0xFFF1E58D))),
-                  const Text(
-                      "• We understand crypto users are cautious. Please feel free to inspect the code before clicking any links.",
-                      style: TextStyle(color: Color(0xFFF1E58D))),
+                  Text(tr('add_coti.note_1'), style: const TextStyle(color: Color(0xFFF1E58D))),
+                  Text(tr('add_coti.note_2'), style: const TextStyle(color: Color(0xFFF1E58D))),
+                  Text(tr('add_coti.note_3'), style: const TextStyle(color: Color(0xFFF1E58D))),
+                  Text(tr('add_coti.note_4'), style: const TextStyle(color: Color(0xFFF1E58D))),
                   const SizedBox(height: 12),
-                  const Text(
-                    "✅ Stay safe, stay informed, and explore the COTI ecosystem with confidence.",
-                    style: TextStyle(color: Color(0xFFF1E58D)),
-                  ),
+                  Text(tr('add_coti.note_closing'), style: const TextStyle(color: Color(0xFFF1E58D))),
                 ],
               ),
             ),

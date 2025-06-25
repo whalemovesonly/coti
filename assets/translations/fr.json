@@ -1,4 +1,34 @@
 {
   "AddCOTINetworkToMetaMask": "Ajouter le réseau COTI à MetaMask",
-  "AddCOTINetworkToMetaMask_title": "Ajouter le réseau COTI à MetaMask"
+  "AddCOTINetworkToMetaMask_title": "Ajouter le réseau COTI à MetaMask",
+  "add_coti": {
+    "title": "Ajouter le réseau COTI à MetaMask",
+    "step1": {
+      "title": "Étape 1 : Ouvrir MetaMask",
+      "text": "Cliquez sur le menu déroulant du réseau en haut à gauche de MetaMask et sélectionnez 'Ajouter un réseau personnalisé'."
+    },
+    "step2": {
+      "title": "Étape 2 : Entrer les informations du réseau COTI",
+      "text": "Remplissez les champs suivants :\n\nNom du réseau : COTI\nURL RPC : https://mainnet.coti.io/rpc\nID de chaîne : 2632500\nSymbole : COTI\nExplorateur de blocs : https://mainnet.cotiscan.io"
+    },
+    "step3": {
+      "title": "Étape 3 : Enregistrer et changer",
+      "text": "Cliquez sur 'Enregistrer'. MetaMask passera automatiquement au réseau COTI."
+    },
+    "step4": {
+      "title": "Tout est prêt !",
+      "text": "Vous avez ajouté le réseau COTI à MetaMask. Vous pouvez maintenant transférer des jetons ou interagir avec des dApps sur COTI V2."
+    },
+    "back": "Retour",
+    "next": "Suivant",
+    "finish": "Terminer",
+    "tutorial_complete": "Tutoriel terminé !",
+    "note_title": "⚠️ Note de sécurité pour les utilisateurs de COTI",
+    "note_intro": "Ce site est 100% open-source et créé pour la communauté COTI afin de partager des instructions techniques.",
+    "note_1": "• Tout le code source est disponible publiquement sur GitHub.",
+    "note_2": "• Le site se charge directement depuis GitHub Pages — aucun code caché ou contenu injecté.",
+    "note_3": "• Aucune connexion au portefeuille n'est requise pour consulter ou utiliser ce site.",
+    "note_4": "• Nous savons que les utilisateurs de crypto sont prudents. N'hésitez pas à inspecter le code avant de cliquer sur un lien.",
+    "note_closing": "✅ Restez en sécurité, bien informé et explorez l'écosystème COTI avec confiance."
+  }
 }
