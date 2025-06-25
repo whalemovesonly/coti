@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../layouts/main_layout.dart';
 import 'package:easy_localization/easy_localization.dart';
+import '../layouts/main_layout.dart';
+import '../theme/app_colors.dart';
 
 class AddCOTINetworkToMetaMask extends StatefulWidget {
   const AddCOTINetworkToMetaMask({super.key});
@@ -64,7 +65,7 @@ class _AddCOTINetworkToMetaMaskState extends State<AddCOTINetworkToMetaMask> {
             Text(
               tr('add_coti.title'),
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color: const Color(0xFF66fcf1),
+                    color: AppColors.accent,
                     fontWeight: FontWeight.bold,
                   ),
               textAlign: TextAlign.center,
@@ -73,8 +74,8 @@ class _AddCOTINetworkToMetaMaskState extends State<AddCOTINetworkToMetaMask> {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: const Color(0xFF1f2833),
-                border: Border.all(color: const Color(0xFF66fcf1), width: 2),
+                color: AppColors.surface,
+                border: Border.all(color: AppColors.accent, width: 2),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Column(
@@ -84,14 +85,17 @@ class _AddCOTINetworkToMetaMaskState extends State<AddCOTINetworkToMetaMask> {
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF66fcf1),
+                      color: AppColors.accent,
                     ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 12),
                   Text(
                     current['text']!,
-                    style: const TextStyle(fontSize: 16, color: Colors.white70),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: AppColors.primaryText,
+                    ),
                     textAlign: TextAlign.left,
                   ),
                 ],
@@ -105,18 +109,18 @@ class _AddCOTINetworkToMetaMaskState extends State<AddCOTINetworkToMetaMask> {
                   onPressed: currentStep > 0 ? goToPrevious : null,
                   child: Text(tr('add_coti.back')),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF1f2833),
-                    foregroundColor: const Color(0xFF66fcf1),
-                    side: const BorderSide(color: Color(0xFF66fcf1)),
+                    backgroundColor: AppColors.surface,
+                    foregroundColor: AppColors.accent,
+                    side: const BorderSide(color: AppColors.accent),
                   ),
                 ),
                 ElevatedButton(
                   onPressed: goToNext,
                   child: Text(currentStep == steps.length - 1 ? tr('add_coti.finish') : tr('add_coti.next')),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF1f2833),
-                    foregroundColor: const Color(0xFF66fcf1),
-                    side: const BorderSide(color: Color(0xFF66fcf1)),
+                    backgroundColor: AppColors.surface,
+                    foregroundColor: AppColors.accent,
+                    side: const BorderSide(color: AppColors.accent),
                   ),
                 ),
               ],
@@ -125,10 +129,10 @@ class _AddCOTINetworkToMetaMaskState extends State<AddCOTINetworkToMetaMask> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: const Color(0xFF3d2e00),
+                color: AppColors.warningBackground,
                 borderRadius: BorderRadius.circular(10),
-                border: Border(
-                  left: BorderSide(color: Colors.amber[400]!, width: 6),
+                border: const Border(
+                  left: BorderSide(color: AppColors.warningBorder, width: 6),
                 ),
               ),
               child: Column(
@@ -136,20 +140,24 @@ class _AddCOTINetworkToMetaMaskState extends State<AddCOTINetworkToMetaMask> {
                 children: [
                   Text(
                     tr('add_coti.note_title'),
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFFF1E58D)),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.warningText,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     tr('add_coti.note_intro'),
-                    style: const TextStyle(color: Color(0xFFF1E58D)),
+                    style: const TextStyle(color: AppColors.warningText),
                   ),
                   const SizedBox(height: 10),
-                  Text(tr('add_coti.note_1'), style: const TextStyle(color: Color(0xFFF1E58D))),
-                  Text(tr('add_coti.note_2'), style: const TextStyle(color: Color(0xFFF1E58D))),
-                  Text(tr('add_coti.note_3'), style: const TextStyle(color: Color(0xFFF1E58D))),
-                  Text(tr('add_coti.note_4'), style: const TextStyle(color: Color(0xFFF1E58D))),
+                  Text(tr('add_coti.note_1'), style: const TextStyle(color: AppColors.warningText)),
+                  Text(tr('add_coti.note_2'), style: const TextStyle(color: AppColors.warningText)),
+                  Text(tr('add_coti.note_3'), style: const TextStyle(color: AppColors.warningText)),
+                  Text(tr('add_coti.note_4'), style: const TextStyle(color: AppColors.warningText)),
                   const SizedBox(height: 12),
-                  Text(tr('add_coti.note_closing'), style: const TextStyle(color: Color(0xFFF1E58D))),
+                  Text(tr('add_coti.note_closing'), style: const TextStyle(color: AppColors.warningText)),
                 ],
               ),
             ),

@@ -1,21 +1,11 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static Color primaryText(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black;
-
-  static Color secondaryText(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark ? Colors.white70 : Colors.grey;
-
-  static Color inputText(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black87;
-
-  static Color buttonText(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark ? Colors.black : Colors.white;
-
-  static Color icon(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark ? Colors.black : Colors.white;
-
-  static Color accentText(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark ? Colors.cyanAccent : Colors.deepPurple;
+  static const background = Color(0xFF0b0c10);
+  static const accent = Color(0xFF66fcf1);
+  static const surface = Color(0xFF1f2833);
+  static const primaryText = Colors.white70;
+  static const warningBackground = Color(0xFF3d2e00);
+  static const warningText = Color(0xFFF1E58D);
+  static const warningBorder = Color(0xFFF1C40F);
 }
