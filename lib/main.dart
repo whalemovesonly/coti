@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'theme/theme_notifier.dart';
 import 'theme/themes.dart';
 import 'theme/theme_type.dart';
-import 'pages/dashboard_page.dart';
+import 'pages/AddCOTINetworkToMetaMask.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const AuthWrapper(),
         '/dashboard': (context) {
-          return DashboardPage();
+          return AddCOTINetworkToMetaMask();
         },
       },
     );
@@ -61,6 +61,6 @@ class AuthWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const DashboardPage(); // No need for FutureBuilder
+    return const AddCOTINetworkToMetaMask(); // No need for FutureBuilder
   }
 }

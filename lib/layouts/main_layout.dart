@@ -8,9 +8,9 @@ import '../theme/theme_type.dart';
 class MainLayout extends StatelessWidget {
   final Widget child;
   final String title;
-  final String role;
+
   
-  const MainLayout({super.key, required this.child, required this.title, required this.role});
+  const MainLayout({super.key, required this.child, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +28,11 @@ class MainLayout extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: [
             ListTile(
-              leading: const Icon(Icons.dashboard),
-              title: Text(tr('dashboard')),
+              leading: const Icon(Icons.fiber_manual_record),
+              title: Text(tr('AddCOTINetworkToMetaMask')),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushReplacementNamed(context, '/dashboard',arguments: role);
+                Navigator.pushReplacementNamed(context, '/AddCOTINetworkToMetaMask');
               },
             ),
             const Divider(),
