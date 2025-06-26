@@ -129,14 +129,19 @@ class _AddCOTITokenToMetaMaskState extends State<AddCOTITokenToMetaMask> {
                     onTap: step['link'] != null
                         ? () => _launchUrl(step['link']!)
                         : null,
-                    child: SelectableText(
-                      step['text']!,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: step['link'] != null
-                            ? theme.colorScheme.secondary.withOpacity(0.9)
-                            : theme.textTheme.bodyMedium?.color,
-                        decoration: step['link'] != null ? TextDecoration.underline : null,
+                    child: SelectableText.rich(
+                      TextSpan(
+                        text: step['text'],
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: step['link'] != null
+                              ? theme.colorScheme.secondary.withOpacity(0.9)
+                              : theme.textTheme.bodyMedium?.color,
+                          decoration: step['link'] != null ? TextDecoration.underline : null,
+                        ),
+                        recognizer: step['link'] != null
+                            ? (TapGestureRecognizer()..onTap = () => _launchUrl(step['link']!))
+                            : null,
                       ),
                       textAlign: TextAlign.left,
                     ),
