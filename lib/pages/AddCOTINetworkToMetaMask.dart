@@ -76,15 +76,6 @@ class _AddCOTINetworkToMetaMaskState extends State<AddCOTINetworkToMetaMask> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            Text(
-              tr('add_coti.title'),
-              style: theme.textTheme.headlineSmall?.copyWith(
-                color: theme.colorScheme.secondary,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(

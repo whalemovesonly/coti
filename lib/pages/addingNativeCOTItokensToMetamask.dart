@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../layouts/main_layout.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/gestures.dart';
 
 class AddCOTITokenToMetaMask extends StatefulWidget {
   const AddCOTITokenToMetaMask({super.key});
@@ -82,6 +83,17 @@ class _AddCOTITokenToMetaMaskState extends State<AddCOTITokenToMetaMask> {
     }
   }
 
+  Future<void> _launchGitHub() async {
+    final Uri url = Uri.parse('https://github.com/whalemovesonly/coti');
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not launch GitHub link')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final steps = getSteps(context);
@@ -94,15 +106,6 @@ class _AddCOTITokenToMetaMaskState extends State<AddCOTITokenToMetaMask> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            Text(
-              tr('add_token.heading'),
-              style: theme.textTheme.headlineSmall?.copyWith(
-                color: theme.colorScheme.secondary,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
@@ -182,14 +185,21 @@ class _AddCOTITokenToMetaMaskState extends State<AddCOTITokenToMetaMask> {
                     style: TextStyle(color: theme.colorScheme.tertiary),
                   ),
                   const SizedBox(height: 10),
-                  GestureDetector(
-                    onTap: () => _launchUrl('https://github.com/whalemovesonly/coti'),
-                    child: Text(
-                      tr('add_token.note_1'),
-                      style: TextStyle(
-                        color: theme.colorScheme.tertiary,
-                        decoration: TextDecoration.underline,
-                      ),
+                  RichText(
+                    text: TextSpan(
+                      style: TextStyle(color: theme.colorScheme.tertiary),
+                      children: [
+                        TextSpan(text: tr('add_token.note_1')),
+                        TextSpan(
+                          text: 'GitHub',
+                          style: TextStyle(
+                            color: theme.colorScheme.secondary,
+                            decoration: TextDecoration.underline,
+                          ),
+                          recognizer: TapGestureRecognizer()..onTap = _launchGitHub,
+                        ),
+                        const TextSpan(text: '.'),
+                      ],
                     ),
                   ),
                   Text(tr('add_token.note_2'), style: TextStyle(color: theme.colorScheme.tertiary)),
