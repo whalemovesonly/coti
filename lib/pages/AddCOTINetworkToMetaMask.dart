@@ -95,7 +95,7 @@ class _AddCOTINetworkToMetaMaskState extends State<AddCOTINetworkToMetaMask> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 12),
-                  Text(
+                  SelectableText(
                     current['text']!,
                     style: TextStyle(
                       fontSize: 16,
