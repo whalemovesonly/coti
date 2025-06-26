@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import '../layouts/main_layout.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/gestures.dart';
+import '../layouts/SecurityNote.dart';
 
 class AddCOTITokenToMetaMask extends StatefulWidget {
   const AddCOTITokenToMetaMask({super.key});
@@ -164,56 +165,7 @@ class _AddCOTITokenToMetaMaskState extends State<AddCOTITokenToMetaMask> {
               ],
             ),
             const SizedBox(height: 40),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceVariant,
-                borderRadius: BorderRadius.circular(10),
-                border: Border(
-                  left: BorderSide(color: theme.colorScheme.tertiary, width: 6),
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    tr('add_token.note_title'),
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: theme.colorScheme.tertiary,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    tr('add_token.note_intro'),
-                    style: TextStyle(color: theme.colorScheme.tertiary),
-                  ),
-                  const SizedBox(height: 10),
-                  RichText(
-                    text: TextSpan(
-                      style: TextStyle(color: theme.colorScheme.tertiary),
-                      children: [
-                        TextSpan(text: tr('add_token.note_1')),
-                        TextSpan(
-                          text: 'GitHub',
-                          style: TextStyle(
-                            color: theme.colorScheme.secondary,
-                            decoration: TextDecoration.underline,
-                          ),
-                          recognizer: TapGestureRecognizer()..onTap = _launchGitHub,
-                        ),
-                        const TextSpan(text: '.'),
-                      ],
-                    ),
-                  ),
-                  Text(tr('add_token.note_2'), style: TextStyle(color: theme.colorScheme.tertiary)),
-                  Text(tr('add_token.note_3'), style: TextStyle(color: theme.colorScheme.tertiary)),
-                  Text(tr('add_token.note_4'), style: TextStyle(color: theme.colorScheme.tertiary)),
-                  Text(tr('add_token.note_closing'), style: TextStyle(color: theme.colorScheme.tertiary)),
-                ],
-              ),
-            )
+            const SecurityNote(),
           ],
         ),
       ),

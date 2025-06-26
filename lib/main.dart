@@ -6,6 +6,7 @@ import 'theme/themes.dart';
 import 'theme/theme_type.dart';
 import 'pages/AddCOTINetworkToMetaMask.dart';
 import 'pages/addingNativeCOTItokensToMetamask.dart';
+import 'pages/buygCOTI.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -55,6 +56,9 @@ class MyApp extends StatelessWidget {
         },
         '/AddCOTITokenToMetaMask': (context) {
           return AddCOTITokenToMetaMask();
+        },
+        '/BuyGCOTIPage': (context) {
+          return BuyGCOTIPage();
         },
       },
     );

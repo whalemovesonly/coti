@@ -43,6 +43,14 @@ class MainLayout extends StatelessWidget {
                 Navigator.pushReplacementNamed(context, '/AddCOTITokenToMetaMask');
               },
             ),
+            ListTile(
+              leading: const Icon(Icons.fiber_manual_record),
+              title: Text(tr('add_token.title')),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, '/BuyGCOTIPage');
+              },
+            ),
             const Divider(),
             ListTile(
               leading: const Icon(Icons.language),
