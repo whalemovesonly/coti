@@ -136,5 +136,14 @@
     "fetching_status": "⏳ Récupération des données...",
     "success_status": "✅ Données affichées du {} au {}",
     "empty_status": "ℹ️ Aucune donnée disponible pour la période sélectionnée."
+  },
+    "gcotiforwalletoverview": {
+    "treasury_chart_title": "📊 Aperçu des activités du Trésor $gCOTI pour un portefeuille spécifique",
+    "enter_wallet": "Entrez le portefeuille",
+    "invalid_address": "❌ Veuillez entrer une adresse de portefeuille valide.",
+    "fetching_status": "⏳ Récupération des données du réseau COTI...",
+    "success_status": "✅ Données récupérées avec succès !",
+    "error_status": "❌ Échec de la récupération des données. Veuillez réessayer plus tard.",
+    "result_text": "🌍 Total déposé : {} $gCOTI\n\n📤 Total retiré : {} $gCOTI"
   }
 }

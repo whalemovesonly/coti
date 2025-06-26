@@ -12,6 +12,7 @@ import 'pages/GCotiDepositsPage.dart';
 import 'pages/CotiDepositsPage.dart';
 import 'pages/GCotiTreasuryTrackerPage.dart';
 import 'pages/GCotiChartPage.dart';
+import 'pages/GCotiTreasuryOverviewPage.dart';
 
 
 void main() async {
@@ -80,6 +81,9 @@ class MyApp extends StatelessWidget {
         }, 
         '/GCotiChartPage': (context) {
           return GCotiChartPage();
+        }, 
+        '/GCotiTreasuryOverviewPage': (context) {
+          return GCotiTreasuryOverviewPage();
         }, 
       },
     );
