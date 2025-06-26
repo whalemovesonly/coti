@@ -124,59 +124,72 @@ class _GCotiTreasuryOverviewPageState extends State<GCotiTreasuryOverviewPage> {
     }
   }
 
-  Widget buildChart() {
-    if (labels.isEmpty) return const SizedBox.shrink();
-    return SizedBox(
-      height: 400,
-      width: MediaQuery.of(context).size.width * 0.95,
-      child: BarChart(
-        BarChartData(
-          barGroups: List.generate(labels.length, (i) => BarChartGroupData(x: i, barRods: [
-            BarChartRodData(toY: deposits[i], color: Colors.greenAccent),
-            BarChartRodData(toY: withdrawals[i], color: Colors.redAccent),
-          ])),
-          titlesData: FlTitlesData(
-            bottomTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                interval: 1,
-                reservedSize: 36,
-                getTitlesWidget: (value, meta) {
+ Widget buildChart(BuildContext context) {
+  final theme = Theme.of(context);
+  final colorScheme = theme.colorScheme;
+  final textColor = theme.textTheme.bodyMedium?.color ?? Colors.white70;
+
+  if (labels.isEmpty) return const SizedBox.shrink();
+
+  return SizedBox(
+    height: 400,
+    width: MediaQuery.of(context).size.width * 0.95,
+    child: BarChart(
+      BarChartData(
+        barGroups: List.generate(labels.length, (i) => BarChartGroupData(
+          x: i,
+          barRods: [
+            BarChartRodData(
+              toY: deposits[i],
+              color: colorScheme.primary, // e.g., accent color
+            ),
+            BarChartRodData(
+              toY: withdrawals[i],
+              color: colorScheme.tertiary, // warning text color (used as "red-like")
+            ),
+          ],
+        )),
+        titlesData: FlTitlesData(
+          bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              interval: 1,
+              reservedSize: 36,
+              getTitlesWidget: (value, meta) {
                 final index = value.toInt();
                 if (index < 0 || index >= labels.length) return const SizedBox.shrink();
-                // Only show even-indexed labels
                 if (index % 2 != 0) return const SizedBox.shrink();
                 final date = labels[index];
                 return SideTitleWidget(
-                    axisSide: meta.axisSide,
-                    child: Text(
+                  axisSide: meta.axisSide,
+                  child: Text(
                     date.substring(5),
-                    style: const TextStyle(fontSize: 10, color: Colors.white70),
-                    ),
+                    style: TextStyle(fontSize: 10, color: textColor),
+                  ),
                 );
-                },
-              ),
+              },
             ),
-            leftTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                reservedSize: 80,
-                getTitlesWidget: (value, meta) {
-                  return Text(
-                    value.toStringAsFixed(0),
-                    style: const TextStyle(fontSize: 10, color: Colors.white70),
-                  );
-                },
-              ),
-            ),
-            topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
           ),
-          borderData: FlBorderData(show: false),
+          leftTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              reservedSize: 80,
+              getTitlesWidget: (value, meta) {
+                return Text(
+                  value.toStringAsFixed(0),
+                  style: TextStyle(fontSize: 10, color: textColor),
+                );
+              },
+            ),
+          ),
+          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
         ),
+        borderData: FlBorderData(show: false),
       ),
-    );
-  }
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -234,7 +247,7 @@ class _GCotiTreasuryOverviewPageState extends State<GCotiTreasuryOverviewPage> {
                         textAlign: TextAlign.center,
                     ),
                 const SizedBox(height: 20),
-                buildChart(),
+                buildChart(context),
                 const SizedBox(height: 30),
                 const SecurityNote(),
                 const SizedBox(height: 20),

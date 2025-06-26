@@ -121,58 +121,68 @@ class _GCotiChartPageState extends State<GCotiChartPage> {
     });
   }
 
-  Widget buildChart() {
-    if (labels.isEmpty) return const SizedBox.shrink();
-    return SizedBox(
-      height: 400,
-      child: BarChart(
-        BarChartData(
-          barGroups: List.generate(labels.length, (index) {
-            return BarChartGroupData(x: index, barRods: [
-              BarChartRodData(toY: deposits[index], color: Colors.cyanAccent),
-              BarChartRodData(toY: withdrawals[index], color: Colors.redAccent),
-            ]);
-          }),
-          titlesData: FlTitlesData(
-            bottomTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                interval: 1,
-                reservedSize: 36,
-                getTitlesWidget: (value, meta) {
-                  final index = value.toInt();
-                  if (index < 0 || index >= labels.length) return const SizedBox.shrink();
-                  final date = labels[index];
-                  return SideTitleWidget(
-                    axisSide: meta.axisSide,
-                    child: Text(
-                      date.substring(5),
-                      style: const TextStyle(fontSize: 10, color: Colors.white70),
-                    ),
-                  );
-                },
-              ),
+  Widget buildChart(BuildContext context) {
+  if (labels.isEmpty) return const SizedBox.shrink();
+
+  final colorScheme = Theme.of(context).colorScheme;
+  final textColor = Theme.of(context).textTheme.bodyMedium?.color ?? Colors.grey;
+
+  return SizedBox(
+    height: 400,
+    child: BarChart(
+      BarChartData(
+        barGroups: List.generate(labels.length, (index) {
+          return BarChartGroupData(x: index, barRods: [
+            BarChartRodData(
+              toY: deposits[index],
+              color: colorScheme.primary, // deposit bar
             ),
-            leftTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                reservedSize: 80,
-                getTitlesWidget: (value, meta) {
-                  return Text(
-                    value.toStringAsFixed(0),
-                    style: const TextStyle(fontSize: 10, color: Colors.white70),
-                  );
-                },
-              ),
+            BarChartRodData(
+              toY: withdrawals[index],
+              color: colorScheme.tertiary, // withdrawal bar (warning color)
             ),
-            topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          ]);
+        }),
+        titlesData: FlTitlesData(
+          bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              interval: 1,
+              reservedSize: 36,
+              getTitlesWidget: (value, meta) {
+                final index = value.toInt();
+                if (index < 0 || index >= labels.length) return const SizedBox.shrink();
+                final date = labels[index];
+                return SideTitleWidget(
+                  axisSide: meta.axisSide,
+                  child: Text(
+                    date.substring(5),
+                    style: TextStyle(fontSize: 10, color: textColor),
+                  ),
+                );
+              },
+            ),
           ),
-          borderData: FlBorderData(show: false),
+          leftTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              reservedSize: 80,
+              getTitlesWidget: (value, meta) {
+                return Text(
+                  value.toStringAsFixed(0),
+                  style: TextStyle(fontSize: 10, color: textColor),
+                );
+              },
+            ),
+          ),
+          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
         ),
+        borderData: FlBorderData(show: false),
       ),
-    );
-  }
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -230,7 +240,7 @@ class _GCotiChartPageState extends State<GCotiChartPage> {
                     textAlign: TextAlign.center,
                   ),
                 const SizedBox(height: 20),
-                buildChart(),
+                buildChart(context),
                 const SizedBox(height: 30),
                 const SecurityNote(),
                 const SizedBox(height: 20),
