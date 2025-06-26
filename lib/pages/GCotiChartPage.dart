@@ -221,7 +221,7 @@ class _GCotiChartPageState extends State<GCotiChartPage> {
                 ),
                 const SizedBox(height: 10),
                 if (labels.isNotEmpty)
-                  Text(
+                  SelectableText(
                     'gcotichart.result_text'.tr(args: [
   deposits.reduce((a, b) => a + b).toStringAsFixed(4),
   withdrawals.reduce((a, b) => a + b).toStringAsFixed(4),
