@@ -9,6 +9,9 @@ import 'pages/addingNativeCOTItokensToMetamask.dart';
 import 'pages/buygCOTI.dart';
 import 'pages/bridgeHack.dart';
 import 'pages/GCotiDepositsPage.dart';
+import 'pages/CotiDepositsPage.dart';
+import 'pages/GCotiTreasuryTrackerPage.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -68,6 +71,12 @@ class MyApp extends StatelessWidget {
         '/GCotiDepositsPage': (context) {
           return GCotiDepositsPage();
         },
+        '/CotiDepositsPage': (context) {
+          return CotiDepositsPage();
+        },
+        '/GCotiTreasuryTrackerPage': (context) {
+          return GCotiTreasuryTrackerPage();
+        }, 
       },
     );
   }

@@ -106,5 +106,28 @@
     "result_text": "🌍 A total of {} $gCOTI was deposited into the Treasury in the last {} day(s).",
     "day_option": "Last {} day(s)",
     "page_title": "$gCOTI Treasury Deposits"
-  }
+  },
+  "coti": {
+    "page_title": "$COTI Treasury Deposits",
+    "title": "🕒 $COTI Treasury Deposits",
+    "day_option": "Last {} day(s)",
+    "loading_status": "⏳ Loading data from COTI network...",
+    "fetching_status": "⏳ Fetching data from COTI network...",
+    "success_status": "✅ Data fetched successfully!",
+    "error_status": "❌ Error while fetching data {}",
+    "result_text": "🌍 A total of {} $COTI was deposited into the Treasury in the last {} day(s)."
+  },
+  "gcotiforwallet":
+  {
+  "treasury_tracker_title": "Track $gCOTI Treasury Deposits for Any Wallet",
+  "enter_wallet": "Enter Wallet Address",
+  "day_option": "Last {} day(s)",
+  "loading_status": "⏳ Loading data...",
+  "fetching_status": "⏳ Fetching data from COTI network...",
+  "success_status": "✅ Data fetched successfully!",
+  "no_tx_found": "✅ No $gCOTI Treasury deposits found in the selected time range.",
+  "invalid_address": "❌ Invalid wallet address format.",
+  "error_status": "❌ Failed to fetch data.",
+  "result_text": "🌍 A total of {} $gCOTI was deposited into the Treasury in the last {} day(s)."
+}
 }
