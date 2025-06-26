@@ -97,5 +97,14 @@
     "bridge_hack": {
     "title": "Bridge Hack",
     "tip": "One tip for you: if you want to bridge more than 25K $COTI from Layer 2 to Ethereum in one day, use multiple wallets. Each wallet can bridge up to 25K $COTI. For example, if you want to bridge 100K $COTI, split it into four wallets with 25K each, then start bridging from each wallet to Ethereum. It worked for me — and yes, it should work for you too."
+  },
+    "gcoti": {
+    "loading_status": "⏳ Loading data from COTI network...",
+    "fetching_status": "⏳ Fetching data from COTI network...",
+    "success_status": "✅ Data fetched successfully!",
+    "error_status": "❌ Error: {}",
+    "result_text": "🌍 A total of {} $gCOTI was deposited into the Treasury in the last {} day(s).",
+    "day_option": "Last {} day(s)",
+    "page_title": "$gCOTI Treasury Deposits"
   }
 }

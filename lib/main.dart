@@ -8,6 +8,7 @@ import 'pages/AddCOTINetworkToMetaMask.dart';
 import 'pages/addingNativeCOTItokensToMetamask.dart';
 import 'pages/buygCOTI.dart';
 import 'pages/bridgeHack.dart';
+import 'pages/GCotiDepositsPage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -63,6 +64,9 @@ class MyApp extends StatelessWidget {
         },
         '/BridgeHackPage': (context) {
           return BridgeHackPage();
+        },
+        '/GCotiDepositsPage': (context) {
+          return GCotiDepositsPage();
         },
       },
     );

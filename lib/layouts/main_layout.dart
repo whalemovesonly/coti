@@ -53,10 +53,18 @@ class MainLayout extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.fiber_manual_record),
-              title: Text(tr('buy_gcoti.title')),
+              title: Text(tr('bridge_hack.title')),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.pushReplacementNamed(context, '/BridgeHackPage');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.fiber_manual_record),
+              title: Text(tr('gcoti.page_title')),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, '/GCotiDepositsPage');
               },
             ),
             const Divider(),

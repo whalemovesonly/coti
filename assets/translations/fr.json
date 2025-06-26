@@ -97,5 +97,14 @@
     "bridge_hack": {
     "title": "Hack du Bridge",
     "tip": "Un conseil pour vous : si vous souhaitez transférer plus de 25K $COTI de Layer 2 vers Ethereum en une journée, utilisez plusieurs portefeuilles. Chaque portefeuille peut transférer jusqu'à 25K $COTI. Par exemple, si vous souhaitez transférer 100K $COTI, divisez-les en quatre portefeuilles avec 25K chacun, puis commencez à transférer depuis chaque portefeuille vers Ethereum. Cela a fonctionné pour moi — et oui, cela devrait aussi fonctionner pour vous."
+  },
+    "gcoti": {
+    "loading_status": "⏳ Chargement des données depuis le réseau COTI...",
+    "fetching_status": "⏳ Récupération des données depuis le réseau COTI...",
+    "success_status": "✅ Données récupérées avec succès !",
+    "error_status": "❌ Erreur : {}",
+    "result_text": "🌍 Un total de {} $gCOTI a été déposé dans le Trésor au cours des {} dernier(s) jour(s).",
+    "day_option": "Dernier(s) {} jour(s)",
+    "page_title": "Dépôts du Trésor $gCOTI"
   }
 }
