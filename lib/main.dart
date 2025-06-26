@@ -11,6 +11,7 @@ import 'pages/bridgeHack.dart';
 import 'pages/GCotiDepositsPage.dart';
 import 'pages/CotiDepositsPage.dart';
 import 'pages/GCotiTreasuryTrackerPage.dart';
+import 'pages/GCotiChartPage.dart';
 
 
 void main() async {
@@ -76,6 +77,9 @@ class MyApp extends StatelessWidget {
         },
         '/GCotiTreasuryTrackerPage': (context) {
           return GCotiTreasuryTrackerPage();
+        }, 
+        '/GCotiChartPage': (context) {
+          return GCotiChartPage();
         }, 
       },
     );

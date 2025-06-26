@@ -33,6 +33,7 @@ dependencies:
   provider: ^6.1.2  # Or latest version
   url_launcher: ^6.2.5
   http: ^0.13.6 # or latest version
+  fl_chart: ^0.64.0  # Or the latest stable version
   flutter_localizations:
     sdk: flutter
   easy_localization: ^3.0.3
