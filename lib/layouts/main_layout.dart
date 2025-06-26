@@ -98,6 +98,15 @@ class MainLayout extends StatelessWidget {
                 Navigator.pushReplacementNamed(context, '/GCotiTreasuryOverviewPage');
               },
             ),
+            ListTile(
+              leading: const Icon(Icons.fiber_manual_record),
+              title: Text(tr('cotiforwallet.treasury_tracker_title')),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, '/CotiTreasuryTrackerPage');
+              },
+            ),
+            
             const Divider(),
             ListTile(
               leading: const Icon(Icons.language),

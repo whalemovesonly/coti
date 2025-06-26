@@ -145,5 +145,17 @@
     "success_status": "✅ Données récupérées avec succès !",
     "error_status": "❌ Échec de la récupération des données. Veuillez réessayer plus tard.",
     "result_text": "🌍 Total déposé : {} $gCOTI\n\n📤 Total retiré : {} $gCOTI"
-  }
+  },
+  "cotiforwallet": {
+  "treasury_tracker_title": "Suivre les dépôts de $gCOTI vers le Trésor pour n'importe quel portefeuille",
+  "enter_wallet": "Entrez l'adresse du portefeuille",
+  "day_option": "Les {} dernier(s) jour(s)",
+  "loading_status": "⏳ Chargement des données...",
+  "fetching_status": "⏳ Récupération des données depuis le réseau COTI...",
+  "success_status": "✅ Données récupérées avec succès !",
+  "no_tx_found": "✅ Aucun dépôt de $COTI vers le Trésor trouvé dans la période sélectionnée.",
+  "invalid_address": "❌ Format d'adresse du portefeuille invalide.",
+  "error_status": "❌ Échec de la récupération des données.",
+  "result_text": "🌍 Un total de {} $COTI a été déposé dans le Trésor au cours des {} dernier(s) jour(s)."
+}
 }
