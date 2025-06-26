@@ -129,7 +129,7 @@ class _AddCOTITokenToMetaMaskState extends State<AddCOTITokenToMetaMask> {
                     onTap: step['link'] != null
                         ? () => _launchUrl(step['link']!)
                         : null,
-                    child: Text(
+                    child: SelectableText(
                       step['text']!,
                       style: TextStyle(
                         fontSize: 16,
