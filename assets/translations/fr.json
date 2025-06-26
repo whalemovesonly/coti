@@ -138,7 +138,7 @@
     "empty_status": "ℹ️ Aucune donnée disponible pour la période sélectionnée."
   },
     "gcotiforwalletoverview": {
-    "treasury_chart_title": "📊 Aperçu des activités du Trésor $gCOTI pour un portefeuille spécifique",
+    "treasury_chart_title": "Aperçu des activités du Trésor $gCOTI pour un portefeuille spécifique",
     "enter_wallet": "Entrez le portefeuille",
     "invalid_address": "❌ Veuillez entrer une adresse de portefeuille valide.",
     "fetching_status": "⏳ Récupération des données du réseau COTI...",

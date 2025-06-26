@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:fl_chart/fl_chart.dart';
 import '../layouts/main_layout.dart';
 import '../layouts/SecurityNote.dart';
 import '../layouts/contactAnddonate.dart';
@@ -18,18 +18,17 @@ class _GCotiTreasuryOverviewPageState extends State<GCotiTreasuryOverviewPage> {
   final TextEditingController _walletController = TextEditingController();
   bool isLoading = false;
   String statusKey = '';
-  List<FlSpot> depositSpots = [];
-  List<FlSpot> withdrawalSpots = [];
-  List<String> xLabels = [];
-
-  double totalDeposits = 0;
-  double totalWithdrawals = 0;
+  List<String> statusArgs = [];
+  String? resultText;
+  List<String> labels = [];
+  List<double> deposits = [];
+  List<double> withdrawals = [];
 
   final String treasuryWallet = '0x5e19f674b3B55dF897C09824a2ddFAD6939e3d1D';
   final String token = '0x7637C7838EC4Ec6b85080F28A678F8E234bB83D1';
   final String baseUrl = 'https://mainnet.cotiscan.io/api/v2/addresses';
 
-  Future<List<dynamic>> fetchAllTransactions(String address) async {
+  Future<List<dynamic>> fetchTransactions(String address) async {
     List<dynamic> allTransactions = [];
     Map<String, String>? params;
 
@@ -48,26 +47,43 @@ class _GCotiTreasuryOverviewPageState extends State<GCotiTreasuryOverviewPage> {
       allTransactions.addAll(items);
 
       if (data['next_page_params'] == null) break;
-      params = (data['next_page_params'] as Map)
-          .map((key, value) => MapEntry(key.toString(), value.toString()));
+      params = (data['next_page_params'] as Map).map((k, v) => MapEntry(k.toString(), v.toString()));
     }
 
     return allTransactions;
   }
 
+  Map<String, Map<String, double>> groupByDate(List<dynamic> txs) {
+    final grouped = <String, Map<String, double>>{};
+    for (final tx in txs) {
+      final ts = tx['timestamp'];
+      if (ts == null) continue;
+      final dateKey = DateTime.parse(ts).toIso8601String().substring(0, 10);
+      final value = double.tryParse(tx['total']?['value'] ?? '0') ?? 0.0;
+      final from = tx['from']?['hash']?.toString().toLowerCase();
+      final to = tx['to']?['hash']?.toString().toLowerCase();
+      grouped.putIfAbsent(dateKey, () => {'deposits': 0, 'withdrawals': 0});
+      if (to == treasuryWallet.toLowerCase()) {
+        grouped[dateKey]!['deposits'] = grouped[dateKey]!['deposits']! + value / 1e18;
+      }
+      if (from == treasuryWallet.toLowerCase()) {
+        grouped[dateKey]!['withdrawals'] = grouped[dateKey]!['withdrawals']! + value / 1e18;
+      }
+    }
+    return grouped;
+  }
+
   Future<void> _fetchData() async {
     FocusScope.of(context).unfocus();
     final address = _walletController.text.trim();
-
     final isValid = RegExp(r'^0x[a-fA-F0-9]{40}$').hasMatch(address);
     if (!isValid) {
       setState(() {
         statusKey = 'gcotiforwalletoverview.invalid_address';
-        depositSpots.clear();
-        withdrawalSpots.clear();
-        xLabels.clear();
-        totalDeposits = 0;
-        totalWithdrawals = 0;
+        resultText = null;
+        deposits.clear();
+        withdrawals.clear();
+        labels.clear();
       });
       return;
     }
@@ -75,128 +91,92 @@ class _GCotiTreasuryOverviewPageState extends State<GCotiTreasuryOverviewPage> {
     setState(() {
       isLoading = true;
       statusKey = 'gcotiforwalletoverview.fetching_status';
+      statusArgs = [];
     });
 
     try {
-      final txs = await fetchAllTransactions(address);
-      final deposits = <double>[];
-      final withdrawals = <double>[];
-      final labels = <String>[];
-
-      totalDeposits = 0;
-      totalWithdrawals = 0;
-
-      final sorted = txs.where((tx) => tx['timestamp'] != null).toList()
-        ..sort((a, b) => DateTime.parse(a['timestamp']).compareTo(DateTime.parse(b['timestamp'])));
-
-      for (int i = 0; i < sorted.length; i++) {
-        final tx = sorted[i];
-        final val = int.tryParse(tx['total']?['value'] ?? '0') ?? 0;
-        final value = val / 1e18;
-        final date = DateTime.parse(tx['timestamp']);
-        final label = '${date.month}/${date.day}';
-        labels.add(label);
-
-        final to = tx['to']?['hash']?.toString().toLowerCase();
-        final from = tx['from']?['hash']?.toString().toLowerCase();
-
-        if (to == treasuryWallet.toLowerCase()) {
-          deposits.add(value);
-          withdrawals.add(0);
-          totalDeposits += value;
-        } else if (from == treasuryWallet.toLowerCase()) {
-          withdrawals.add(value);
-          deposits.add(0);
-          totalWithdrawals += value;
-        } else {
-          deposits.add(0);
-          withdrawals.add(0);
-        }
-      }
-
-      depositSpots = List.generate(deposits.length, (i) => FlSpot(i.toDouble(), deposits[i]));
-      withdrawalSpots = List.generate(withdrawals.length, (i) => FlSpot(i.toDouble(), withdrawals[i]));
-      xLabels = labels;
+      final txs = await fetchTransactions(address);
+      final grouped = groupByDate(txs);
+      final sortedDates = grouped.keys.toList()..sort();
 
       setState(() {
-        statusKey = 'gcotiforwalletoverview.success_status';
+        labels = sortedDates;
+        deposits = sortedDates.map((k) => grouped[k]!['deposits']!).toList();
+        withdrawals = sortedDates.map((k) => grouped[k]!['withdrawals']!).toList();
+        statusKey = labels.isNotEmpty
+            ? 'gcotiforwalletoverview.success_status'
+            : 'gcotiforwalletoverview.no_tx_found';
+        resultText = labels.isNotEmpty
+            ? 'gcotiforwalletoverview.result_text'
+                .tr(args: [
+                  deposits.reduce((a, b) => a + b).toStringAsFixed(4),
+                  withdrawals.reduce((a, b) => a + b).toStringAsFixed(4),
+                ])
+            : null;
         isLoading = false;
       });
     } catch (_) {
       setState(() {
         statusKey = 'gcotiforwalletoverview.error_status';
+        resultText = null;
         isLoading = false;
       });
     }
   }
 
-  Widget _buildChart() {
-  if (depositSpots.isEmpty && withdrawalSpots.isEmpty) return const SizedBox.shrink();
-
-  return SizedBox(
-    height: 400,
-    child: LineChart(
-      LineChartData(
-        lineBarsData: [
-          LineChartBarData(
-            spots: depositSpots,
-            isCurved: true,
-            color: Colors.greenAccent,
-            dotData: FlDotData(show: false),
-          ),
-          LineChartBarData(
-            spots: withdrawalSpots,
-            isCurved: true,
-            color: Colors.redAccent,
-            dotData: FlDotData(show: false),
-          ),
-        ],
-        titlesData: FlTitlesData(
-          bottomTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              interval: 1,
-              getTitlesWidget: (value, meta) {
+  Widget buildChart() {
+    if (labels.isEmpty) return const SizedBox.shrink();
+    return SizedBox(
+      height: 400,
+      width: MediaQuery.of(context).size.width * 0.95,
+      child: BarChart(
+        BarChartData(
+          barGroups: List.generate(labels.length, (i) => BarChartGroupData(x: i, barRods: [
+            BarChartRodData(toY: deposits[i], color: Colors.greenAccent),
+            BarChartRodData(toY: withdrawals[i], color: Colors.redAccent),
+          ])),
+          titlesData: FlTitlesData(
+            bottomTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                interval: 1,
+                reservedSize: 36,
+                getTitlesWidget: (value, meta) {
                 final index = value.toInt();
+                if (index < 0 || index >= labels.length) return const SizedBox.shrink();
+                // Only show even-indexed labels
+                if (index % 2 != 0) return const SizedBox.shrink();
+                final date = labels[index];
                 return SideTitleWidget(
-                  axisSide: meta.axisSide,
-                  child: Text(
-                    index < xLabels.length ? xLabels[index] : '',
-                    style: const TextStyle(color: Colors.white, fontSize: 10),
-                  ),
+                    axisSide: meta.axisSide,
+                    child: Text(
+                    date.substring(5),
+                    style: const TextStyle(fontSize: 10, color: Colors.white70),
+                    ),
                 );
-              },
+                },
+              ),
             ),
-          ),
-          leftTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              reservedSize: 80, // ✅ Enough space for 10-digit numbers like 1,000,000,000
-              getTitlesWidget: (value, meta) {
-                return SideTitleWidget(
-                  axisSide: meta.axisSide,
-                  space: 4,
-                  child: Text(
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                reservedSize: 80,
+                getTitlesWidget: (value, meta) {
+                  return Text(
                     value.toStringAsFixed(0),
-                    style: const TextStyle(color: Colors.white, fontSize: 12),
-                  ),
-                );
-              },
+                    style: const TextStyle(fontSize: 10, color: Colors.white70),
+                  );
+                },
+              ),
             ),
+            topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
           ),
-          rightTitles: AxisTitles(
-            sideTitles: SideTitles(showTitles: false),
-          ),
-          topTitles: AxisTitles(
-            sideTitles: SideTitles(showTitles: false),
-          ),
+          borderData: FlBorderData(show: false),
         ),
-        gridData: FlGridData(show: false),
-        borderData: FlBorderData(show: false),
       ),
-    ),
-  );
-}
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -204,18 +184,8 @@ class _GCotiTreasuryOverviewPageState extends State<GCotiTreasuryOverviewPage> {
     final color = theme.colorScheme;
     final text = theme.textTheme;
 
-    final translatedResult = (depositSpots.isNotEmpty || withdrawalSpots.isNotEmpty)
-        ? tr(
-            'gcotiforwalletoverview.result_text',
-            args: [
-              totalDeposits.toStringAsFixed(6),
-              totalWithdrawals.toStringAsFixed(6),
-            ],
-          )
-        : null;
-
     return MainLayout(
-      title: 'gcotiforwalletoverview.treasury_chart_title'.tr(),
+      title: tr('gcotiforwalletoverview.treasury_chart_title'),
       child: Container(
         padding: const EdgeInsets.all(32),
         color: color.background,
@@ -224,7 +194,8 @@ class _GCotiTreasuryOverviewPageState extends State<GCotiTreasuryOverviewPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text('gcotiforwalletoverview.enter_wallet'.tr(), style: text.titleMedium?.copyWith(color: color.primary)),
+                Text(tr('gcotiforwalletoverview.enter_wallet'),
+                    style: text.titleMedium?.copyWith(color: color.primary)),
                 const SizedBox(height: 10),
                 SizedBox(
                   width: 400,
@@ -251,12 +222,19 @@ class _GCotiTreasuryOverviewPageState extends State<GCotiTreasuryOverviewPage> {
                   icon: Icon(Icons.refresh, color: color.primary),
                 ),
                 const SizedBox(height: 20),
-                Text(statusKey.tr(), style: text.bodyMedium?.copyWith(color: color.tertiary)),
+                Text(statusKey.tr(args: statusArgs), style: text.bodyMedium?.copyWith(color: color.tertiary)),
                 const SizedBox(height: 10),
-                if (translatedResult != null)
-                  Text(translatedResult, style: text.bodyLarge, textAlign: TextAlign.center),
-                const SizedBox(height: 30),
-                _buildChart(),
+                if (resultText != null)
+                    SelectableText(
+                        tr('gcotiforwalletoverview.result_text', args: [
+                        deposits.reduce((a, b) => a + b).toStringAsFixed(4),
+                        withdrawals.reduce((a, b) => a + b).toStringAsFixed(4),
+                        ]),
+                        style: text.bodyLarge,
+                        textAlign: TextAlign.center,
+                    ),
+                const SizedBox(height: 20),
+                buildChart(),
                 const SizedBox(height: 30),
                 const SecurityNote(),
                 const SizedBox(height: 20),

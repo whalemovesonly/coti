@@ -138,7 +138,7 @@
     "empty_status": "ℹ️ No data available in selected time range."
   },
     "gcotiforwalletoverview": {
-    "treasury_chart_title": "📊 $gCOTI Treasury Activity Overview for a Specific Wallet",
+    "treasury_chart_title": "$gCOTI Treasury Activity Overview for a Specific Wallet",
     "enter_wallet": "Enter Wallet Address",
     "invalid_address": "❌ Invalid wallet address format.",
     "fetching_status": "⏳ Fetching data from COTI network...",

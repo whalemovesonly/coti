@@ -92,7 +92,7 @@ class MainLayout extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.fiber_manual_record),
-              title: Text(tr('gcotichart.chart_title')),
+              title: Text(tr('gcotiforwalletoverview.treasury_chart_title')),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.pushReplacementNamed(context, '/GCotiTreasuryOverviewPage');
