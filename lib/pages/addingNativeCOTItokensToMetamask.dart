@@ -4,6 +4,7 @@ import '../layouts/main_layout.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/gestures.dart';
 import '../layouts/SecurityNote.dart';
+import '../layouts/contactAnddonate.dart';
 
 class AddCOTITokenToMetaMask extends StatefulWidget {
   const AddCOTITokenToMetaMask({super.key});
@@ -166,6 +167,8 @@ class _AddCOTITokenToMetaMaskState extends State<AddCOTITokenToMetaMask> {
             ),
             const SizedBox(height: 40),
             const SecurityNote(),
+            const SizedBox(height: 20),
+            const ContactAndDonate(),
           ],
         ),
       ),

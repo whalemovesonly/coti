@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../layouts/main_layout.dart';
 import '../layouts/SecurityNote.dart';
+import '../layouts/contactAnddonate.dart';
 
 class BuyGCOTIPage extends StatelessWidget {
   const BuyGCOTIPage({super.key});
@@ -44,6 +45,8 @@ class BuyGCOTIPage extends StatelessWidget {
             ),
             const SizedBox(height: 40),
             const SecurityNote(),
+            const SizedBox(height: 20),
+            const ContactAndDonate(),
           ],
         ),
       ),

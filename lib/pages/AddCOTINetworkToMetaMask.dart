@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import '../layouts/main_layout.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../layouts/SecurityNote.dart';
+import '../layouts/contactAnddonate.dart';
 
 class AddCOTINetworkToMetaMask extends StatefulWidget {
   const AddCOTINetworkToMetaMask({super.key});
@@ -127,6 +128,8 @@ class _AddCOTINetworkToMetaMaskState extends State<AddCOTINetworkToMetaMask> {
             ),
             const SizedBox(height: 40),
             const SecurityNote(),
+            const SizedBox(height: 20),
+            const ContactAndDonate(),
           ],
         ),
       ),

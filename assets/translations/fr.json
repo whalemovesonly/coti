@@ -86,5 +86,12 @@
     "mexc": "Acheter $gCOTI sur MEXC",
     "bitrue": "Acheter $gCOTI sur Bitrue",
     "carbondefi": "Acheter $gCOTI sur CarbonDeFi"
+  },
+  "donate": {
+    "title": "🙏 Contact & Faire un Don",
+    "message": "Si vous trouvez mes outils utiles et souhaitez soutenir davantage de développement, veuillez faire un don en $COTI à mon adresse COTI V2 via le domaine ZNS ci-dessous :",
+    "domain_prefix": "Domaine ZNS : ",
+    "contact_intro": "📣 Si vous souhaitez me contacter, voici quelques moyens :",
+    "link_error": "Impossible d'ouvrir le lien"
   }
 }
