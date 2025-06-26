@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 import '../layouts/main_layout.dart';
 import '../layouts/SecurityNote.dart';
 import '../layouts/contactAnddonate.dart';
@@ -18,8 +17,9 @@ class _GCotiDepositsPageState extends State<GCotiDepositsPage> {
   final List<int> daysOptions = [1, 3, 7, 21, 30, 90, 365, 1095];
   int selectedDays = 1;
   bool isLoading = false;
-  String statusMessage = 'gcoti.loading_status'.tr();
-  String resultMessage = '';
+
+  String statusKey = 'gcoti.loading_status';
+  double? resultValue;
 
   final List<String> addressesToWatch = [
     '0x5e19f674b3B55dF897C09824a2ddFAD6939e3d1D'.toLowerCase(),
@@ -89,8 +89,8 @@ class _GCotiDepositsPageState extends State<GCotiDepositsPage> {
   Future<void> _fetchData() async {
     setState(() {
       isLoading = true;
-      statusMessage = 'gcoti.fetching_status'.tr();
-      resultMessage = '';
+      statusKey = 'gcoti.fetching_status';
+      resultValue = null;
     });
 
     try {
@@ -103,24 +103,17 @@ class _GCotiDepositsPageState extends State<GCotiDepositsPage> {
       final totalValue = totalValueRaw / 1e18;
 
       setState(() {
-        statusMessage = 'gcoti.success_status'.tr();
-        resultMessage = 'gcoti.result_text'.tr(args: [
-          totalValue.toStringAsFixed(6),
-          selectedDays.toString()
-        ]);
+        statusKey = 'gcoti.success_status';
+        resultValue = totalValue;
         isLoading = false;
       });
     } catch (e) {
       setState(() {
-        statusMessage = 'gcoti.error_status'.tr(args: [e.toString()]);
-        resultMessage = '';
+        statusKey = 'gcoti.error_status';
+        resultValue = null;
         isLoading = false;
       });
     }
-  }
-
-  void _goHome(BuildContext context) {
-    Navigator.pushReplacementNamed(context, '/');
   }
 
   @override
@@ -144,6 +137,8 @@ class _GCotiDepositsPageState extends State<GCotiDepositsPage> {
                   children: [
                     DropdownButton<int>(
                       value: selectedDays,
+                      dropdownColor: color.surface,
+                      style: text.bodyMedium?.copyWith(color: color.primary),
                       onChanged: isLoading
                           ? null
                           : (value) {
@@ -163,21 +158,25 @@ class _GCotiDepositsPageState extends State<GCotiDepositsPage> {
                     const SizedBox(width: 8),
                     IconButton(
                       onPressed: isLoading ? null : _fetchData,
-                      icon: const Icon(Icons.refresh),
+                      icon: Icon(Icons.refresh, color: color.primary),
                     ),
                   ],
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  statusMessage,
+                  statusKey.tr(args: statusKey == 'gcoti.error_status' ? [''] : []),
                   style: text.bodyMedium?.copyWith(color: color.tertiary),
                 ),
                 const SizedBox(height: 10),
-                Text(
-                  resultMessage,
-                  style: text.bodyLarge,
-                  textAlign: TextAlign.center,
-                ),
+                if (resultValue != null)
+                  Text(
+                    'gcoti.result_text'.tr(args: [
+                      resultValue!.toStringAsFixed(6),
+                      selectedDays.toString()
+                    ]),
+                    style: text.bodyLarge,
+                    textAlign: TextAlign.center,
+                  ),
                 const SizedBox(height: 30),
                 const SecurityNote(),
                 const SizedBox(height: 20),
