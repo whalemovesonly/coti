@@ -128,5 +128,13 @@
   "invalid_address": "❌ Format d'adresse du portefeuille invalide.",
   "error_status": "❌ Échec de la récupération des données.",
   "result_text": "🌍 Un total de {} $gCOTI a été déposé dans le Trésor au cours des {} dernier(s) jour(s)."
-}
+},
+  "gcotichart": {
+    "chart_title": "Graphique $gCOTI : Dépôts vs Retraits",
+    "day_option": "{} dernier(s) jour(s)",
+    "result_text": "🌍 Total déposé : {} $gCOTI\n📤 Total retiré : {} $gCOTI",
+    "fetching_status": "⏳ Récupération des données...",
+    "success_status": "✅ Données affichées du {} au {}",
+    "empty_status": "ℹ️ Aucune donnée disponible pour la période sélectionnée."
+  }
 }

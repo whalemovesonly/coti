@@ -18,7 +18,8 @@ class _GCotiChartPageState extends State<GCotiChartPage> {
   final List<int> daysOptions = [3, 7, 21, 30, 90, 365, 1095];
   int selectedDays = 3;
   bool isLoading = false;
-  String statusText = "⏳ Ready";
+  String statusKey = 'gcotichart.fetching_status';
+  List<String> statusArgs = [];
 
   List<String> labels = [];
   List<double> deposits = [];
@@ -91,8 +92,9 @@ class _GCotiChartPageState extends State<GCotiChartPage> {
 
   Future<void> _fetchData() async {
     setState(() {
-      isLoading = true;
-      statusText = '⏳ Fetching data...';
+    isLoading = true;
+    statusKey = 'gcotichart.fetching_status';
+    statusArgs = [];
     });
 
     List<dynamic> combined = [];
@@ -105,13 +107,17 @@ class _GCotiChartPageState extends State<GCotiChartPage> {
     final sortedKeys = grouped.keys.toList()..sort();
 
     setState(() {
-      labels = sortedKeys;
-      deposits = sortedKeys.map((k) => grouped[k]!['deposits']!).toList();
-      withdrawals = sortedKeys.map((k) => grouped[k]!['withdrawals']!).toList();
-      statusText = labels.isNotEmpty
-          ? '✅ Showing data from ${labels.first} to ${labels.last}'
-          : 'ℹ️ No data available in selected time range.';
-      isLoading = false;
+    labels = sortedKeys;
+    deposits = sortedKeys.map((k) => grouped[k]!['deposits']!).toList();
+    withdrawals = sortedKeys.map((k) => grouped[k]!['withdrawals']!).toList();
+    if (labels.isNotEmpty) {
+        statusKey = 'gcotichart.success_status';
+        statusArgs = [labels.first, labels.last];
+    } else {
+        statusKey = 'gcotichart.empty_status';
+        statusArgs = [];
+    }
+    isLoading = false;
     });
   }
 
@@ -175,7 +181,7 @@ class _GCotiChartPageState extends State<GCotiChartPage> {
     final text = theme.textTheme;
 
     return MainLayout(
-      title: tr('gcoti.chart_title'),
+      title: tr('gcotichart.chart_title'),
       child: Container(
         padding: const EdgeInsets.all(32),
         color: color.background,
@@ -199,7 +205,7 @@ class _GCotiChartPageState extends State<GCotiChartPage> {
                             },
                       items: daysOptions.map((day) => DropdownMenuItem<int>(
                         value: day,
-                        child: Text('gcoti.day_option'.tr(args: [day.toString()])),
+                        child: Text('gcotichart.day_option'.tr(args: [day.toString()])),
                       )).toList(),
                     ),
                     IconButton(
@@ -209,12 +215,17 @@ class _GCotiChartPageState extends State<GCotiChartPage> {
                   ],
                 ),
                 const SizedBox(height: 20),
-                Text(statusText, style: text.bodyMedium?.copyWith(color: color.tertiary)),
+                Text(
+                statusKey.tr(args: statusArgs),
+                style: text.bodyMedium?.copyWith(color: color.tertiary),
+                ),
                 const SizedBox(height: 10),
                 if (labels.isNotEmpty)
                   Text(
-                    '🌍 Total Deposited: ${deposits.reduce((a, b) => a + b).toStringAsFixed(4)}\n'
-                    '📤 Total Withdrawn: ${withdrawals.reduce((a, b) => a + b).toStringAsFixed(4)}',
+                    'gcotichart.result_text'.tr(args: [
+  deposits.reduce((a, b) => a + b).toStringAsFixed(4),
+  withdrawals.reduce((a, b) => a + b).toStringAsFixed(4),
+]),
                     style: text.bodyLarge,
                     textAlign: TextAlign.center,
                   ),
