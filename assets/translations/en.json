@@ -79,5 +79,12 @@
         "title": "Step 9: Done!",
         "text": "The token should now appear in your MetaMask wallet."
       }
-    }
+    },
+    "buy_gcoti": {
+    "title": "Buy $gCOTI",
+    "heading": "Where to buy $gCOTI:",
+    "mexc": "Buy $gCOTI on MEXC",
+    "bitrue": "Buy $gCOTI on Bitrue",
+    "carbondefi": "Buy $gCOTI on CarbonDeFi"
+  }
 }

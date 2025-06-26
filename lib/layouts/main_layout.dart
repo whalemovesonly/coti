@@ -45,7 +45,7 @@ class MainLayout extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.fiber_manual_record),
-              title: Text(tr('add_token.title')),
+              title: Text(tr('buy_gcoti.title')),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.pushReplacementNamed(context, '/BuyGCOTIPage');

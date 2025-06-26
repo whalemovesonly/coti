@@ -79,5 +79,12 @@
         "title": "Étape 9 : Terminé !",
         "text": "Le jeton devrait maintenant apparaître dans votre portefeuille MetaMask."
       }
-    }
+    },
+    "buy_gcoti": {
+    "title": "Acheter $gCOTI",
+    "heading": "Où acheter $gCOTI :",
+    "mexc": "Acheter $gCOTI sur MEXC",
+    "bitrue": "Acheter $gCOTI sur Bitrue",
+    "carbondefi": "Acheter $gCOTI sur CarbonDeFi"
+  }
 }
