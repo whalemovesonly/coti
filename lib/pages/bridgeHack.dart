@@ -26,9 +26,9 @@ class BridgeHackPage extends StatelessWidget {
     final text = theme.textTheme;
 
     return MainLayout(
-      title: tr('buy_gcoti.title'),
+      title: tr('bridge_hack.title'),
       child: Container(
-        padding: const EdgeInsets.all(32),
+        padding: const EdgeInsets.all(0),
         color: color.background,
         child: Center(
           child: SingleChildScrollView(
@@ -43,17 +43,14 @@ class BridgeHackPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
-                    'One tip for you: if you want to bridge more than 25K \$COTI from Layer 2 to Ethereum in one day, '
-                    'use multiple wallets. Each wallet can bridge up to 25K \$COTI. For example, if you want to bridge '
-                    '100K \$COTI, split it into four wallets with 25K each, then start bridging from each wallet to Ethereum. '
-                    'It worked for me — and yes, it should work for you too.',
+                    tr('bridge_hack.tip'),
                     style: text.bodyLarge?.copyWith(height: 1.6),
                     textAlign: TextAlign.left,
                   ),
                 ),
-            const SecurityNote(),
-            const SizedBox(height: 20),
-            const ContactAndDonate(),
+                const SecurityNote(),
+                const SizedBox(height: 20),
+                const ContactAndDonate(),
               ],
             ),
           ),

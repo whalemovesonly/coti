@@ -93,5 +93,9 @@
     "domain_prefix": "ZNS Domain: ",
     "contact_intro": "📣 If you want to contact me, here are some ways:",
     "link_error": "Could not launch link"
+  },
+    "bridge_hack": {
+    "title": "Bridge Hack",
+    "tip": "One tip for you: if you want to bridge more than 25K $COTI from Layer 2 to Ethereum in one day, use multiple wallets. Each wallet can bridge up to 25K $COTI. For example, if you want to bridge 100K $COTI, split it into four wallets with 25K each, then start bridging from each wallet to Ethereum. It worked for me — and yes, it should work for you too."
   }
 }

@@ -93,5 +93,9 @@
     "domain_prefix": "Domaine ZNS : ",
     "contact_intro": "📣 Si vous souhaitez me contacter, voici quelques moyens :",
     "link_error": "Impossible d'ouvrir le lien"
+  },
+    "bridge_hack": {
+    "title": "Hack du Bridge",
+    "tip": "Un conseil pour vous : si vous souhaitez transférer plus de 25K $COTI de Layer 2 vers Ethereum en une journée, utilisez plusieurs portefeuilles. Chaque portefeuille peut transférer jusqu'à 25K $COTI. Par exemple, si vous souhaitez transférer 100K $COTI, divisez-les en quatre portefeuilles avec 25K chacun, puis commencez à transférer depuis chaque portefeuille vers Ethereum. Cela a fonctionné pour moi — et oui, cela devrait aussi fonctionner pour vous."
   }
 }
