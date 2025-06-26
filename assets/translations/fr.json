@@ -23,7 +23,7 @@
     "complete": "Tutoriel terminé !",
     "note_title": "⚠️ Note de sécurité pour les utilisateurs de COTI",
     "note_intro": "Ce site est 100% open-source et créé pour la communauté COTI afin de partager des instructions techniques.",
-    "note_1": "• Tout le code source est disponible publiquement sur GitHub.",
+    "note_1_part1": "• Tout le code source est disponible publiquement sur GitHub.",
     "note_2": "• Le site se charge directement depuis GitHub Pages — aucun code caché ou contenu injecté.",
     "note_3": "• Aucune connexion au portefeuille n'est requise pour consulter ou utiliser ce site.",
     "note_4": "• Nous savons que les utilisateurs de crypto sont prudents. N'hésitez pas à inspecter le code avant de cliquer sur un lien.",
