@@ -147,7 +147,7 @@
     "result_text": "🌍 Total déposé : {} $gCOTI\n\n📤 Total retiré : {} $gCOTI"
   },
   "cotiforwallet": {
-  "treasury_tracker_title": "Suivre les dépôts de $gCOTI vers le Trésor pour n'importe quel portefeuille",
+  "treasury_tracker_title": "Suivre les dépôts de $COTI vers le Trésor pour n'importe quel portefeuille",
   "enter_wallet": "Entrez l'adresse du portefeuille",
   "day_option": "Les {} dernier(s) jour(s)",
   "loading_status": "⏳ Chargement des données...",

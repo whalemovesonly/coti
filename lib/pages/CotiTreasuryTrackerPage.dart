@@ -187,7 +187,7 @@ class _HtmlCotiConversionPageState extends State<CotiTreasuryTrackerPage> {
                 if (result != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 10),
-                    child: Text(
+                    child: SelectableText(
                       'cotiforwallet.result_text'.tr(args: [result!.toStringAsFixed(6), selectedDays.toString()]),
                       style: text.bodyLarge,
                       textAlign: TextAlign.center,
