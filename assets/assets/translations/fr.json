@@ -1,0 +1,165 @@
+{
+  "add_coti": {
+    "title": "Ajouter le réseau COTI à MetaMask",
+    "step1": {
+      "title": "Étape 1 : Ouvrir MetaMask",
+      "text": "Cliquez sur le menu déroulant du réseau en haut à gauche de MetaMask et sélectionnez 'Ajouter un réseau personnalisé'."
+    },
+    "step2": {
+      "title": "Étape 2 : Entrer les informations du réseau COTI",
+      "text": "Remplissez les champs suivants :\n\nNom du réseau : COTI\nURL RPC : https://mainnet.coti.io/rpc\nID de chaîne : 2632500\nSymbole : COTI\nExplorateur de blocs : https://mainnet.cotiscan.io"
+    },
+    "step3": {
+      "title": "Étape 3 : Enregistrer et changer",
+      "text": "Cliquez sur 'Enregistrer'. MetaMask passera automatiquement au réseau COTI."
+    },
+    "step4": {
+      "title": "Tout est prêt !",
+      "text": "Vous avez ajouté le réseau COTI à MetaMask. Vous pouvez maintenant transférer des jetons ou interagir avec des dApps sur COTI V2."
+    },
+    "back": "Retour",
+    "next": "Suivant",
+    "finish": "Terminer",
+    "complete": "Tutoriel terminé !",
+    "note_title": "⚠️ Note de sécurité pour les utilisateurs de COTI",
+    "note_intro": "Ce site est 100% open-source et créé pour la communauté COTI afin de partager des instructions techniques.",
+    "note_1_part1": "• Tout le code source est disponible publiquement sur ",
+    "note_2": "• Le site se charge directement depuis GitHub Pages — aucun code caché ou contenu injecté.",
+    "note_3": "• Aucune connexion au portefeuille n'est requise pour consulter ou utiliser ce site.",
+    "note_4": "• Nous savons que les utilisateurs de crypto sont prudents. N'hésitez pas à inspecter le code avant de cliquer sur un lien.",
+    "note_closing": "✅ Restez en sécurité, bien informé et explorez l'écosystème COTI avec confiance."
+  },
+  "add_token": {
+      "title": "Ajouter le jeton COTI V2",
+      "heading": "Comment ajouter un jeton COTI V2 à MetaMask",
+      "back": "Précédent",
+      "next": "Suivant",
+      "finish": "Terminer",
+      "complete": "Vous avez terminé toutes les étapes !",
+      "note_title": "\u26a0\ufe0f Note de sécurité pour les utilisateurs de COTI",
+      "note_intro": "Ce site est 100% open-source et créé pour la communauté COTI afin de partager des instructions techniques.",
+      "note_1": "\u2022 Tout le code source est disponible publiquement sur ",
+      "note_2": "\u2022 Le site se charge directement depuis GitHub Pages \u2014 aucun code caché ou contenu injecté.",
+      "note_3": "\u2022 Aucune connexion de portefeuille n'est requise pour consulter ou utiliser ce site.",
+      "note_4": "\u2022 Nous comprenons que les utilisateurs de crypto soient prudents. N'hésitez pas à inspecter le code avant de cliquer sur des liens.",
+      "note_closing": "\u2705 Restez en sécurité, bien informé et explorez l'écosystème COTI en toute confiance.",
+      "step1": {
+        "title": "Étape 1 : Accédez à l'explorateur de jetons COTI",
+        "text": "Visitez mainnet.cotiscan.io/tokens"
+      },
+      "step2": {
+        "title": "Étape 2 : Recherchez et sélectionnez votre jeton",
+        "text": "Tapez le nom du jeton que vous souhaitez importer et cliquez dessus pour ouvrir la page du jeton."
+      },
+      "step3": {
+        "title": "Étape 3 : Copiez l'adresse du jeton",
+        "text": "Sur la page du jeton, copiez l'adresse du contrat dans votre presse-papiers."
+      },
+      "step4": {
+        "title": "Étape 4 : Ouvrez MetaMask",
+        "text": "Lancez votre extension MetaMask ou l'application mobile."
+      },
+      "step5": {
+        "title": "Étape 5 : Cliquez sur les 3 points et choisissez \"Importer des jetons\"",
+        "text": "Dans l'onglet Jetons, appuyez sur l'icône à 3 points, puis sélectionnez Importer des jetons."
+      },
+      "step6": {
+        "title": "Étape 6 : Sélectionnez le réseau et collez l'adresse",
+        "text": "Sélectionnez le réseau COTI, puis collez l'adresse du jeton dans le champ prévu."
+      },
+      "step7": {
+        "title": "Étape 7 : Cliquez sur Suivant",
+        "text": "Cliquez sur le bouton Suivant pour continuer."
+      },
+      "step8": {
+        "title": "Étape 8 : Cliquez sur Importer",
+        "text": "Cliquez sur Importer pour terminer l'ajout du jeton."
+      },
+      "step9": {
+        "title": "Étape 9 : Terminé !",
+        "text": "Le jeton devrait maintenant apparaître dans votre portefeuille MetaMask."
+      }
+    },
+    "buy_gcoti": {
+    "title": "Acheter $gCOTI",
+    "heading": "Où acheter $gCOTI :",
+    "mexc": "Acheter $gCOTI sur MEXC",
+    "bitrue": "Acheter $gCOTI sur Bitrue",
+    "carbondefi": "Acheter $gCOTI sur CarbonDeFi"
+  },
+  "donate": {
+    "title": "🙏 Contact & Faire un Don",
+    "message": "Si vous trouvez mes outils utiles et souhaitez soutenir davantage de développement, veuillez faire un don en $COTI à mon adresse COTI V2 via le domaine ZNS ci-dessous :",
+    "domain_prefix": "Domaine ZNS : ",
+    "contact_intro": "📣 Si vous souhaitez me contacter, voici quelques moyens :",
+    "link_error": "Impossible d'ouvrir le lien"
+  },
+    "bridge_hack": {
+    "title": "Hack du Bridge",
+    "tip": "Un conseil pour vous : si vous souhaitez transférer plus de 25K $COTI de Layer 2 vers Ethereum en une journée, utilisez plusieurs portefeuilles. Chaque portefeuille peut transférer jusqu'à 25K $COTI. Par exemple, si vous souhaitez transférer 100K $COTI, divisez-les en quatre portefeuilles avec 25K chacun, puis commencez à transférer depuis chaque portefeuille vers Ethereum. Cela a fonctionné pour moi — et oui, cela devrait aussi fonctionner pour vous."
+  },
+    "gcoti": {
+    "loading_status": "⏳ Chargement des données depuis le réseau COTI...",
+    "fetching_status": "⏳ Récupération des données depuis le réseau COTI...",
+    "success_status": "✅ Données récupérées avec succès !",
+    "error_status": "❌ Erreur : {}",
+    "result_text": "🌍 Un total de {} $gCOTI a été déposé dans le Trésor au cours des {} dernier(s) jour(s).",
+    "day_option": "Dernier(s) {} jour(s)",
+    "page_title": "Dépôts du Trésor $gCOTI"
+  },
+    "coti": {
+    "page_title": "Dépôts dans le Trésor $COTI",
+    "title": "🕒 Dépôts dans le Trésor $COTI",
+    "day_option": "Les {} derniers jours",
+    "loading_status": "⏳ Chargement des données depuis le réseau COTI...",
+    "fetching_status": "⏳ Récupération des données depuis le réseau COTI...",
+    "success_status": "✅ Données récupérées avec succès !",
+    "error_status": "❌ Erreur lors de la récupération des données {}",
+    "result_text": "🌍 Un total de {} $COTI a été déposé dans le Trésor au cours des {} derniers jours."
+  },
+  "gcotiforwallet": {
+  "treasury_tracker_title": "Suivre les dépôts de $gCOTI vers le Trésor pour n'importe quel portefeuille",
+  "enter_wallet": "Entrez l'adresse du portefeuille",
+  "day_option": "Les {} dernier(s) jour(s)",
+  "loading_status": "⏳ Chargement des données...",
+  "fetching_status": "⏳ Récupération des données depuis le réseau COTI...",
+  "success_status": "✅ Données récupérées avec succès !",
+  "no_tx_found": "✅ Aucun dépôt de $gCOTI vers le Trésor trouvé dans la période sélectionnée.",
+  "invalid_address": "❌ Format d'adresse du portefeuille invalide.",
+  "error_status": "❌ Échec de la récupération des données.",
+  "result_text": "🌍 Un total de {} $gCOTI a été déposé dans le Trésor au cours des {} dernier(s) jour(s)."
+},
+  "gcotichart": {
+    "chart_title": "Graphique $gCOTI : Dépôts vs Retraits",
+    "day_option": "{} dernier(s) jour(s)",
+    "result_text": "🌍 Total déposé : {} $gCOTI\n📤 Total retiré : {} $gCOTI",
+    "fetching_status": "⏳ Récupération des données...",
+    "success_status": "✅ Données affichées du {} au {}",
+    "empty_status": "ℹ️ Aucune donnée disponible pour la période sélectionnée.",
+    "deposit": "Dépôt",
+    "withdrawal": "Retrait"
+  },
+    "gcotiforwalletoverview": {
+    "treasury_chart_title": "Aperçu des activités du Trésor $gCOTI pour un portefeuille spécifique",
+    "enter_wallet": "Entrez le portefeuille",
+    "invalid_address": "❌ Veuillez entrer une adresse de portefeuille valide.",
+    "fetching_status": "⏳ Récupération des données du réseau COTI...",
+    "success_status": "✅ Données récupérées avec succès !",
+    "error_status": "❌ Échec de la récupération des données. Veuillez réessayer plus tard.",
+    "result_text": "🌍 Total déposé : {} $gCOTI\n\n📤 Total retiré : {} $gCOTI",
+    "deposit": "Dépôt",
+    "withdrawal": "Retrait"
+  },
+  "cotiforwallet": {
+  "treasury_tracker_title": "Suivre les dépôts de $COTI vers le Trésor pour n'importe quel portefeuille",
+  "enter_wallet": "Entrez l'adresse du portefeuille",
+  "day_option": "Les {} dernier(s) jour(s)",
+  "loading_status": "⏳ Chargement des données...",
+  "fetching_status": "⏳ Récupération des données depuis le réseau COTI...",
+  "success_status": "✅ Données récupérées avec succès !",
+  "no_tx_found": "✅ Aucun dépôt de $COTI vers le Trésor trouvé dans la période sélectionnée.",
+  "invalid_address": "❌ Format d'adresse du portefeuille invalide.",
+  "error_status": "❌ Échec de la récupération des données.",
+  "result_text": "🌍 Un total de {} $COTI a été déposé dans le Trésor au cours des {} dernier(s) jour(s)."
+}
+}

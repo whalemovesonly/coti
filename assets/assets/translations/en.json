@@ -1,0 +1,168 @@
+{
+  "add_coti": {
+    "title": "Add COTI Network to MetaMask",
+    "step1": {
+      "title": "Step 1: Open MetaMask",
+      "text": "Click the network dropdown at the top left of MetaMask and select 'Add a custom network'."
+    },
+    "step2": {
+      "title": "Step 2: Enter COTI Mainnet Info",
+      "text": "Fill in the fields with:\n\nNetwork Name: COTI\nRPC URL: https://mainnet.coti.io/rpc\nChain ID: 2632500\nSymbol: COTI\nBlock Explorer: https://mainnet.cotiscan.io"
+    },
+    "step3": {
+      "title": "Step 3: Save & Switch",
+      "text": "Click 'Save'. MetaMask will switch to the COTI network automatically."
+    },
+    "step4": {
+      "title": "You're All Set!",
+      "text": "You’ve added the COTI network to MetaMask. You can now bridge tokens or interact with dApps on COTI V2."
+    },
+    "back": "Back",
+    "next": "Next",
+    "finish": "Finish",
+    "complete": "Tutorial complete!",
+    "note_title": "⚠️ Security Note for COTI Users",
+    "note_intro": "This website is 100% open-source and created for the COTI community to share technical instructions.",
+     "note_1_part1": "• All source code is available publicly on ",
+    "note_2": "• The site loads directly from GitHub Pages — no hidden code or injected content.",
+    "note_3": "• No wallet connection is required to view or use this site.",
+    "note_4": "• We understand crypto users are cautious. Please feel free to inspect the code before clicking any links.",
+    "note_closing": "✅ Stay safe, stay informed, and explore the COTI ecosystem with confidence."
+  },
+  "add_token": {
+      "title": "Add COTI V2 Token",
+      "heading": "How to Add a COTI V2 Token to MetaMask",
+      "back": "Previous",
+      "next": "Next",
+      "finish": "Finish",
+      "complete": "You have completed all the steps!",
+      "note_title": "\u26a0\ufe0f Security Note for COTI Users",
+      "note_intro": "This website is 100% open-source and created for the COTI community to share technical instructions.",
+      "note_1": "\u2022 All source code is available publicly on ",
+      "note_2": "\u2022 The site loads directly from GitHub Pages \u2014 no hidden code or injected content.",
+      "note_3": "\u2022 No wallet connection is required to view or use this site.",
+      "note_4": "\u2022 We understand crypto users are cautious. Please feel free to inspect the code before clicking any links.",
+      "note_closing": "\u2705 Stay safe, stay informed, and explore the COTI ecosystem with confidence.",
+      "step1": {
+        "title": "Step 1: Go to COTI Token Explorer",
+        "text": "Visit mainnet.cotiscan.io/tokens"
+      },
+      "step2": {
+        "title": "Step 2: Search and Select Your Token",
+        "text": "Type the name of the token you want to import and click on it to open the token page."
+      },
+      "step3": {
+        "title": "Step 3: Copy the Token Address",
+        "text": "On the token's page, copy the token contract address to your clipboard."
+      },
+      "step4": {
+        "title": "Step 4: Open MetaMask",
+        "text": "Launch your MetaMask extension or mobile app."
+      },
+      "step5": {
+        "title": "Step 5: Click the 3 Dots and Choose \"Import Tokens\"",
+        "text": "In the Tokens tab, tap the 3 dots icon, then select Import Tokens."
+      },
+      "step6": {
+        "title": "Step 6: Select Network & Paste Address",
+        "text": "Select the COTI network, then paste the token address into the input field."
+      },
+      "step7": {
+        "title": "Step 7: Click Next",
+        "text": "Click the Next button to continue."
+      },
+      "step8": {
+        "title": "Step 8: Click Import",
+        "text": "Click Import to finish adding the token."
+      },
+      "step9": {
+        "title": "Step 9: Done!",
+        "text": "The token should now appear in your MetaMask wallet."
+      }
+    },
+    "buy_gcoti": {
+    "title": "Buy $gCOTI",
+    "heading": "Where to buy $gCOTI:",
+    "mexc": "Buy $gCOTI on MEXC",
+    "bitrue": "Buy $gCOTI on Bitrue",
+    "carbondefi": "Buy $gCOTI on CarbonDeFi"
+  },
+    "donate": {
+    "title": "🙏 Contact & Donate",
+    "message": "If you find my tools useful and want to support more development, please donate $COTI to my COTI V2 address using the ZNS domain below:",
+    "domain_prefix": "ZNS Domain: ",
+    "contact_intro": "📣 If you want to contact me, here are some ways:",
+    "link_error": "Could not launch link"
+  },
+    "bridge_hack": {
+    "title": "Bridge Hack",
+    "tip": "One tip for you: if you want to bridge more than 25K $COTI from Layer 2 to Ethereum in one day, use multiple wallets. Each wallet can bridge up to 25K $COTI. For example, if you want to bridge 100K $COTI, split it into four wallets with 25K each, then start bridging from each wallet to Ethereum. It worked for me — and yes, it should work for you too."
+  },
+    "gcoti": {
+    "loading_status": "⏳ Loading data from COTI network...",
+    "fetching_status": "⏳ Fetching data from COTI network...",
+    "success_status": "✅ Data fetched successfully!",
+    "error_status": "❌ Error: {}",
+    "result_text": "🌍 A total of {} $gCOTI was deposited into the Treasury in the last {} day(s).",
+    "day_option": "Last {} day(s)",
+    "page_title": "$gCOTI Treasury Deposits"
+  },
+  "coti": {
+    "page_title": "$COTI Treasury Deposits",
+    "title": "🕒 $COTI Treasury Deposits",
+    "day_option": "Last {} day(s)",
+    "loading_status": "⏳ Loading data from COTI network...",
+    "fetching_status": "⏳ Fetching data from COTI network...",
+    "success_status": "✅ Data fetched successfully!",
+    "error_status": "❌ Error while fetching data {}",
+    "result_text": "🌍 A total of {} $COTI was deposited into the Treasury in the last {} day(s)."
+  },
+  "gcotiforwallet":
+  {
+  "treasury_tracker_title": "Track $gCOTI Treasury Deposits for Any Wallet",
+  "enter_wallet": "Enter Wallet Address",
+  "day_option": "Last {} day(s)",
+  "loading_status": "⏳ Loading data...",
+  "fetching_status": "⏳ Fetching data from COTI network...",
+  "success_status": "✅ Data fetched successfully!",
+  "no_tx_found": "✅ No $gCOTI Treasury deposits found in the selected time range.",
+  "invalid_address": "❌ Invalid wallet address format.",
+  "error_status": "❌ Failed to fetch data.",
+  "result_text": "🌍 A total of {} $gCOTI was deposited into the Treasury in the last {} day(s)."
+},  
+"gcotichart": {
+    "chart_title": "$gCOTI Chart: Deposits vs Withdrawals",
+    "day_option": "Last {} day(s)",
+    "result_text": "🌍 Total Deposited: {} $gCOTI\n📤 Total Withdrawn: {} $gCOTI",
+    "fetching_status": "⏳ Fetching data...",
+    "success_status": "✅ Showing data from {} to {}",
+    "empty_status": "ℹ️ No data available in selected time range.",
+    "deposit": "Deposit",
+    "withdrawal": "Withdrawal"
+  },
+    
+  "gcotiforwalletoverview": {
+    "treasury_chart_title": "$gCOTI Treasury Activity Overview for a Specific Wallet",
+    "enter_wallet": "Enter Wallet Address",
+    "invalid_address": "❌ Invalid wallet address format.",
+    "fetching_status": "⏳ Fetching data from COTI network...",
+    "success_status": "✅ Data fetched successfully!",
+    "error_status": "❌ Error fetching data.",
+    "result_text": "🌍 Total Deposited: {} $gCOTI\n\n📤 Total Withdrawn: {} $gCOTI",
+    "deposit": "Deposit",
+    "withdrawal": "Withdrawal"
+  },
+    "cotiforwallet":
+  {
+  "treasury_tracker_title": "Track $COTI Treasury Deposits for Any Wallet",
+  "enter_wallet": "Enter Wallet Address",
+  "day_option": "Last {} day(s)",
+  "loading_status": "⏳ Loading data...",
+  "fetching_status": "⏳ Fetching data from COTI network...",
+  "success_status": "✅ Data fetched successfully!",
+  "no_tx_found": "✅ No gCOTI Treasury deposits found in the selected time range.",
+  "invalid_address": "❌ Invalid wallet address format.",
+  "error_status": "❌ Failed to fetch data.",
+  "result_text": "🌍 A total of {} $COTI was deposited into the Treasury in the last {} day(s)."
+}
+}

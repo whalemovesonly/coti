@@ -1,137 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>WhaleMovesOnly.coti</title>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
 
-    body {
-      background-color: #0b0c10;
-      color: #66fcf1;
-      font-family: Arial, sans-serif;
-      padding: 2rem;
-      text-align: center;
-    }
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
 
-    h1 {
-      margin-bottom: 2rem;
-      font-size: clamp(1.5rem, 6vw, 2.5rem);
-    }
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
 
-    .title-link {
-      text-decoration: none;
-      color: #66fcf1;
-    }
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+  <base href="/coti/">
 
-    .button-grid {
-      display: grid;
-      gap: 1rem;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      max-width: 800px;
-      margin: 0 auto 2rem;
-    }
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="A new Flutter project.">
 
-    .button-link {
-      padding: 0.8rem 1.5rem;
-      background-color: #1f2833;
-      color: #66fcf1;
-      border: 2px solid #66fcf1;
-      border-radius: 8px;
-      font-size: clamp(1rem, 4vw, 1.2rem);
-      cursor: pointer;
-      text-decoration: none;
-      text-align: center;
-      transition: background-color 0.3s, color 0.3s;
-    }
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="COTIV2TOOLS">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
-    .button-link:hover {
-      background-color: #66fcf1;
-      color: #0b0c10;
-    }
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
 
-    .security-note {
-      background-color: #3d2e00;
-      color: #f1e58d;
-      border-left: 6px solid #f1c40f;
-      padding: 1.5rem;
-      margin-top: 2rem;
-      border-radius: 10px;
-      text-align: left;
-      max-width: 800px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .security-note h2 {
-      margin-bottom: 0.8rem;
-      font-size: 1.2rem;
-      font-weight: bold;
-    }
-
-    .security-note ul {
-      padding-left: 1.2rem;
-      margin-top: 0.5rem;
-    }
-
-    .security-note li {
-      margin-bottom: 0.5rem;
-    }
-
-    .security-note a {
-      color: #f7dc6f;
-      text-decoration: underline;
-    }
-
-    .security-note a:hover {
-      color: #fff9c4;
-    }
-
-    .security-note p {
-      margin-top: 1rem;
-    }
-  </style>
+  <title>COTI V2 tools</title>
+  <link rel="manifest" href="manifest.json">
 </head>
 <body>
-  <a href="https://x.com/WhaleMovesOnly" target="_blank" class="title-link">
-    <h1>WhaleMovesOnly.coti</h1>
-  </a>
-
-  <div class="button-grid">
-  <a href="addCOTINetworkToMetamaskInstrucions.html" class="button-link">Add $COTI network to MetaMask Instruction</a>
-  <a href="addingNativeCOTItokensToMetamask.html" class="button-link">Add $COTI native tokens into MetaMask</a>
-  <a href="whereToBuygCOTI.html" class="button-link">Where to buy $gCOTI</a>
-  <a href="bridgeHack.html" class="button-link">Bridge Hack</a>
-  <a href="depositedgCOTIlast24hours.html" class="button-link">🕒 Last 24h $gCOTI Deposits</a>
-  <a href="depositedCOTIlast24hours.html" class="button-link">🕒 Last 24h $COTI Deposits</a>
-  <a href="depositedgCOTIlast24hoursForWallet.html" class="button-link">🔍 Track $gCOTI Deposits to Treasury for Any Wallet</a>
-  <a href="depositedWithdrawalsgCOTIlast24hoursChart.html" class="button-link">📊 $gCOTI Treasury: Deposits vs Withdrawals</a>
-  <a href="gCOTITreasuryActivityOverviewforaSpecificWallet.html" class="button-link">📊 $gCOTI Treasury Activity Overview for a Specific Wallet</a>
-  <a href="depositedCOTIlast24hoursForWallet.html" class="button-link">🔍 Track $COTI Deposits to Treasury for Any Wallet</a>
-  <a href="depositedWithdrawalsCOTIlast24hoursChart.html" class="button-link">📊 $COTI Treasury: Deposits vs Withdrawals</a>
-  <a href="COTITreasuryActivityOverviewforaSpecificWallet.html" class="button-link">📊 $COTI Treasury Activity Overview for a Specific Wallet</a>
-  <a href="bridgedgCOTIlast24hours.html" class="button-link">🕒 Total $gCOTI was bridged from Ethereum to the $COTI network</a>
-  <a href="bridgedCOTIlast24hours.html" class="button-link">🕒 Total $COTI was bridged from Ethereum to the $COTI network</a>
-  <a href="bridgedgCOTIlast24hoursForWallet.html" class="button-link">🔍 Track $gCOTI was bridged from Ethereum to the $COTI network for Any Wallet</a>
-<a href="bridgedCOTIlast24hoursForWallet.html" class="button-link">🔍 Track $COTI was bridged from Ethereum to the $COTI network for Any Wallet</a>
-
-</div>
-
-  <div class="security-note">
-    <h2>⚠️ Security Note for COTI Users</h2>
-    <p>This website is <strong>100% open-source</strong> and created for the COTI community to share technical instructions.</p>
-    <ul>
-      <li>All source code is available publicly on 
-        <a href="https://github.com/whalemovesonly/coti" target="_blank" rel="noopener noreferrer">GitHub</a>.
-      </li>
-      <li>The site loads directly from GitHub Pages — no hidden code or injected content.</li>
-      <li><strong>No wallet connection is required</strong> to view or use this site.</li>
-      <li>We understand crypto users are cautious. Please feel free to inspect the code before clicking any links.</li>
-    </ul>
-    <p>✅ Stay safe, stay informed, and explore the COTI ecosystem with confidence.</p>
-  </div>
+  <script src="flutter_bootstrap.js" async></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js"></script>
+  <script src="firebase-config.js"></script>
 </body>
 </html>
