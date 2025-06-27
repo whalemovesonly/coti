@@ -146,7 +146,7 @@ class _GCotiTreasuryOverviewPageState extends State<GCotiTreasuryOverviewPage> {
               final isDeposit = rodIndex == 0;
               final value = rod.toY;
               return BarTooltipItem(
-                '${isDeposit ? 'Deposit' : 'Withdrawal'}\n$label\n$value',
+                '${isDeposit ? tr('gcotiforwalletoverview.deposit') : tr('gcotiforwalletoverview.withdrawal')}\n$label\n$value',
                 TextStyle(
                   color: textColor,
                   fontWeight: FontWeight.w600,

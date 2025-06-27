@@ -143,7 +143,7 @@ class _GCotiChartPageState extends State<GCotiChartPage> {
               final isDeposit = rodIndex == 0;
               final value = rod.toY;
               return BarTooltipItem(
-                '${isDeposit ? 'Deposit' : 'Withdrawal'}\n$label\n$value',
+                '${isDeposit ? tr('gcotichart.deposit') : tr('gcotichart.withdrawal')}\n$label\n$value',
                 TextStyle(
                   color: textColor,
                   fontWeight: FontWeight.w600,

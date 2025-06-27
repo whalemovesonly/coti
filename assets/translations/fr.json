@@ -135,7 +135,9 @@
     "result_text": "🌍 Total déposé : {} $gCOTI\n📤 Total retiré : {} $gCOTI",
     "fetching_status": "⏳ Récupération des données...",
     "success_status": "✅ Données affichées du {} au {}",
-    "empty_status": "ℹ️ Aucune donnée disponible pour la période sélectionnée."
+    "empty_status": "ℹ️ Aucune donnée disponible pour la période sélectionnée.",
+    "deposit": "Dépôt",
+    "withdrawal": "Retrait"
   },
     "gcotiforwalletoverview": {
     "treasury_chart_title": "Aperçu des activités du Trésor $gCOTI pour un portefeuille spécifique",
@@ -144,7 +146,9 @@
     "fetching_status": "⏳ Récupération des données du réseau COTI...",
     "success_status": "✅ Données récupérées avec succès !",
     "error_status": "❌ Échec de la récupération des données. Veuillez réessayer plus tard.",
-    "result_text": "🌍 Total déposé : {} $gCOTI\n\n📤 Total retiré : {} $gCOTI"
+    "result_text": "🌍 Total déposé : {} $gCOTI\n\n📤 Total retiré : {} $gCOTI",
+    "deposit": "Dépôt",
+    "withdrawal": "Retrait"
   },
   "cotiforwallet": {
   "treasury_tracker_title": "Suivre les dépôts de $COTI vers le Trésor pour n'importe quel portefeuille",
