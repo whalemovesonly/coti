@@ -124,22 +124,44 @@ class _GCotiChartPageState extends State<GCotiChartPage> {
   Widget buildChart(BuildContext context) {
   if (labels.isEmpty) return const SizedBox.shrink();
 
-  final colorScheme = Theme.of(context).colorScheme;
-  final textColor = Theme.of(context).textTheme.bodyMedium?.color ?? Colors.grey;
+  final theme = Theme.of(context);
+  final colorScheme = theme.colorScheme;
+  final textColor = theme.textTheme.bodyMedium?.color ?? Colors.grey;
 
   return SizedBox(
     height: 400,
     child: BarChart(
       BarChartData(
+        barTouchData: BarTouchData(
+          enabled: true,
+          touchTooltipData: BarTouchTooltipData(
+            tooltipBgColor: colorScheme.surfaceVariant,
+            tooltipPadding: const EdgeInsets.all(8),
+            tooltipMargin: 8,
+            getTooltipItem: (group, groupIndex, rod, rodIndex) {
+              final label = labels[group.x.toInt()];
+              final isDeposit = rodIndex == 0;
+              final value = rod.toY;
+              return BarTooltipItem(
+                '${isDeposit ? 'Deposit' : 'Withdrawal'}\n$label\n$value',
+                TextStyle(
+                  color: textColor,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                ),
+              );
+            },
+          ),
+        ),
         barGroups: List.generate(labels.length, (index) {
           return BarChartGroupData(x: index, barRods: [
             BarChartRodData(
               toY: deposits[index],
-              color: Colors.green, // deposit bar
+              color: colorScheme.primary, // Deposit bar color from theme
             ),
             BarChartRodData(
               toY: withdrawals[index],
-              color: Colors.red, // withdrawal bar (warning color)
+              color: colorScheme.tertiary, // Withdrawal bar color from theme
             ),
           ]);
         }),
@@ -152,11 +174,12 @@ class _GCotiChartPageState extends State<GCotiChartPage> {
               getTitlesWidget: (value, meta) {
                 final index = value.toInt();
                 if (index < 0 || index >= labels.length) return const SizedBox.shrink();
+                if (index % 2 != 0) return const SizedBox.shrink(); // show every other label
                 final date = labels[index];
                 return SideTitleWidget(
                   axisSide: meta.axisSide,
                   child: Text(
-                    date.substring(5),
+                    date.substring(5), // Show MM-DD
                     style: TextStyle(fontSize: 10, color: textColor),
                   ),
                 );

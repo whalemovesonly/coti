@@ -125,30 +125,49 @@ class _GCotiTreasuryOverviewPageState extends State<GCotiTreasuryOverviewPage> {
   }
 
  Widget buildChart(BuildContext context) {
+  if (labels.isEmpty) return const SizedBox.shrink();
+
   final theme = Theme.of(context);
   final colorScheme = theme.colorScheme;
-  final textColor = theme.textTheme.bodyMedium?.color ?? Colors.white70;
-
-  if (labels.isEmpty) return const SizedBox.shrink();
+  final textColor = theme.textTheme.bodyMedium?.color ?? Colors.grey;
 
   return SizedBox(
     height: 400,
-    width: MediaQuery.of(context).size.width * 0.95,
     child: BarChart(
       BarChartData(
-        barGroups: List.generate(labels.length, (i) => BarChartGroupData(
-          x: i,
-          barRods: [
+        barTouchData: BarTouchData(
+          enabled: true,
+          touchTooltipData: BarTouchTooltipData(
+            tooltipBgColor: colorScheme.surfaceVariant,
+            tooltipPadding: const EdgeInsets.all(8),
+            tooltipMargin: 8,
+            getTooltipItem: (group, groupIndex, rod, rodIndex) {
+              final label = labels[group.x.toInt()];
+              final isDeposit = rodIndex == 0;
+              final value = rod.toY;
+              return BarTooltipItem(
+                '${isDeposit ? 'Deposit' : 'Withdrawal'}\n$label\n$value',
+                TextStyle(
+                  color: textColor,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                ),
+              );
+            },
+          ),
+        ),
+        barGroups: List.generate(labels.length, (index) {
+          return BarChartGroupData(x: index, barRods: [
             BarChartRodData(
-              toY: deposits[i],
-              color: Colors.green, // e.g., accent color
+              toY: deposits[index],
+              color: colorScheme.primary, // Deposit bar color from theme
             ),
             BarChartRodData(
-              toY: withdrawals[i],
-              color: Colors.red, // warning text color (used as "red-like")
+              toY: withdrawals[index],
+              color: colorScheme.tertiary, // Withdrawal bar color from theme
             ),
-          ],
-        )),
+          ]);
+        }),
         titlesData: FlTitlesData(
           bottomTitles: AxisTitles(
             sideTitles: SideTitles(
@@ -158,12 +177,12 @@ class _GCotiTreasuryOverviewPageState extends State<GCotiTreasuryOverviewPage> {
               getTitlesWidget: (value, meta) {
                 final index = value.toInt();
                 if (index < 0 || index >= labels.length) return const SizedBox.shrink();
-                if (index % 2 != 0) return const SizedBox.shrink();
+                if (index % 2 != 0) return const SizedBox.shrink(); // show every other label
                 final date = labels[index];
                 return SideTitleWidget(
                   axisSide: meta.axisSide,
                   child: Text(
-                    date.substring(5),
+                    date.substring(5), // Show MM-DD
                     style: TextStyle(fontSize: 10, color: textColor),
                   ),
                 );
