@@ -141,11 +141,11 @@ class _GCotiTreasuryOverviewPageState extends State<GCotiTreasuryOverviewPage> {
           barRods: [
             BarChartRodData(
               toY: deposits[i],
-              color: colorScheme.primary, // e.g., accent color
+              color: Colors.green, // e.g., accent color
             ),
             BarChartRodData(
               toY: withdrawals[i],
-              color: colorScheme.tertiary, // warning text color (used as "red-like")
+              color: Colors.red, // warning text color (used as "red-like")
             ),
           ],
         )),

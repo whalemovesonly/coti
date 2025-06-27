@@ -135,11 +135,11 @@ class _GCotiChartPageState extends State<GCotiChartPage> {
           return BarChartGroupData(x: index, barRods: [
             BarChartRodData(
               toY: deposits[index],
-              color: colorScheme.primary, // deposit bar
+              color: Colors.green, // deposit bar
             ),
             BarChartRodData(
               toY: withdrawals[index],
-              color: colorScheme.tertiary, // withdrawal bar (warning color)
+              color: Colors.red, // withdrawal bar (warning color)
             ),
           ]);
         }),
