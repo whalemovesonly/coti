@@ -99,6 +99,6 @@ class AuthWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const AddCOTINetworkToMetaMask(); // No need for FutureBuilder
+    return const GCotiTreasuryTrackerPage(); // No need for FutureBuilder
   }
 }

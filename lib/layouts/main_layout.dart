@@ -27,6 +27,56 @@ class MainLayout extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
+              ListTile(
+              leading: const Icon(Icons.fiber_manual_record),
+              title: Text(tr('gcotiforwallet.treasury_tracker_title')),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, '/GCotiTreasuryTrackerPage');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.fiber_manual_record),
+              title: Text(tr('gcotiforwalletoverview.treasury_chart_title')),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, '/GCotiTreasuryOverviewPage');
+              },
+            ),
+
+            ListTile(
+              leading: const Icon(Icons.fiber_manual_record),
+              title: Text(tr('gcotichart.chart_title')),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, '/GCotiChartPage');
+              },
+            ),
+
+            ListTile(
+              leading: const Icon(Icons.fiber_manual_record),
+              title: Text(tr('gcoti.page_title')),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, '/GCotiDepositsPage');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.fiber_manual_record),
+              title: Text(tr('cotiforwallet.treasury_tracker_title')),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, '/CotiTreasuryTrackerPage');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.fiber_manual_record),
+              title: Text(tr('coti.page_title')),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, '/CotiDepositsPage');
+              }),
+
             ListTile(
               leading: const Icon(Icons.fiber_manual_record),
               title: Text(tr('add_coti.title')),
@@ -59,53 +109,7 @@ class MainLayout extends StatelessWidget {
                 Navigator.pushReplacementNamed(context, '/BridgeHackPage');
               },
             ),
-            ListTile(
-              leading: const Icon(Icons.fiber_manual_record),
-              title: Text(tr('gcoti.page_title')),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushReplacementNamed(context, '/GCotiDepositsPage');
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.fiber_manual_record),
-              title: Text(tr('coti.page_title')),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushReplacementNamed(context, '/CotiDepositsPage');
-              }),
-              ListTile(
-              leading: const Icon(Icons.fiber_manual_record),
-              title: Text(tr('gcotiforwallet.treasury_tracker_title')),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushReplacementNamed(context, '/GCotiTreasuryTrackerPage');
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.fiber_manual_record),
-              title: Text(tr('gcotichart.chart_title')),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushReplacementNamed(context, '/GCotiChartPage');
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.fiber_manual_record),
-              title: Text(tr('gcotiforwalletoverview.treasury_chart_title')),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushReplacementNamed(context, '/GCotiTreasuryOverviewPage');
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.fiber_manual_record),
-              title: Text(tr('cotiforwallet.treasury_tracker_title')),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushReplacementNamed(context, '/CotiTreasuryTrackerPage');
-              },
-            ),
+            
             
             const Divider(),
             ListTile(
