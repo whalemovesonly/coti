@@ -78,8 +78,49 @@ class _HtmlCotiConversionPageState extends State<CotiTreasuryTrackerPage> {
     return total;
   }
 
+Future<String?> fetchZnsAddress(String domainInput) async {
+
+    if (domainInput.isEmpty || RegExp(r'^0x[a-fA-F0-9]{40}$').hasMatch(domainInput)) {
+      return null;
+    }
+
+  final cleanedDomain = domainInput.toLowerCase().endsWith('.coti')
+      ? domainInput.substring(0, domainInput.length - 5)
+      : domainInput;
+  final proxyUrl = Uri.parse(
+    'https://zns.bio/api/resolveDomain?chain=2632500&domain=$cleanedDomain',
+  );
+
+  try {
+    final response = await http.get(proxyUrl);
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      if (data is Map && data.containsKey('address')) {
+        return data['address'];
+      }
+    } else {
+      print('Failed: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('Error: $e');
+  }
+  
+  return null;
+}
+
   Future<void> _fetchData() async {
-    final address = _walletController.text.trim();
+    FocusScope.of(context).unfocus();
+
+    final address1 = _walletController.text.trim();
+    final address2 = await fetchZnsAddress(address1); // or 'example.coti'
+    String address = "";
+    if (address2 != null)
+    {
+        address = address2;
+    }else
+    {
+       address = _walletController.text.trim();
+    }
 
     if (address.isEmpty || !RegExp(r'^0x[a-fA-F0-9]{40}$').hasMatch(address)) {
       setState(() {
