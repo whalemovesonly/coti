@@ -192,7 +192,7 @@ Future<String?> fetchZnsAddress(String domainInput) async {
                     enabled: !isLoading,
                     style: text.bodyMedium?.copyWith(color: color.primary),
                     decoration: InputDecoration(
-                      hintText: '0x...',
+                      hintText: '0x... || .coti',
                       hintStyle: TextStyle(color: color.tertiary),
                       filled: true,
                       fillColor: color.surface,
