@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'COTI V2 tools',
+      title: tr('COTI Tools'),
 
       theme: appThemes[AppThemeType.light],
       darkTheme: appThemes[AppThemeType.dark],
