@@ -50,7 +50,6 @@ class _CotiDepositsPageState extends State<CotiDepositsPage> {
             .join('&');
         url += '?$paramStr';
       }
-
       final response = await http.get(Uri.parse(url), headers: {'accept': 'application/json'});
 
       if (response.statusCode != 200) {
@@ -60,10 +59,17 @@ class _CotiDepositsPageState extends State<CotiDepositsPage> {
       final data = jsonDecode(response.body);
       final transactions = data['items'] ?? [];
       bool stop = false;
+      
 
       for (final tx in transactions) {
         final toAddress = tx['to']?['hash']?.toString().toLowerCase();
-        final type = (tx['transaction_types'] as List?)?.first ?? '';
+        
+        final types = tx['transaction_types'] as List?;
+        String type = '';
+        if (types != null && types.isNotEmpty) {
+          type = types.first;
+        }
+
         if (toAddress == address && tx['result'] == 'success' && type == 'coin_transfer') {
           final txTime = DateTime.parse(tx['timestamp']);
           if (txTime.isBefore(timeLimit)) {
@@ -73,10 +79,10 @@ class _CotiDepositsPageState extends State<CotiDepositsPage> {
           allTransactions.add(tx);
         }
       }
-
       if (stop || data['next_page_params'] == null) break;
       params = (data['next_page_params'] as Map)
           .map((key, value) => MapEntry(key.toString(), value.toString()));
+      
     }
 
     return allTransactions;
