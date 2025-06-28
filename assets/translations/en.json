@@ -120,7 +120,7 @@
   "gcotiforwallet":
   {
   "treasury_tracker_title": "Track $gCOTI Treasury Deposits for Any Wallet",
-  "enter_wallet": "Enter Wallet Address",
+  "enter_wallet": "Enter Wallet Address or ZNS domains",
   "day_option": "Last {} day(s)",
   "loading_status": "⏳ Loading data...",
   "fetching_status": "⏳ Fetching data from COTI network...",
@@ -143,7 +143,7 @@
     
   "gcotiforwalletoverview": {
     "treasury_chart_title": "$gCOTI Treasury Activity Overview for a Specific Wallet",
-    "enter_wallet": "Enter Wallet Address",
+    "enter_wallet": "Enter Wallet Address or ZNS domains",
     "invalid_address": "❌ Invalid wallet address format.",
     "fetching_status": "⏳ Fetching data from COTI network...",
     "success_status": "✅ Data fetched successfully!",
@@ -155,7 +155,7 @@
     "cotiforwallet":
   {
   "treasury_tracker_title": "Track $COTI Treasury Deposits for Any Wallet",
-  "enter_wallet": "Enter Wallet Address",
+  "enter_wallet": "Enter Wallet Address or ZNS domains",
   "day_option": "Last {} day(s)",
   "loading_status": "⏳ Loading data...",
   "fetching_status": "⏳ Fetching data from COTI network...",
