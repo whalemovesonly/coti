@@ -119,7 +119,7 @@
   },
   "gcotiforwallet": {
   "treasury_tracker_title": "Suivre les dépôts de $gCOTI vers le Trésor pour n'importe quel portefeuille",
-  "enter_wallet": "Entrez l'adresse du portefeuille",
+  "enter_wallet": "Entrez l'adresse du portefeuille ou les domaines ZNS",
   "day_option": "Les {} dernier(s) jour(s)",
   "loading_status": "⏳ Chargement des données...",
   "fetching_status": "⏳ Récupération des données depuis le réseau COTI...",
@@ -141,7 +141,7 @@
   },
     "gcotiforwalletoverview": {
     "treasury_chart_title": "Aperçu des activités du Trésor $gCOTI pour un portefeuille spécifique",
-    "enter_wallet": "Entrez le portefeuille",
+    "enter_wallet": "Entrez l'adresse du portefeuille ou les domaines ZNS",
     "invalid_address": "❌ Veuillez entrer une adresse de portefeuille valide.",
     "fetching_status": "⏳ Récupération des données du réseau COTI...",
     "success_status": "✅ Données récupérées avec succès !",
@@ -152,7 +152,7 @@
   },
   "cotiforwallet": {
   "treasury_tracker_title": "Suivre les dépôts de $COTI vers le Trésor pour n'importe quel portefeuille",
-  "enter_wallet": "Entrez l'adresse du portefeuille",
+  "enter_wallet": "Entrez l'adresse du portefeuille ou les domaines ZNS",
   "day_option": "Les {} dernier(s) jour(s)",
   "loading_status": "⏳ Chargement des données...",
   "fetching_status": "⏳ Récupération des données depuis le réseau COTI...",
