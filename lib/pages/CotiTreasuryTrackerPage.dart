@@ -111,6 +111,12 @@ Future<String?> fetchZnsAddress(String domainInput) async {
   Future<void> _fetchData() async {
     FocusScope.of(context).unfocus();
 
+    setState(() {
+      isLoading = true;
+      statusKey = 'cotiforwallet.fetching_status';
+      result = null;
+    });
+
     final address1 = _walletController.text.trim();
     final address2 = await fetchZnsAddress(address1); // or 'example.coti'
     String address = "";
@@ -125,16 +131,11 @@ Future<String?> fetchZnsAddress(String domainInput) async {
     if (address.isEmpty || !RegExp(r'^0x[a-fA-F0-9]{40}$').hasMatch(address)) {
       setState(() {
         statusKey = 'cotiforwallet.invalid_address';
+        isLoading = false;
       
       });
       return;
     }
-
-    setState(() {
-      isLoading = true;
-      statusKey = 'cotiforwallet.fetching_status';
-      result = null;
-    });
 
     try {
       final txs = await fetchTransactionsWithinDays(address, selectedDays);
