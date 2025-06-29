@@ -112,6 +112,12 @@ Future<String?> fetchZnsAddress(String domainInput) async {
   Future<void> _fetchData() async {
     FocusScope.of(context).unfocus();
 
+    setState(() {
+      isLoading = true;
+      statusKey = 'gcotiforwallet.fetching_status';
+      resultValue = null;
+    });
+
     final address1 = _walletController.text.trim();
     final address2 = await fetchZnsAddress(address1); // or 'example.coti'
     String address = "";
@@ -127,14 +133,12 @@ Future<String?> fetchZnsAddress(String domainInput) async {
       setState(() {
         statusKey = 'gcotiforwallet.invalid_address';
         resultValue = null;
+        isLoading = false;
       });
       return;
     }
 
     setState(() {
-      isLoading = true;
-      statusKey = 'gcotiforwallet.fetching_status';
-      resultValue = null;
       currentAddress = address;
     });
 
