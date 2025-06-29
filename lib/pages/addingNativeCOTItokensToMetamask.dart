@@ -105,8 +105,12 @@ class _AddCOTITokenToMetaMaskState extends State<AddCOTITokenToMetaMask> {
     return MainLayout(
       title: tr('add_token.title'),
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
+        padding: const EdgeInsets.all(0),
+        child: 
+                    Padding(
+             padding: const EdgeInsets.all(16.0), // applies to top, bottom, left, right
+             child:
+        Column(
           children: [
             Container(
               padding: const EdgeInsets.all(20),
@@ -171,6 +175,7 @@ class _AddCOTITokenToMetaMaskState extends State<AddCOTITokenToMetaMask> {
             const ContactAndDonate(),
           ],
         ),
+                    ),
       ),
     );
   }

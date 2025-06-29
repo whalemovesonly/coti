@@ -32,7 +32,12 @@ class BridgeHackPage extends StatelessWidget {
         color: color.background,
         child: Center(
           child: SingleChildScrollView(
-            child: Column(
+            child: 
+                        Padding(
+             padding: const EdgeInsets.all(16.0), // applies to top, bottom, left, right
+             child:
+
+            Column(
               children: [
                 Container(
                   padding: const EdgeInsets.all(24),
@@ -53,6 +58,7 @@ class BridgeHackPage extends StatelessWidget {
                 const ContactAndDonate(),
               ],
             ),
+                        ),
           ),
         ),
       ),

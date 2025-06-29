@@ -172,11 +172,15 @@ Future<String?> fetchZnsAddress(String domainInput) async {
     return MainLayout(
       title: 'gcotiforwallet.treasury_tracker_title'.tr(),
       child: Container(
-        padding: const EdgeInsets.all(32),
+        padding: const EdgeInsets.all(0),
         color: color.background,
         child: Center(
           child: SingleChildScrollView(
-            child: Column(
+            child: 
+            Padding(
+             padding: const EdgeInsets.all(16.0), // applies to top, bottom, left, right
+             child:
+            Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
@@ -255,6 +259,12 @@ Future<String?> fetchZnsAddress(String domainInput) async {
                 const ContactAndDonate(),
               ],
             ),
+
+
+            ),
+
+
+
           ),
         ),
       ),

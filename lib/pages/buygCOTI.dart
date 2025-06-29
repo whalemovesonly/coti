@@ -24,8 +24,13 @@ class BuyGCOTIPage extends StatelessWidget {
     return MainLayout(
       title: tr('buy_gcoti.title'),
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
+        padding: const EdgeInsets.all(0),
+        child: 
+                    Padding(
+             padding: const EdgeInsets.all(16.0), // applies to top, bottom, left, right
+             child:
+
+        Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             _buyLink(
@@ -49,6 +54,7 @@ class BuyGCOTIPage extends StatelessWidget {
             const ContactAndDonate(),
           ],
         ),
+                    ),
       ),
     );
   }
