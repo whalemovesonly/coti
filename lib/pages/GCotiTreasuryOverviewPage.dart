@@ -230,6 +230,14 @@ String formatDateRange(String range) {
   }
 }
 
+double calculateYAxisInterval(double maxY) {
+  if (maxY <= 10) return 2;
+  if (maxY <= 50) return 10;
+  if (maxY <= 100) return 20;
+  if (maxY <= 500) return 50;
+  if (maxY <= 1000) return 100;
+  return (maxY / 10).ceilToDouble();
+}
 
 Widget buildChart(BuildContext context) {
   if (labels.isEmpty) return const SizedBox.shrink();
@@ -237,6 +245,7 @@ Widget buildChart(BuildContext context) {
   final screenWidth = MediaQuery.of(context).size.width;
   const estimatedLabelWidth = 90.0;
   final maxVisibleLabels = (screenWidth / estimatedLabelWidth).floor();
+
 
   final originalGrouped = Map<String, Map<String, double>>.fromIterable(
     List.generate(labels.length, (i) => i),
@@ -270,10 +279,20 @@ Widget buildChart(BuildContext context) {
 
   final labelInterval = (adjustedLabels.length / maxVisibleLabels).ceil().clamp(1, adjustedLabels.length);
 
-  return SizedBox(
-    height: 400,
-    child: BarChart(
-      BarChartData(
+// Compute max Y with padding
+final allYValues = <double>[];
+allYValues.addAll(adjustedDeposits);
+allYValues.addAll(adjustedWithdrawals);
+final maxY = allYValues.isEmpty ? 10.0 : allYValues.reduce((a, b) => a > b ? a : b);
+final paddedMaxY = (maxY * 1.15).ceilToDouble(); // 15% visual buffer
+
+final interval = calculateYAxisInterval(paddedMaxY);
+
+return SizedBox(
+  height: 400,
+  child: BarChart(
+    BarChartData(
+      maxY: paddedMaxY, // ✅ ensures the Y-axis has space to breathe
         barTouchData: BarTouchData(
           enabled: true,
           touchTooltipData: BarTouchTooltipData(
@@ -334,6 +353,7 @@ Widget buildChart(BuildContext context) {
             sideTitles: SideTitles(
               showTitles: true,
               reservedSize: 80,
+              interval: interval,
               getTitlesWidget: (value, meta) {
                 return Text(
                   value.toStringAsFixed(0),
