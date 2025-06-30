@@ -73,6 +73,42 @@ class _GCotiTreasuryOverviewPageState extends State<GCotiTreasuryOverviewPage> {
     return grouped;
   }
 
+
+Map<String, Map<String, double>> groupByNDays(
+  Map<String, Map<String, double>> originalGrouped,
+  int interval,
+) {
+  final entries = originalGrouped.entries.toList()
+    ..sort((a, b) => a.key.compareTo(b.key)); // sort by date
+
+  final grouped = <String, Map<String, double>>{};
+  for (int i = 0; i < entries.length; i += interval) {
+    final chunk = entries.sublist(i, (i + interval).clamp(0, entries.length));
+    final depositsSum = chunk.fold(0.0, (sum, e) => sum + (e.value['deposits'] ?? 0.0));
+    final withdrawalsSum = chunk.fold(0.0, (sum, e) => sum + (e.value['withdrawals'] ?? 0.0));
+
+    final startDate = DateTime.parse(chunk.first.key);
+    final endDate = DateTime.parse(chunk.last.key);
+    final groupKey = _formatGroupKey(startDate, endDate, interval);
+
+    grouped[groupKey] = {
+      'deposits': depositsSum,
+      'withdrawals': withdrawalsSum,
+    };
+  }
+
+  return grouped;
+}
+
+String _formatGroupKey(DateTime start, DateTime end, int interval) {
+  final formatter = DateFormat('yyyy-MM-dd');
+  if (interval == 1 || start.isAtSameMomentAs(end)) {
+    return formatter.format(start);
+  } else {
+    return '${formatter.format(start)} - ${formatter.format(end)}';
+  }
+}
+
 Future<String?> fetchZnsAddress(String domainInput) async {
 
     if (domainInput.isEmpty || RegExp(r'^0x[a-fA-F0-9]{40}$').hasMatch(domainInput)) {
@@ -168,12 +204,71 @@ Future<String?> fetchZnsAddress(String domainInput) async {
     }
   }
 
- Widget buildChart(BuildContext context) {
+String formatDateRange(String range) {
+  if (!range.contains(' - ')) {
+    try {
+      final singleDate = DateTime.parse(range);
+      return '${singleDate.month}-${singleDate.day}';
+    } catch (_) {
+      return range;
+    }
+  }
+
+  final parts = range.split(' - ');
+  try {
+    final startDate = DateTime.parse(parts[0]);
+    final endDate = DateTime.parse(parts[1]);
+
+    final startFormatted = '${startDate.month}-${startDate.day}';
+    final endFormatted = '${endDate.month}-${endDate.day}';
+
+    return startFormatted == endFormatted
+        ? startFormatted
+        : '$startFormatted - $endFormatted';
+  } catch (_) {
+    return range;
+  }
+}
+
+
+Widget buildChart(BuildContext context) {
   if (labels.isEmpty) return const SizedBox.shrink();
+
+  final screenWidth = MediaQuery.of(context).size.width;
+  const estimatedLabelWidth = 50.0;
+  final maxVisibleLabels = (screenWidth / estimatedLabelWidth).floor();
+
+  final originalGrouped = Map<String, Map<String, double>>.fromIterable(
+    List.generate(labels.length, (i) => i),
+    key: (i) => labels[i as int],
+    value: (i) => {
+      'deposits': deposits[i as int],
+      'withdrawals': withdrawals[i as int],
+    },
+  );
+
+  final intervals = [1, 3, 7, 30];
+  Map<String, Map<String, double>> bestGrouped = originalGrouped;
+  int usedInterval = 1;
+
+  for (final interval in intervals) {
+    final grouped = groupByNDays(originalGrouped, interval);
+    if (grouped.length <= maxVisibleLabels) {
+      bestGrouped = grouped;
+      usedInterval = interval;
+      break;
+    }
+  }
+
+  final adjustedLabels = bestGrouped.keys.toList();
+  final adjustedDeposits = adjustedLabels.map((k) => bestGrouped[k]!['deposits']!).toList();
+  final adjustedWithdrawals = adjustedLabels.map((k) => bestGrouped[k]!['withdrawals']!).toList();
 
   final theme = Theme.of(context);
   final colorScheme = theme.colorScheme;
   final textColor = theme.textTheme.bodyMedium?.color ?? Colors.grey;
+
+  final labelInterval = (adjustedLabels.length / maxVisibleLabels).ceil().clamp(1, adjustedLabels.length);
 
   return SizedBox(
     height: 400,
@@ -186,11 +281,11 @@ Future<String?> fetchZnsAddress(String domainInput) async {
             tooltipPadding: const EdgeInsets.all(8),
             tooltipMargin: 8,
             getTooltipItem: (group, groupIndex, rod, rodIndex) {
-              final label = labels[group.x.toInt()];
+              final label = adjustedLabels[group.x.toInt()];
               final isDeposit = rodIndex == 0;
               final value = rod.toY;
               return BarTooltipItem(
-                '${isDeposit ? tr('gcotiforwalletoverview.deposit') : tr('gcotiforwalletoverview.withdrawal')}\n$label\n$value',
+                '${isDeposit ? tr('gcotiforwalletoverview.deposit') : tr('gcotiforwalletoverview.withdrawal')}\n$label\n${value.toStringAsFixed(4)}',
                 TextStyle(
                   color: textColor,
                   fontWeight: FontWeight.w600,
@@ -200,15 +295,15 @@ Future<String?> fetchZnsAddress(String domainInput) async {
             },
           ),
         ),
-        barGroups: List.generate(labels.length, (index) {
+        barGroups: List.generate(adjustedLabels.length, (index) {
           return BarChartGroupData(x: index, barRods: [
             BarChartRodData(
-              toY: deposits[index],
-              color: colorScheme.primary, // Deposit bar color from theme
+              toY: adjustedDeposits[index],
+              color: colorScheme.primary,
             ),
             BarChartRodData(
-              toY: withdrawals[index],
-              color: colorScheme.tertiary, // Withdrawal bar color from theme
+              toY: adjustedWithdrawals[index],
+              color: colorScheme.tertiary,
             ),
           ]);
         }),
@@ -217,17 +312,19 @@ Future<String?> fetchZnsAddress(String domainInput) async {
             sideTitles: SideTitles(
               showTitles: true,
               interval: 1,
-              reservedSize: 36,
+              reservedSize: 40,
               getTitlesWidget: (value, meta) {
                 final index = value.toInt();
-                if (index < 0 || index >= labels.length) return const SizedBox.shrink();
-                if (index % 2 != 0) return const SizedBox.shrink(); // show every other label
-                final date = labels[index];
+                if (index < 0 || index >= adjustedLabels.length) return const SizedBox.shrink();
+                if (index % labelInterval != 0) return const SizedBox.shrink();
+
+                final label = adjustedLabels[index];
                 return SideTitleWidget(
                   axisSide: meta.axisSide,
                   child: Text(
-                    date.substring(5), // Show MM-DD
+                    formatDateRange(label),
                     style: TextStyle(fontSize: 10, color: textColor),
+                    textAlign: TextAlign.center,
                   ),
                 );
               },
