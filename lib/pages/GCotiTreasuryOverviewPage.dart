@@ -75,6 +75,42 @@ class _GCotiTreasuryOverviewPageState extends State<GCotiTreasuryOverviewPage> {
     return grouped;
   }
 
+
+Map<String, Map<String, double>> groupByNDays(
+  Map<String, Map<String, double>> originalGrouped,
+  int interval,
+) {
+  final entries = originalGrouped.entries.toList()
+    ..sort((a, b) => a.key.compareTo(b.key)); // sort by date
+
+  final grouped = <String, Map<String, double>>{};
+  for (int i = 0; i < entries.length; i += interval) {
+    final chunk = entries.sublist(i, (i + interval).clamp(0, entries.length));
+    final depositsSum = chunk.fold(0.0, (sum, e) => sum + (e.value['deposits'] ?? 0.0));
+    final withdrawalsSum = chunk.fold(0.0, (sum, e) => sum + (e.value['withdrawals'] ?? 0.0));
+
+    final startDate = DateTime.parse(chunk.first.key);
+    final endDate = DateTime.parse(chunk.last.key);
+    final groupKey = _formatGroupKey(startDate, endDate, interval);
+
+    grouped[groupKey] = {
+      'deposits': depositsSum,
+      'withdrawals': withdrawalsSum,
+    };
+  }
+
+  return grouped;
+}
+
+String _formatGroupKey(DateTime start, DateTime end, int interval) {
+  final formatter = DateFormat('yyyy-MM-dd');
+  if (interval == 1 || start.isAtSameMomentAs(end)) {
+    return formatter.format(start);
+  } else {
+    return '${formatter.format(start)} - ${formatter.format(end)}';
+  }
+}
+
 Future<String?> fetchZnsAddress(String domainInput) async {
 
     if (domainInput.isEmpty || RegExp(r'^0x[a-fA-F0-9]{40}$').hasMatch(domainInput)) {
@@ -170,7 +206,42 @@ Future<String?> fetchZnsAddress(String domainInput) async {
     }
   }
 
- Widget buildChart(BuildContext context) {
+String formatDateRange(String range) {
+  if (!range.contains(' - ')) {
+    try {
+      final singleDate = DateTime.parse(range);
+      return '${singleDate.month}-${singleDate.day}';
+    } catch (_) {
+      return range;
+    }
+  }
+
+  final parts = range.split(' - ');
+  try {
+    final startDate = DateTime.parse(parts[0]);
+    final endDate = DateTime.parse(parts[1]);
+
+    final startFormatted = '${startDate.month}-${startDate.day}';
+    final endFormatted = '${endDate.month}-${endDate.day}';
+
+    return startFormatted == endFormatted
+        ? startFormatted
+        : '$startFormatted - $endFormatted';
+  } catch (_) {
+    return range;
+  }
+}
+
+double calculateYAxisInterval(double maxY) {
+  if (maxY <= 10) return 2;
+  if (maxY <= 50) return 10;
+  if (maxY <= 100) return 20;
+  if (maxY <= 500) return 50;
+  if (maxY <= 1000) return 100;
+  return (maxY / 10).ceilToDouble();
+}
+
+Widget buildChart(BuildContext context) {
   if (labels.isEmpty) return const SizedBox.shrink();
 
 
