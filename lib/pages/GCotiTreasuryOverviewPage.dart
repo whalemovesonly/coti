@@ -28,6 +28,8 @@ class _GCotiTreasuryOverviewPageState extends State<GCotiTreasuryOverviewPage> {
   final String token = '0x7637C7838EC4Ec6b85080F28A678F8E234bB83D1';
   final String baseUrl = 'https://mainnet.cotiscan.io/api/v2/addresses';
 
+  final ScrollController _scrollController = ScrollController();
+
   Future<List<dynamic>> fetchTransactions(String address) async {
     List<dynamic> allTransactions = [];
     Map<String, String>? params;
@@ -171,85 +173,141 @@ Future<String?> fetchZnsAddress(String domainInput) async {
  Widget buildChart(BuildContext context) {
   if (labels.isEmpty) return const SizedBox.shrink();
 
+
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    if (_scrollController.hasClients) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      // Or use animateTo for smooth scroll:
+      // _scrollController.animateTo(
+      //   _scrollController.position.maxScrollExtent,
+      //   duration: Duration(milliseconds: 500),
+      //   curve: Curves.easeOut,
+      // );
+    }
+  });
+
   final theme = Theme.of(context);
   final colorScheme = theme.colorScheme;
   final textColor = theme.textTheme.bodyMedium?.color ?? Colors.grey;
 
+  const double leftTitleWidth = 80;
+  const double barGroupWidth = 40;
+  final double chartContentWidth = labels.length * barGroupWidth.toDouble();
+
+  // Get max value
+  final maxDeposit = deposits.isNotEmpty ? deposits.reduce((a, b) => a > b ? a : b) : 0;
+  final maxWithdrawal = withdrawals.isNotEmpty ? withdrawals.reduce((a, b) => a > b ? a : b) : 0;
+  final maxY = (maxDeposit > maxWithdrawal ? maxDeposit : maxWithdrawal) * 1.2;
+  final yIntervalCount = 5;
+  final yStep = maxY / yIntervalCount;
+
   return SizedBox(
     height: 400,
-    child: BarChart(
-      BarChartData(
-        barTouchData: BarTouchData(
-          enabled: true,
-          touchTooltipData: BarTouchTooltipData(
-            tooltipBgColor: colorScheme.surfaceVariant,
-            tooltipPadding: const EdgeInsets.all(8),
-            tooltipMargin: 8,
-            getTooltipItem: (group, groupIndex, rod, rodIndex) {
-              final label = labels[group.x.toInt()];
-              final isDeposit = rodIndex == 0;
-              final value = rod.toY;
-              return BarTooltipItem(
-                '${isDeposit ? tr('gcotiforwalletoverview.deposit') : tr('gcotiforwalletoverview.withdrawal')}\n$label\n$value',
-                TextStyle(
-                  color: textColor,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
+    child: Row(
+      children: [
+        // Fixed Y-axis labels
+        SizedBox(
+          width: leftTitleWidth,
+          child: Column(
+            children: List.generate(yIntervalCount + 1, (i) {
+              final value = (yStep * (yIntervalCount - i)).round();
+              return Expanded(
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 4),
+                    child: Text(
+                      value.toString(),
+                      style: TextStyle(fontSize: 10, color: textColor),
+                    ),
+                  ),
                 ),
               );
-            },
+            }),
           ),
         ),
-        barGroups: List.generate(labels.length, (index) {
-          return BarChartGroupData(x: index, barRods: [
-            BarChartRodData(
-              toY: deposits[index],
-              color: colorScheme.primary, // Deposit bar color from theme
-            ),
-            BarChartRodData(
-              toY: withdrawals[index],
-              color: colorScheme.tertiary, // Withdrawal bar color from theme
-            ),
-          ]);
-        }),
-        titlesData: FlTitlesData(
-          bottomTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              interval: 1,
-              reservedSize: 36,
-              getTitlesWidget: (value, meta) {
-                final index = value.toInt();
-                if (index < 0 || index >= labels.length) return const SizedBox.shrink();
-                if (index % 2 != 0) return const SizedBox.shrink(); // show every other label
-                final date = labels[index];
-                return SideTitleWidget(
-                  axisSide: meta.axisSide,
-                  child: Text(
-                    date.substring(5), // Show MM-DD
-                    style: TextStyle(fontSize: 10, color: textColor),
+        // Scrollable chart with padding
+        Expanded(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            controller: _scrollController, // 🔁 attach controller here
+            child: Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, top: 40, bottom: 8), // 💡 padding for tooltip
+              child: SizedBox(
+                width: chartContentWidth < MediaQuery.of(context).size.width
+                    ? MediaQuery.of(context).size.width
+                    : chartContentWidth,
+                child: BarChart(
+                  BarChartData(
+                    maxY: maxY,
+                    barTouchData: BarTouchData(
+                      enabled: true,
+                      touchTooltipData: BarTouchTooltipData(
+                        tooltipBgColor: colorScheme.surfaceVariant,
+                        tooltipPadding: const EdgeInsets.all(8),
+                        tooltipMargin: 8,
+                        getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                          final label = labels[group.x.toInt()];
+                          final isDeposit = rodIndex == 0;
+                          final value = rod.toY;
+                          return BarTooltipItem(
+                            '${isDeposit ? tr('gcotiforwalletoverview.deposit') : tr('gcotiforwalletoverview.withdrawal')}\n$label\n$value',
+                            TextStyle(
+                              color: textColor,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 12,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    barGroups: List.generate(labels.length, (index) {
+                      return BarChartGroupData(x: index, barRods: [
+                        BarChartRodData(
+                          toY: deposits[index],
+                          color: colorScheme.primary,
+                        ),
+                        BarChartRodData(
+                          toY: withdrawals[index],
+                          color: colorScheme.tertiary,
+                        ),
+                      ]);
+                    }),
+                    titlesData: FlTitlesData(
+                      leftTitles: AxisTitles(
+                        sideTitles: SideTitles(showTitles: false),
+                      ),
+                      rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                      topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                      bottomTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          interval: 1,
+                          reservedSize: 36,
+                          getTitlesWidget: (value, meta) {
+                            final index = value.toInt();
+                            if (index < 0 || index >= labels.length) return const SizedBox.shrink();
+                            if (index % 2 != 0) return const SizedBox.shrink();
+                            final date = labels[index];
+                            return SideTitleWidget(
+                              axisSide: meta.axisSide,
+                              child: Text(
+                                date.substring(5),
+                                style: TextStyle(fontSize: 10, color: textColor),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    borderData: FlBorderData(show: false),
                   ),
-                );
-              },
+                ),
+              ),
             ),
           ),
-          leftTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              reservedSize: 80,
-              getTitlesWidget: (value, meta) {
-                return Text(
-                  value.toStringAsFixed(0),
-                  style: TextStyle(fontSize: 10, color: textColor),
-                );
-              },
-            ),
-          ),
-          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
         ),
-        borderData: FlBorderData(show: false),
-      ),
+      ],
     ),
   );
 }
