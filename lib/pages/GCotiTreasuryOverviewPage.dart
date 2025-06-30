@@ -235,7 +235,7 @@ Widget buildChart(BuildContext context) {
   if (labels.isEmpty) return const SizedBox.shrink();
 
   final screenWidth = MediaQuery.of(context).size.width;
-  const estimatedLabelWidth = 50.0;
+  const estimatedLabelWidth = 90.0;
   final maxVisibleLabels = (screenWidth / estimatedLabelWidth).floor();
 
   final originalGrouped = Map<String, Map<String, double>>.fromIterable(
