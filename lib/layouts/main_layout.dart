@@ -78,7 +78,7 @@ class MainLayout extends StatelessWidget {
               }),
               ListTile(
               leading: const Icon(Icons.fiber_manual_record),
-              title: Text(tr('coti.page_title')),
+              title: Text(tr('znsaddress.title.get_zns_address')),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.pushReplacementNamed(context, '/GetAddressOfZNSDomain');

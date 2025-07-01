@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:flutter/services.dart'; // For Clipboard
-import 'package:url_launcher/url_launcher.dart'; // For launching URL
+import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../layouts/main_layout.dart';
 import '../layouts/SecurityNote.dart';
@@ -54,14 +54,14 @@ class _GetAddressOfZNSDomainState extends State<GetAddressOfZNSDomain> {
     FocusScope.of(context).unfocus();
 
     setState(() {
-      loadingStatus = 'Fetching address...';
+      loadingStatus = tr('znsaddress.status.fetching');
       resultAddress = null;
     });
 
     final input = _controller.text.trim();
     if (input.isEmpty) {
       setState(() {
-        loadingStatus = 'Please enter a domain';
+        loadingStatus = tr('znsaddress.status.empty_input');
       });
       return;
     }
@@ -70,10 +70,10 @@ class _GetAddressOfZNSDomainState extends State<GetAddressOfZNSDomain> {
 
     setState(() {
       if (address != null) {
-        loadingStatus = 'Success!';
+        loadingStatus = tr('znsaddress.status.success');
         resultAddress = address;
       } else {
-        loadingStatus = 'No address found or invalid input';
+        loadingStatus = tr('znsaddress.status.not_found');
         resultAddress = null;
       }
     });
@@ -82,7 +82,7 @@ class _GetAddressOfZNSDomainState extends State<GetAddressOfZNSDomain> {
   void _copyToClipboard(String text) {
     Clipboard.setData(ClipboardData(text: text));
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Copied to clipboard')),
+      SnackBar(content: Text(tr('znsaddress.clipboard.copied'))),
     );
   }
 
@@ -92,7 +92,7 @@ class _GetAddressOfZNSDomainState extends State<GetAddressOfZNSDomain> {
       await launchUrl(url);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Could not open link')),
+        SnackBar(content: Text(tr('znsaddress.error.cannot_open_link'))),
       );
     }
   }
@@ -110,7 +110,7 @@ class _GetAddressOfZNSDomainState extends State<GetAddressOfZNSDomain> {
     final text = theme.textTheme;
 
     return MainLayout(
-      title: 'Get Address Of ZNS Domain',
+      title: tr('znsaddress.title.get_zns_address'),
       child: Container(
         padding: const EdgeInsets.all(0),
         color: color.background,
@@ -122,7 +122,7 @@ class _GetAddressOfZNSDomainState extends State<GetAddressOfZNSDomain> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    'Enter ZNS Domain',
+                    tr('znsaddress.label.enter_zns_domain'),
                     style: text.titleMedium?.copyWith(color: color.primary),
                   ),
                   const SizedBox(height: 10),
@@ -133,7 +133,7 @@ class _GetAddressOfZNSDomainState extends State<GetAddressOfZNSDomain> {
                       onSubmitted: (_) => _handleFetch(),
                       style: text.bodyMedium?.copyWith(color: color.primary),
                       decoration: InputDecoration(
-                        hintText: '.coti',
+                        hintText: tr('znsaddress.hint.coti_domain'),
                         hintStyle: TextStyle(color: color.tertiary),
                         filled: true,
                         fillColor: color.surface,
@@ -170,13 +170,13 @@ class _GetAddressOfZNSDomainState extends State<GetAddressOfZNSDomain> {
                             ElevatedButton.icon(
                               onPressed: () => _copyToClipboard(resultAddress!),
                               icon: const Icon(Icons.copy),
-                              label: const Text('Copy'),
+                              label: Text(tr('znsaddress.button.copy')),
                             ),
                             const SizedBox(width: 12),
                             ElevatedButton.icon(
                               onPressed: () => _openExplorerLink(resultAddress!),
                               icon: const Icon(Icons.open_in_new),
-                              label: const Text('Open'),
+                              label: Text(tr('znsaddress.button.open')),
                             ),
                           ],
                         ),

@@ -161,5 +161,32 @@
   "invalid_address": "❌ Format d'adresse du portefeuille invalide.",
   "error_status": "❌ Échec de la récupération des données.",
   "result_text": "🌍 Un total de {} $COTI a été déposé dans le Trésor au cours des {} dernier(s) jour(s)."
+},
+"znsaddress": {
+  "title": {
+    "get_zns_address": "Obtenir l'adresse du domaine ZNS"
+  },
+  "label": {
+    "enter_zns_domain": "Entrez le domaine ZNS"
+  },
+  "hint": {
+    "coti_domain": ".coti"
+  },
+  "button": {
+    "copy": "Copier",
+    "open": "Ouvrir"
+  },
+  "status": {
+    "fetching": "Recherche de l'adresse...",
+    "success": "Succès !",
+    "not_found": "Aucune adresse trouvée ou entrée invalide",
+    "empty_input": "Veuillez entrer un domaine"
+  },
+  "clipboard": {
+    "copied": "Copié dans le presse-papiers"
+  },
+  "error": {
+    "cannot_open_link": "Impossible d'ouvrir le lien"
+  }
 }
 }
