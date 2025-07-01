@@ -18,7 +18,7 @@ class GetAddressOfZNSDomain extends StatefulWidget {
 
 class _GetAddressOfZNSDomainState extends State<GetAddressOfZNSDomain> {
   final TextEditingController _controller = TextEditingController();
-  String loadingStatus = '';
+  String? loadingStatusKey;
   String? resultAddress;
 
   Future<String?> fetchZnsAddress(String domainInput) async {
@@ -54,14 +54,14 @@ class _GetAddressOfZNSDomainState extends State<GetAddressOfZNSDomain> {
     FocusScope.of(context).unfocus();
 
     setState(() {
-      loadingStatus = tr('znsaddress.status.fetching');
+      loadingStatusKey = 'znsaddress.status.fetching';
       resultAddress = null;
     });
 
     final input = _controller.text.trim();
     if (input.isEmpty) {
       setState(() {
-        loadingStatus = tr('znsaddress.status.empty_input');
+        loadingStatusKey = 'znsaddress.status.empty_input';
       });
       return;
     }
@@ -70,10 +70,10 @@ class _GetAddressOfZNSDomainState extends State<GetAddressOfZNSDomain> {
 
     setState(() {
       if (address != null) {
-        loadingStatus = tr('znsaddress.status.success');
+        loadingStatusKey = 'znsaddress.status.success';
         resultAddress = address;
       } else {
-        loadingStatus = tr('znsaddress.status.not_found');
+        loadingStatusKey = 'znsaddress.status.not_found';
         resultAddress = null;
       }
     });
@@ -149,11 +149,12 @@ class _GetAddressOfZNSDomainState extends State<GetAddressOfZNSDomain> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Text(
-                    loadingStatus,
-                    style: text.bodyMedium?.copyWith(color: color.tertiary),
-                    textAlign: TextAlign.center,
-                  ),
+                  if (loadingStatusKey != null)
+                    Text(
+                      loadingStatusKey!.tr(),
+                      style: text.bodyMedium?.copyWith(color: color.tertiary),
+                      textAlign: TextAlign.center,
+                    ),
                   const SizedBox(height: 10),
                   if (resultAddress != null)
                     Column(
