@@ -150,7 +150,8 @@
     "error_status": "❌ Error fetching data.",
     "result_text": "🌍 Total Deposited: {} $gCOTI\n\n📤 Total Withdrawn: {} $gCOTI",
     "deposit": "Deposit",
-    "withdrawal": "Withdrawal"
+    "withdrawal": "Withdrawal",
+    "no_tx_found": "✅ No $gCOTI Treasury deposits found."
   },
     "cotiforwallet":
   {

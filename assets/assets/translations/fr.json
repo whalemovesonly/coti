@@ -148,7 +148,8 @@
     "error_status": "❌ Échec de la récupération des données. Veuillez réessayer plus tard.",
     "result_text": "🌍 Total déposé : {} $gCOTI\n\n📤 Total retiré : {} $gCOTI",
     "deposit": "Dépôt",
-    "withdrawal": "Retrait"
+    "withdrawal": "Retrait",
+    "no_tx_found": "✅ Aucun dépôt dans le Trésor $gCOTI trouvé."
   },
   "cotiforwallet": {
   "treasury_tracker_title": "Suivre les dépôts de $COTI vers le Trésor pour n'importe quel portefeuille",
