@@ -25,6 +25,8 @@ class _GCotiChartPageState extends State<GCotiChartPage> {
   List<double> deposits = [];
   List<double> withdrawals = [];
 
+  final ScrollController _scrollController = ScrollController();
+
   final List<String> addressesToWatch = [
     '0x5e19f674b3B55dF897C09824a2ddFAD6939e3d1D'.toLowerCase(),
   ];
@@ -124,85 +126,131 @@ class _GCotiChartPageState extends State<GCotiChartPage> {
   Widget buildChart(BuildContext context) {
   if (labels.isEmpty) return const SizedBox.shrink();
 
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    if (_scrollController.hasClients) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    }
+  });
+
   final theme = Theme.of(context);
   final colorScheme = theme.colorScheme;
   final textColor = theme.textTheme.bodyMedium?.color ?? Colors.grey;
 
+  const double leftTitleWidth = 80;
+  const double barGroupWidth = 40;
+  final double chartContentWidth = labels.length * barGroupWidth.toDouble();
+
+  final maxDeposit = deposits.isNotEmpty ? deposits.reduce((a, b) => a > b ? a : b) : 0;
+  final maxWithdrawal = withdrawals.isNotEmpty ? withdrawals.reduce((a, b) => a > b ? a : b) : 0;
+  final maxY = (maxDeposit > maxWithdrawal ? maxDeposit : maxWithdrawal) * 1.2;
+  final yIntervalCount = 5;
+  final yStep = maxY / yIntervalCount;
+
   return SizedBox(
     height: 400,
-    child: BarChart(
-      BarChartData(
-        barTouchData: BarTouchData(
-          enabled: true,
-          touchTooltipData: BarTouchTooltipData(
-            tooltipBgColor: colorScheme.surfaceVariant,
-            tooltipPadding: const EdgeInsets.all(8),
-            tooltipMargin: 8,
-            getTooltipItem: (group, groupIndex, rod, rodIndex) {
-              final label = labels[group.x.toInt()];
-              final isDeposit = rodIndex == 0;
-              final value = rod.toY;
-              return BarTooltipItem(
-                '${isDeposit ? tr('gcotichart.deposit') : tr('gcotichart.withdrawal')}\n$label\n$value',
-                TextStyle(
-                  color: textColor,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
+    child: Row(
+      children: [
+        // Fixed Y-axis labels
+        SizedBox(
+          width: leftTitleWidth,
+          child: Column(
+            children: List.generate(yIntervalCount + 1, (i) {
+              final value = (yStep * (yIntervalCount - i)).round();
+              return Expanded(
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 4),
+                    child: Text(
+                      value.toString(),
+                      style: TextStyle(fontSize: 10, color: textColor),
+                    ),
+                  ),
                 ),
               );
-            },
+            }),
           ),
         ),
-        barGroups: List.generate(labels.length, (index) {
-          return BarChartGroupData(x: index, barRods: [
-            BarChartRodData(
-              toY: deposits[index],
-              color: colorScheme.primary, // Deposit bar color from theme
-            ),
-            BarChartRodData(
-              toY: withdrawals[index],
-              color: colorScheme.tertiary, // Withdrawal bar color from theme
-            ),
-          ]);
-        }),
-        titlesData: FlTitlesData(
-          bottomTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              interval: 1,
-              reservedSize: 36,
-              getTitlesWidget: (value, meta) {
-                final index = value.toInt();
-                if (index < 0 || index >= labels.length) return const SizedBox.shrink();
-                if (index % 2 != 0) return const SizedBox.shrink(); // show every other label
-                final date = labels[index];
-                return SideTitleWidget(
-                  axisSide: meta.axisSide,
-                  child: Text(
-                    date.substring(5), // Show MM-DD
-                    style: TextStyle(fontSize: 10, color: textColor),
+        // Scrollable chart with padding
+        Expanded(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            controller: _scrollController,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, top: 40, bottom: 8),
+              child: SizedBox(
+                width: chartContentWidth < MediaQuery.of(context).size.width
+                    ? MediaQuery.of(context).size.width
+                    : chartContentWidth,
+                child: BarChart(
+                  BarChartData(
+                    maxY: maxY,
+                    barTouchData: BarTouchData(
+                      enabled: true,
+                      touchTooltipData: BarTouchTooltipData(
+                        tooltipBgColor: colorScheme.surfaceVariant,
+                        tooltipPadding: const EdgeInsets.all(8),
+                        tooltipMargin: 8,
+                        getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                          final label = labels[group.x.toInt()];
+                          final isDeposit = rodIndex == 0;
+                          final value = rod.toY;
+                          return BarTooltipItem(
+                            '${isDeposit ? tr('gcotichart.deposit') : tr('gcotichart.withdrawal')}\n$label\n$value',
+                            TextStyle(
+                              color: textColor,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 12,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    barGroups: List.generate(labels.length, (index) {
+                      return BarChartGroupData(x: index, barRods: [
+                        BarChartRodData(
+                          toY: deposits[index],
+                          color: colorScheme.primary,
+                        ),
+                        BarChartRodData(
+                          toY: withdrawals[index],
+                          color: colorScheme.tertiary,
+                        ),
+                      ]);
+                    }),
+                    titlesData: FlTitlesData(
+                      leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                      rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                      topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                      bottomTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          interval: 1,
+                          reservedSize: 36,
+                          getTitlesWidget: (value, meta) {
+                            final index = value.toInt();
+                            if (index < 0 || index >= labels.length) return const SizedBox.shrink();
+                            if (index % 2 != 0) return const SizedBox.shrink();
+                            final date = labels[index];
+                            return SideTitleWidget(
+                              axisSide: meta.axisSide,
+                              child: Text(
+                                date.substring(5),
+                                style: TextStyle(fontSize: 10, color: textColor),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    borderData: FlBorderData(show: false),
                   ),
-                );
-              },
+                ),
+              ),
             ),
           ),
-          leftTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              reservedSize: 80,
-              getTitlesWidget: (value, meta) {
-                return Text(
-                  value.toStringAsFixed(0),
-                  style: TextStyle(fontSize: 10, color: textColor),
-                );
-              },
-            ),
-          ),
-          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
         ),
-        borderData: FlBorderData(show: false),
-      ),
+      ],
     ),
   );
 }
