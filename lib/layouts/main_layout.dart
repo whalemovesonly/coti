@@ -76,7 +76,13 @@ class MainLayout extends StatelessWidget {
                 Navigator.pop(context);
                 Navigator.pushReplacementNamed(context, '/CotiDepositsPage');
               }),
-
+              ListTile(
+              leading: const Icon(Icons.fiber_manual_record),
+              title: Text(tr('coti.page_title')),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, '/GetAddressOfZNSDomain');
+              }),
             ListTile(
               leading: const Icon(Icons.fiber_manual_record),
               title: Text(tr('add_coti.title')),

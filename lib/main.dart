@@ -14,6 +14,7 @@ import 'pages/GCotiTreasuryTrackerPage.dart';
 import 'pages/GCotiChartPage.dart';
 import 'pages/GCotiTreasuryOverviewPage.dart';
 import 'pages/CotiTreasuryTrackerPage.dart';
+import 'pages/GetAddressOfZNSDomain.dart';
 
 
 
@@ -89,6 +90,9 @@ class MyApp extends StatelessWidget {
         }, 
         '/CotiTreasuryTrackerPage': (context) {
           return CotiTreasuryTrackerPage();
+        },
+        '/GetAddressOfZNSDomain': (context) {
+          return GetAddressOfZNSDomain();
         }, 
       },
     );
