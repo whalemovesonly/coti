@@ -3,6 +3,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import '../layouts/main_layout.dart';
 import '../layouts/SecurityNote.dart';
 import '../layouts/contactAnddonate.dart';
@@ -25,10 +28,12 @@ class _GCotiChartPageState extends State<GCotiChartPage> {
   List<double> deposits = [];
   List<double> withdrawals = [];
 
+  Map<String, Map<String, double>> addressSummaries = {};
+
   final ScrollController _scrollController = ScrollController();
 
   final List<String> addressesToWatch = [
-    '0x5e19f674b3B55dF897C09824a2ddFAD6939e3d1D'.toLowerCase(),
+    '0x5e19f674b3b55df897c09824a2ddfad6939e3d1d',
   ];
 
   final String token = '0x7637C7838EC4Ec6b85080F28A678F8E234bB83D1';
@@ -85,18 +90,18 @@ class _GCotiChartPageState extends State<GCotiChartPage> {
       final isDeposit = addressesToWatch.contains(tx['to']?['hash']?.toLowerCase());
       final isWithdraw = addressesToWatch.contains(tx['from']?['hash']?.toLowerCase());
 
-      result.putIfAbsent(dateKey, () => {'deposits': 0, 'withdrawals': 0});
-      if (isDeposit) result[dateKey]!['deposits'] = result[dateKey]!['deposits']! + value / 1e18;
-      if (isWithdraw) result[dateKey]!['withdrawals'] = result[dateKey]!['withdrawals']! + value / 1e18;
+      result.putIfAbsent(dateKey, () => {'deposits': 0.0, 'withdrawals': 0.0});
+      if (isDeposit) result[dateKey]!['deposits'] = (result[dateKey]!['deposits'] ?? 0.0) + value / 1e18;
+      if (isWithdraw) result[dateKey]!['withdrawals'] = (result[dateKey]!['withdrawals'] ?? 0.0) + value / 1e18;
     }
     return result;
   }
 
   Future<void> _fetchData() async {
     setState(() {
-    isLoading = true;
-    statusKey = 'gcotichart.fetching_status';
-    statusArgs = [];
+      isLoading = true;
+      statusKey = 'gcotichart.fetching_status';
+      statusArgs = [];
     });
 
     List<dynamic> combined = [];
@@ -108,22 +113,186 @@ class _GCotiChartPageState extends State<GCotiChartPage> {
     final grouped = groupTransactionsByDay(combined);
     final sortedKeys = grouped.keys.toList()..sort();
 
+    addressSummaries.clear();
+    for (final tx in combined) {
+      final from = tx['from']?['hash']?.toLowerCase();
+      final to = tx['to']?['hash']?.toLowerCase();
+      final value = double.tryParse(tx['total']?['value'] ?? '0') ?? 0.0;
+      final amount = value / 1e18;
+
+      for (final treasury in addressesToWatch) {
+        if (to == treasury && from != null) {
+          addressSummaries[from] ??= {'deposits': 0.0, 'withdrawals': 0.0};
+          addressSummaries[from]!['deposits'] = (addressSummaries[from]!['deposits'] ?? 0.0) + amount;
+        }
+        if (from == treasury && to != null) {
+          addressSummaries[to] ??= {'deposits': 0.0, 'withdrawals': 0.0};
+          addressSummaries[to]!['withdrawals'] = (addressSummaries[to]!['withdrawals'] ?? 0.0) + amount;
+        }
+      }
+    }
+
     setState(() {
-    labels = sortedKeys;
-    deposits = sortedKeys.map((k) => grouped[k]!['deposits']!).toList();
-    withdrawals = sortedKeys.map((k) => grouped[k]!['withdrawals']!).toList();
-    if (labels.isNotEmpty) {
+      labels = sortedKeys;
+      deposits = sortedKeys.map((k) => grouped[k]!['deposits'] ?? 0.0).toList();
+      withdrawals = sortedKeys.map((k) => grouped[k]!['withdrawals'] ?? 0.0).toList();
+      if (labels.isNotEmpty) {
         statusKey = 'gcotichart.success_status';
         statusArgs = [labels.first, labels.last];
-    } else {
+      } else {
         statusKey = 'gcotichart.empty_status';
         statusArgs = [];
-    }
-    isLoading = false;
+      }
+      isLoading = false;
     });
   }
 
-  Widget buildChart(BuildContext context) {
+  Widget buildAddressList(List<MapEntry<String, Map<String, double>>> list, String title, String typeKey, ColorScheme color, TextTheme text) {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(title, style: text.titleSmall?.copyWith(color: color.primary)),
+          const SizedBox(height: 8),
+          ...list.map((entry) {
+            final addr = entry.key;
+            final value = (entry.value[typeKey] ?? 0.0).toStringAsFixed(4);
+            return Container(
+              margin: const EdgeInsets.symmetric(vertical: 4),
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: color.surfaceVariant,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(addr, style: text.bodySmall?.copyWith(color: color.onSurface)),
+                        Text('${tr('gcotichart.$typeKey')}: $value', style: text.bodySmall?.copyWith(color: color.primary)),
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.copy, size: 16, color: color.secondary),
+                    onPressed: () => Clipboard.setData(ClipboardData(text: addr)),
+                    tooltip: 'Copy',
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.open_in_new, size: 16, color: color.secondary),
+                    onPressed: () => launchUrl(Uri.parse('https://mainnet.cotiscan.io/address/$addr')),
+                    tooltip: 'Open',
+                  ),
+                ],
+              ),
+            );
+          })
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final color = theme.colorScheme;
+    final text = theme.textTheme;
+
+    List<MapEntry<String, Map<String, double>>> topDepositors = addressSummaries.entries
+        .where((entry) => (entry.value['deposits'] ?? 0.0) > 0)
+        .toList()
+      ..sort((a, b) => (b.value['deposits'] ?? 0.0).compareTo(a.value['deposits'] ?? 0.0));
+    topDepositors = topDepositors.take(10).toList();
+
+    List<MapEntry<String, Map<String, double>>> topWithdrawers = addressSummaries.entries
+        .where((entry) => (entry.value['withdrawals'] ?? 0.0) > 0)
+        .toList()
+      ..sort((a, b) => (b.value['withdrawals'] ?? 0.0).compareTo(a.value['withdrawals'] ?? 0.0));
+    topWithdrawers = topWithdrawers.take(10).toList();
+
+    return MainLayout(
+      title: tr('gcotichart.chart_title'),
+      child: Container(
+        padding: const EdgeInsets.all(0),
+        color: color.background,
+        child: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      DropdownButton<int>(
+                        value: selectedDays,
+                        dropdownColor: color.surface,
+                        style: text.bodyMedium?.copyWith(color: color.primary),
+                        onChanged: isLoading ? null : (value) {
+                          setState(() => selectedDays = value!);
+                          _fetchData();
+                        },
+                        items: daysOptions.map((day) => DropdownMenuItem<int>(
+                          value: day,
+                          child: Text('gcotichart.day_option'.tr(args: [day.toString()])),
+                        )).toList(),
+                      ),
+                      IconButton(
+                        onPressed: isLoading ? null : _fetchData,
+                        icon: Icon(Icons.refresh, color: color.primary),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    statusKey.tr(args: statusArgs),
+                    style: text.bodyMedium?.copyWith(color: color.tertiary),
+                  ),
+                  const SizedBox(height: 10),
+                  if (labels.isNotEmpty)
+                    SelectableText(
+                      'gcotichart.result_text'.tr(args: [
+                        deposits.reduce((a, b) => a + b).toStringAsFixed(4),
+                        withdrawals.reduce((a, b) => a + b).toStringAsFixed(4),
+                      ]),
+                      style: text.bodyLarge,
+                      textAlign: TextAlign.center,
+                    ),
+                  const SizedBox(height: 20),
+                  buildChart(context),
+                  const SizedBox(height: 30),
+                  if (topDepositors.isNotEmpty || topWithdrawers.isNotEmpty)
+                    Column(
+                      children: [
+                        Text(tr('gcotichart.address_summary'), style: text.titleMedium?.copyWith(color: color.primary)),
+                        const SizedBox(height: 16),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            buildAddressList(topDepositors, tr('gcotichart.top_depositors'), 'deposits', color, text),
+                            const SizedBox(width: 16),
+                            buildAddressList(topWithdrawers, tr('gcotichart.top_withdrawers'), 'withdrawals', color, text),
+                          ],
+                        ),
+                      ],
+                    ),
+                  const SizedBox(height: 30),
+                  const SecurityNote(),
+                  const SizedBox(height: 20),
+                  const ContactAndDonate(),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+Widget buildChart(BuildContext context) {
   if (labels.isEmpty) return const SizedBox.shrink();
 
   WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -150,7 +319,7 @@ class _GCotiChartPageState extends State<GCotiChartPage> {
     height: 400,
     child: Row(
       children: [
-        // Fixed Y-axis labels
+        // Y-axis values
         SizedBox(
           width: leftTitleWidth,
           child: Column(
@@ -171,7 +340,7 @@ class _GCotiChartPageState extends State<GCotiChartPage> {
             }),
           ),
         ),
-        // Scrollable chart with padding
+        // Scrollable chart
         Expanded(
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
@@ -254,78 +423,4 @@ class _GCotiChartPageState extends State<GCotiChartPage> {
     ),
   );
 }
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final color = theme.colorScheme;
-    final text = theme.textTheme;
-
-    return MainLayout(
-      title: tr('gcotichart.chart_title'),
-      child: Container(
-        padding: const EdgeInsets.all(0),
-        color: color.background,
-        child: Center(
-          child: SingleChildScrollView(
-            child:
-                        Padding(
-             padding: const EdgeInsets.all(16.0), // applies to top, bottom, left, right
-             child:
-             Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    DropdownButton<int>(
-                      value: selectedDays,
-                      dropdownColor: color.surface,
-                      style: text.bodyMedium?.copyWith(color: color.primary),
-                      onChanged: isLoading
-                          ? null
-                          : (value) {
-                              setState(() => selectedDays = value!);
-                              _fetchData();
-                            },
-                      items: daysOptions.map((day) => DropdownMenuItem<int>(
-                        value: day,
-                        child: Text('gcotichart.day_option'.tr(args: [day.toString()])),
-                      )).toList(),
-                    ),
-                    IconButton(
-                      onPressed: isLoading ? null : _fetchData,
-                      icon: Icon(Icons.refresh, color: color.primary),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Text(
-                statusKey.tr(args: statusArgs),
-                style: text.bodyMedium?.copyWith(color: color.tertiary),
-                ),
-                const SizedBox(height: 10),
-                if (labels.isNotEmpty)
-                  SelectableText(
-                    'gcotichart.result_text'.tr(args: [
-  deposits.reduce((a, b) => a + b).toStringAsFixed(4),
-  withdrawals.reduce((a, b) => a + b).toStringAsFixed(4),
-]),
-                    style: text.bodyLarge,
-                    textAlign: TextAlign.center,
-                  ),
-                const SizedBox(height: 20),
-                buildChart(context),
-                const SizedBox(height: 30),
-                const SecurityNote(),
-                const SizedBox(height: 20),
-                const ContactAndDonate(),
-              ],
-            ),
-                        ),
-          ),
-        ),
-      ),
-    );
-  }
 }
