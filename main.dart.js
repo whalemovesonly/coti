@@ -41908,7 +41908,7 @@ $1(a){var s=null
 return A.jU(new A.du(B.cJ,s,s,new A.bG(B.hA,A.aC(B.i.k(B.d.aU(this.a*(this.b-a))),s,s,s,A.bC(s,s,this.c,s,s,s,s,s,s,s,s,10,s,s,s,s,s,!0,s,s,s,s,s,s,s,s),s,s),s),s))},
 $S:73}
 A.asX.prototype={
-$4(a,b,c,d){var s=null,r=this.a.x[B.i.dH(a.a)],q=d===0?A.aw("gcotichart.deposit",s,s,s,s):A.aw("gcotichart.withdrawal",s,s,s,s)
+$4(a,b,c,d){var s=null,r=this.a.x[B.i.dH(a.a)],q=d===0?A.aw("gcotichart.deposits",s,s,s,s):A.aw("gcotichart.withdrawals",s,s,s,s)
 return new A.i_(q+"\n"+r+"\n"+A.o(c.b),A.bC(s,s,this.b,s,s,s,s,s,s,s,s,12,s,s,B.ff,s,s,!0,s,s,s,s,s,s,s,s))},
 $S:74}
 A.asY.prototype={
