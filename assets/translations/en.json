@@ -140,6 +140,17 @@
     "deposit": "Deposit",
     "withdrawal": "Withdrawal"
   },
+
+  "cotichart": {
+    "chart_title": "$COTI Chart: Deposits vs Withdrawals",
+    "day_option": "Last {} day(s)",
+    "result_text": "🌍 Total Deposited: {} $COTI\n📤 Total Withdrawn: {} $COTI",
+    "fetching_status": "⏳ Fetching data...",
+    "success_status": "✅ Showing data from {} to {}",
+    "empty_status": "ℹ️ No data available in selected time range.",
+    "deposit": "Deposit",
+    "withdrawal": "Withdrawal"
+  },
     
   "gcotiforwalletoverview": {
     "treasury_chart_title": "$gCOTI Treasury Activity Overview for a Specific Wallet",

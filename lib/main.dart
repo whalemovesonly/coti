@@ -16,6 +16,7 @@ import 'pages/GCotiTreasuryOverviewPage.dart';
 import 'pages/CotiTreasuryTrackerPage.dart';
 import 'pages/GetAddressOfZNSDomain.dart';
 import 'pages/CotiTreasuryOverviewPage.dart';
+import 'pages/CotiChartPage.dart';
 
 
 void main() async {
