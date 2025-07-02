@@ -365,7 +365,7 @@ Widget buildChart(BuildContext context) {
                           final isDeposit = rodIndex == 0;
                           final value = rod.toY;
                           return BarTooltipItem(
-                            '${isDeposit ? tr('gcotichart.deposit') : tr('gcotichart.withdrawal')}\n$label\n$value',
+                            '${isDeposit ? tr('gcotichart.deposits') : tr('gcotichart.withdrawals')}\n$label\n$value',
                             TextStyle(
                               color: textColor,
                               fontWeight: FontWeight.w600,
