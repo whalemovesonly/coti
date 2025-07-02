@@ -139,6 +139,18 @@
     "deposit": "Dépôt",
     "withdrawal": "Retrait"
   },
+
+    "cotichart": {
+    "chart_title": "Graphique $COTI : Dépôts vs Retraits",
+    "day_option": "{} dernier(s) jour(s)",
+    "result_text": "🌍 Total déposé : {} $COTI\n📤 Total retiré : {} $COTI",
+    "fetching_status": "⏳ Récupération des données...",
+    "success_status": "✅ Données affichées du {} au {}",
+    "empty_status": "ℹ️ Aucune donnée disponible pour la période sélectionnée.",
+    "deposit": "Dépôt",
+    "withdrawal": "Retrait"
+  },
+
     "gcotiforwalletoverview": {
     "treasury_chart_title": "Aperçu des activités du Trésor $gCOTI pour un portefeuille spécifique",
     "enter_wallet": "Entrez l'adresse du portefeuille ou les domaines ZNS",
