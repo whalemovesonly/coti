@@ -71,6 +71,15 @@ class MainLayout extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.fiber_manual_record),
+              title: Text(tr('cotiforwalletoverview.treasury_chart_title')),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, '/CotiTreasuryOverviewPage');
+              },
+            ),
+            
+            ListTile(
+              leading: const Icon(Icons.fiber_manual_record),
               title: Text(tr('coti.page_title')),
               onTap: () {
                 Navigator.pop(context);

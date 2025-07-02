@@ -153,6 +153,19 @@
     "withdrawal": "Withdrawal",
     "no_tx_found": "✅ No $gCOTI Treasury deposits found."
   },
+    "cotiforwalletoverview": {
+    "treasury_chart_title": "$COTI Treasury Activity Overview for a Specific Wallet",
+    "enter_wallet": "Enter Wallet Address or ZNS domains",
+    "invalid_address": "❌ Invalid wallet address format.",
+    "fetching_status": "⏳ Fetching data from COTI network...",
+    "success_status": "✅ Data fetched successfully!",
+    "error_status": "❌ Error fetching data.",
+    "result_text": "🌍 Total Deposited: {} $COTI\n\n📤 Total Withdrawn: {} $COTI",
+    "deposit": "Deposit",
+    "withdrawal": "Withdrawal",
+    "no_tx_found": "✅ No $COTI Treasury deposits found."
+  },
+
     "cotiforwallet":
   {
   "treasury_tracker_title": "Track $COTI Treasury Deposits for Any Wallet",
