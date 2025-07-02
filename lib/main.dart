@@ -98,6 +98,9 @@ class MyApp extends StatelessWidget {
         '/CotiTreasuryOverviewPage': (context) {
           return CotiTreasuryOverviewPage();
         }, 
+        '/CotiChartPage': (context) {
+          return CotiChartPage();
+        }, 
       },
     );
   }
