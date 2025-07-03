@@ -172,9 +172,30 @@ class _CotiChartPageState extends State<CotiChartPage> {
         children: [
           Text(title, style: text.titleSmall?.copyWith(color: color.primary)),
           const SizedBox(height: 8),
-          ...list.map((entry) {
-            final addr = entry.key;
-            final value = entry.value.toStringAsFixed(4);
+          ...list.asMap().entries.map((entry) {
+            final index = entry.key; // ✅ Now this is 0, 1, 2, ...
+            final addr = entry.value.key;
+            final value = entry.value.value.toStringAsFixed(4);
+
+                      // Determine the leaderboard icon with tooltip
+            Widget? leaderboardIcon;
+            if (index == 0) {
+              leaderboardIcon = Tooltip(
+                message: '🥇 Rank #1',
+                child: const Text('🥇', style: TextStyle(fontSize: 36)),
+              );
+            } else if (index == 1) {
+              leaderboardIcon = Tooltip(
+                message: '🥈 Rank #2',
+                child: const Text('🥈', style: TextStyle(fontSize: 34)),
+              );
+            } else if (index == 2) {
+              leaderboardIcon = Tooltip(
+                message: '🥉 Rank #3',
+                child: const Text('🥉', style: TextStyle(fontSize: 32)),
+              );
+            }
+
             return Container(
               margin: const EdgeInsets.symmetric(vertical: 4),
               padding: const EdgeInsets.all(8),
@@ -192,6 +213,11 @@ class _CotiChartPageState extends State<CotiChartPage> {
                         Text('${tr('cotichart.$typeKey')}: $value', style: text.bodySmall?.copyWith(color: color.primary)),
                       ],
                     ),
+                  ),
+                  if (leaderboardIcon != null)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 4),
+                    child: leaderboardIcon,
                   ),
                   IconButton(
                     icon: Icon(Icons.copy, size: 16, color: color.secondary),
