@@ -139,8 +139,8 @@
     "deposits": "Dépôt",
     "withdrawals": "Retrait",
     "address_summary": "Résumé des adresses",
-    "top_depositors": "Top 10 des déposants",
-    "top_withdrawers": "Top 10 des retraits"
+    "top_depositors": "Top 10 déposants de $gCOTI",
+    "top_withdrawers": "Top 10 retraits de $gCOTI"
   },
 
     "cotichart": {
@@ -151,7 +151,12 @@
     "success_status": "✅ Données affichées du {} au {}",
     "empty_status": "ℹ️ Aucune donnée disponible pour la période sélectionnée.",
     "deposit": "Dépôt",
-    "withdrawal": "Retrait"
+    "withdrawal": "Retrait",
+    "top_depositors": "Top 10 des déposants de $COTI",
+    "top_withdrawers": "Top 10 des retraits de $COTI",
+    "deposits": "Dépôts",
+    "withdrawals": "Retraits",
+    "address_summary": "Résumé des adresses"
   },
 
     "gcotiforwalletoverview": {

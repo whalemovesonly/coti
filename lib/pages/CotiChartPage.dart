@@ -3,6 +3,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import '../layouts/main_layout.dart';
 import '../layouts/SecurityNote.dart';
 import '../layouts/contactAnddonate.dart';
@@ -28,11 +31,14 @@ class _CotiChartPageState extends State<CotiChartPage> {
   final ScrollController _scrollController = ScrollController();
 
   final List<String> addressesToWatch = [
-    '0x5e19f674b3B55dF897C09824a2ddFAD6939e3d1D'.toLowerCase(),
+    '0x5e19f674b3b55df897c09824a2ddfad6939e3d1d',
   ];
 
   final String token = '0x7637C7838EC4Ec6b85080F28A678F8E234bB83D1';
   final String baseUrl = 'https://mainnet.cotiscan.io/api/v2/addresses';
+
+  Map<String, double> depositorTotals = {};
+  Map<String, double> withdrawerTotals = {};
 
   @override
   void initState() {
@@ -65,12 +71,11 @@ class _CotiChartPageState extends State<CotiChartPage> {
       final data = jsonDecode(response.body);
       final transactions = data['items'] ?? [];
       bool stop = false;
-      
 
       for (final tx in transactions) {
         final toAddress = tx['to']?['hash']?.toString().toLowerCase();
         final fromAddress = tx['from']?['hash']?.toString().toLowerCase();
-        
+
         final types = tx['transaction_types'] as List?;
         String type = '';
         if (types != null && types.isNotEmpty) {
@@ -86,10 +91,10 @@ class _CotiChartPageState extends State<CotiChartPage> {
           allTransactions.add(tx);
         }
       }
+
       if (stop || data['next_page_params'] == null) break;
       params = (data['next_page_params'] as Map)
           .map((key, value) => MapEntry(key.toString(), value.toString()));
-      
     }
 
     return allTransactions;
@@ -112,9 +117,9 @@ class _CotiChartPageState extends State<CotiChartPage> {
 
   Future<void> _fetchData() async {
     setState(() {
-    isLoading = true;
-    statusKey = 'cotichart.fetching_status';
-    statusArgs = [];
+      isLoading = true;
+      statusKey = 'cotichart.fetching_status';
+      statusArgs = [];
     });
 
     List<dynamic> combined = [];
@@ -126,158 +131,222 @@ class _CotiChartPageState extends State<CotiChartPage> {
     final grouped = groupTransactionsByDay(combined);
     final sortedKeys = grouped.keys.toList()..sort();
 
+    // Process depositors & withdrawers
+    depositorTotals = {};
+    withdrawerTotals = {};
+    for (final tx in combined) {
+      final value = double.tryParse(tx['value'] ?? '0') ?? 0.0;
+      final amount = value / 1e18;
+      final from = tx['from']?['hash']?.toLowerCase();
+      final to = tx['to']?['hash']?.toLowerCase();
+
+      for (final treasury in addressesToWatch) {
+        if (to == treasury && from != null) {
+          depositorTotals[from] = (depositorTotals[from] ?? 0.0) + amount;
+        }
+        if (from == treasury && to != null) {
+          withdrawerTotals[to] = (withdrawerTotals[to] ?? 0.0) + amount;
+        }
+      }
+    }
+
     setState(() {
-    labels = sortedKeys;
-    deposits = sortedKeys.map((k) => grouped[k]!['deposits']!).toList();
-    withdrawals = sortedKeys.map((k) => grouped[k]!['withdrawals']!).toList();
-    if (labels.isNotEmpty) {
+      labels = sortedKeys;
+      deposits = sortedKeys.map((k) => grouped[k]!['deposits']!).toList();
+      withdrawals = sortedKeys.map((k) => grouped[k]!['withdrawals']!).toList();
+      if (labels.isNotEmpty) {
         statusKey = 'cotichart.success_status';
         statusArgs = [labels.first, labels.last];
-    } else {
+      } else {
         statusKey = 'cotichart.empty_status';
         statusArgs = [];
-    }
-    isLoading = false;
+      }
+      isLoading = false;
     });
   }
 
-  Widget buildChart(BuildContext context) {
-  if (labels.isEmpty) return const SizedBox.shrink();
-
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    if (_scrollController.hasClients) {
-      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-    }
-  });
-
-  final theme = Theme.of(context);
-  final colorScheme = theme.colorScheme;
-  final textColor = theme.textTheme.bodyMedium?.color ?? Colors.grey;
-
-  const double leftTitleWidth = 80;
-  const double barGroupWidth = 40;
-  final double chartContentWidth = labels.length * barGroupWidth.toDouble();
-
-  final maxDeposit = deposits.isNotEmpty ? deposits.reduce((a, b) => a > b ? a : b) : 0;
-  final maxWithdrawal = withdrawals.isNotEmpty ? withdrawals.reduce((a, b) => a > b ? a : b) : 0;
-  final maxY = (maxDeposit > maxWithdrawal ? maxDeposit : maxWithdrawal) * 1.2;
-  final yIntervalCount = 5;
-  final yStep = maxY / yIntervalCount;
-
-  return SizedBox(
-    height: 400,
-    child: Row(
-      children: [
-        // Fixed Y-axis labels
-        SizedBox(
-          width: leftTitleWidth,
-          child: Column(
-            children: List.generate(yIntervalCount + 1, (i) {
-              final value = (yStep * (yIntervalCount - i)).round();
-              return Expanded(
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 4),
-                    child: Text(
-                      value.toString(),
-                      style: TextStyle(fontSize: 10, color: textColor),
+  Widget buildAddressList(List<MapEntry<String, double>> list, String title, String typeKey, ColorScheme color, TextTheme text) {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(title, style: text.titleSmall?.copyWith(color: color.primary)),
+          const SizedBox(height: 8),
+          ...list.map((entry) {
+            final addr = entry.key;
+            final value = entry.value.toStringAsFixed(4);
+            return Container(
+              margin: const EdgeInsets.symmetric(vertical: 4),
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: color.surfaceVariant,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(addr, style: text.bodySmall?.copyWith(color: color.onSurface)),
+                        Text('${tr('cotichart.$typeKey')}: $value', style: text.bodySmall?.copyWith(color: color.primary)),
+                      ],
                     ),
                   ),
-                ),
-              );
-            }),
-          ),
-        ),
-        // Scrollable chart with padding
-        Expanded(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            controller: _scrollController,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16, top: 40, bottom: 8),
-              child: SizedBox(
-                width: chartContentWidth < MediaQuery.of(context).size.width
-                    ? MediaQuery.of(context).size.width
-                    : chartContentWidth,
-                child: BarChart(
-                  BarChartData(
-                    maxY: maxY,
-                    barTouchData: BarTouchData(
-                      enabled: true,
-                      touchTooltipData: BarTouchTooltipData(
-                        tooltipBgColor: colorScheme.surfaceVariant,
-                        tooltipPadding: const EdgeInsets.all(8),
-                        tooltipMargin: 8,
-                        getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                          final label = labels[group.x.toInt()];
-                          final isDeposit = rodIndex == 0;
-                          final value = rod.toY;
-                          return BarTooltipItem(
-                            '${isDeposit ? tr('cotichart.deposit') : tr('cotichart.withdrawal')}\n$label\n$value',
-                            TextStyle(
-                              color: textColor,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 12,
-                            ),
-                          );
-                        },
+                  IconButton(
+                    icon: Icon(Icons.copy, size: 16, color: color.secondary),
+                    onPressed: () => Clipboard.setData(ClipboardData(text: addr)),
+                    tooltip: 'Copy',
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.open_in_new, size: 16, color: color.secondary),
+                    onPressed: () => launchUrl(Uri.parse('https://mainnet.cotiscan.io/address/$addr')),
+                    tooltip: 'Open',
+                  ),
+                ],
+              ),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+
+  Widget buildChart(BuildContext context) {
+    if (labels.isEmpty) return const SizedBox.shrink();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      }
+    });
+
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textColor = theme.textTheme.bodyMedium?.color ?? Colors.grey;
+
+    const double leftTitleWidth = 80;
+    const double barGroupWidth = 40;
+    final double chartContentWidth = labels.length * barGroupWidth.toDouble();
+
+    final maxDeposit = deposits.isNotEmpty ? deposits.reduce((a, b) => a > b ? a : b) : 0;
+    final maxWithdrawal = withdrawals.isNotEmpty ? withdrawals.reduce((a, b) => a > b ? a : b) : 0;
+    final maxY = (maxDeposit > maxWithdrawal ? maxDeposit : maxWithdrawal) * 1.2;
+    final yIntervalCount = 5;
+    final yStep = maxY / yIntervalCount;
+
+    return SizedBox(
+      height: 400,
+      child: Row(
+        children: [
+          SizedBox(
+            width: leftTitleWidth,
+            child: Column(
+              children: List.generate(yIntervalCount + 1, (i) {
+                final value = (yStep * (yIntervalCount - i)).round();
+                return Expanded(
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 4),
+                      child: Text(
+                        value.toString(),
+                        style: TextStyle(fontSize: 10, color: textColor),
                       ),
                     ),
-                    barGroups: List.generate(labels.length, (index) {
-                      return BarChartGroupData(x: index, barRods: [
-                        BarChartRodData(
-                          toY: deposits[index],
-                          color: colorScheme.primary,
-                        ),
-                        BarChartRodData(
-                          toY: withdrawals[index],
-                          color: colorScheme.tertiary,
-                        ),
-                      ]);
-                    }),
-                    titlesData: FlTitlesData(
-                      leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                      rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                      topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                      bottomTitles: AxisTitles(
-                        sideTitles: SideTitles(
-                          showTitles: true,
-                          interval: 1,
-                          reservedSize: 36,
-                          getTitlesWidget: (value, meta) {
-                            final index = value.toInt();
-                            if (index < 0 || index >= labels.length) return const SizedBox.shrink();
-                            if (index % 2 != 0) return const SizedBox.shrink();
-                            final date = labels[index];
-                            return SideTitleWidget(
-                              axisSide: meta.axisSide,
-                              child: Text(
-                                date.substring(5),
-                                style: TextStyle(fontSize: 10, color: textColor),
+                  ),
+                );
+              }),
+            ),
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              controller: _scrollController,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16, right: 16, top: 40, bottom: 8),
+                child: SizedBox(
+                  width: chartContentWidth < MediaQuery.of(context).size.width
+                      ? MediaQuery.of(context).size.width
+                      : chartContentWidth,
+                  child: BarChart(
+                    BarChartData(
+                      maxY: maxY,
+                      barTouchData: BarTouchData(
+                        enabled: true,
+                        touchTooltipData: BarTouchTooltipData(
+                          tooltipBgColor: colorScheme.surfaceVariant,
+                          tooltipPadding: const EdgeInsets.all(8),
+                          tooltipMargin: 8,
+                          getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                            final label = labels[group.x.toInt()];
+                            final isDeposit = rodIndex == 0;
+                            final value = rod.toY;
+                            return BarTooltipItem(
+                              '${isDeposit ? tr('cotichart.deposit') : tr('cotichart.withdrawal')}\n$label\n$value',
+                              TextStyle(
+                                color: textColor,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 12,
                               ),
                             );
                           },
                         ),
                       ),
+                      barGroups: List.generate(labels.length, (index) {
+                        return BarChartGroupData(x: index, barRods: [
+                          BarChartRodData(toY: deposits[index], color: colorScheme.primary),
+                          BarChartRodData(toY: withdrawals[index], color: colorScheme.tertiary),
+                        ]);
+                      }),
+                      titlesData: FlTitlesData(
+                        leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                        rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                        topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                        bottomTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            interval: 1,
+                            reservedSize: 36,
+                            getTitlesWidget: (value, meta) {
+                              final index = value.toInt();
+                              if (index < 0 || index >= labels.length) return const SizedBox.shrink();
+                              if (index % 2 != 0) return const SizedBox.shrink();
+                              final date = labels[index];
+                              return SideTitleWidget(
+                                axisSide: meta.axisSide,
+                                child: Text(date.substring(5), style: TextStyle(fontSize: 10, color: textColor)),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      borderData: FlBorderData(show: false),
                     ),
-                    borderData: FlBorderData(show: false),
                   ),
                 ),
               ),
             ),
           ),
-        ),
-      ],
-    ),
-  );
-}
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final color = theme.colorScheme;
     final text = theme.textTheme;
+
+    final topDepositorsList = depositorTotals.entries
+        .where((e) => e.value > 0)
+        .toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+    final topWithdrawersList = withdrawerTotals.entries
+        .where((e) => e.value > 0)
+        .toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
 
     return MainLayout(
       title: tr('cotichart.chart_title'),
@@ -286,61 +355,70 @@ class _CotiChartPageState extends State<CotiChartPage> {
         color: color.background,
         child: Center(
           child: SingleChildScrollView(
-            child:
-                        Padding(
-             padding: const EdgeInsets.all(16.0), // applies to top, bottom, left, right
-             child:
-             Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    DropdownButton<int>(
-                      value: selectedDays,
-                      dropdownColor: color.surface,
-                      style: text.bodyMedium?.copyWith(color: color.primary),
-                      onChanged: isLoading
-                          ? null
-                          : (value) {
-                              setState(() => selectedDays = value!);
-                              _fetchData();
-                            },
-                      items: daysOptions.map((day) => DropdownMenuItem<int>(
-                        value: day,
-                        child: Text('cotichart.day_option'.tr(args: [day.toString()])),
-                      )).toList(),
-                    ),
-                    IconButton(
-                      onPressed: isLoading ? null : _fetchData,
-                      icon: Icon(Icons.refresh, color: color.primary),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Text(
-                statusKey.tr(args: statusArgs),
-                style: text.bodyMedium?.copyWith(color: color.tertiary),
-                ),
-                const SizedBox(height: 10),
-                if (labels.isNotEmpty)
-                  SelectableText(
-                    'cotichart.result_text'.tr(args: [
-  deposits.reduce((a, b) => a + b).toStringAsFixed(4),
-  withdrawals.reduce((a, b) => a + b).toStringAsFixed(4),
-]),
-                    style: text.bodyLarge,
-                    textAlign: TextAlign.center,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      DropdownButton<int>(
+                        value: selectedDays,
+                        dropdownColor: color.surface,
+                        style: text.bodyMedium?.copyWith(color: color.primary),
+                        onChanged: isLoading ? null : (value) {
+                          setState(() => selectedDays = value!);
+                          _fetchData();
+                        },
+                        items: daysOptions.map((day) => DropdownMenuItem<int>(
+                          value: day,
+                          child: Text('cotichart.day_option'.tr(args: [day.toString()])),
+                        )).toList(),
+                      ),
+                      IconButton(
+                        onPressed: isLoading ? null : _fetchData,
+                        icon: Icon(Icons.refresh, color: color.primary),
+                      ),
+                    ],
                   ),
-                const SizedBox(height: 20),
-                buildChart(context),
-                const SizedBox(height: 30),
-                const SecurityNote(),
-                const SizedBox(height: 20),
-                const ContactAndDonate(),
-              ],
-            ),
+                  const SizedBox(height: 20),
+                  Text(statusKey.tr(args: statusArgs), style: text.bodyMedium?.copyWith(color: color.tertiary)),
+                  const SizedBox(height: 10),
+                  if (labels.isNotEmpty)
+                    SelectableText(
+                      tr('cotichart.result_text', args: [
+                        deposits.reduce((a, b) => a + b).toStringAsFixed(4),
+                        withdrawals.reduce((a, b) => a + b).toStringAsFixed(4),
+                      ]),
+                      style: text.bodyLarge,
+                      textAlign: TextAlign.center,
+                    ),
+                  const SizedBox(height: 20),
+                  buildChart(context),
+                  const SizedBox(height: 30),
+                  if (topDepositorsList.isNotEmpty || topWithdrawersList.isNotEmpty)
+                    Column(
+                      children: [
+                        Text(tr('cotichart.address_summary'), style: text.titleMedium?.copyWith(color: color.primary)),
+                        const SizedBox(height: 16),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            buildAddressList(topDepositorsList.take(10).toList(), tr('cotichart.top_depositors'), 'deposits', color, text),
+                            const SizedBox(width: 16),
+                            buildAddressList(topWithdrawersList.take(10).toList(), tr('cotichart.top_withdrawers'), 'withdrawals', color, text),
+                          ],
                         ),
+                      ],
+                    ),
+                  const SizedBox(height: 30),
+                  const SecurityNote(),
+                  const SizedBox(height: 20),
+                  const ContactAndDonate(),
+                ],
+              ),
+            ),
           ),
         ),
       ),
