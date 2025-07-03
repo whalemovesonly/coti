@@ -140,8 +140,8 @@
     "deposits": "Deposit",
     "withdrawals": "Withdrawal",
     "address_summary": "Address Summary",
-    "top_depositors": "Top 10 Depositors",
-    "top_withdrawers": "Top 10 Withdrawers"
+    "top_depositors": "Top 10 $gCOTI Depositors",
+    "top_withdrawers": "Top 10 $gCOTI Withdrawers"
   },
 
   "cotichart": {
@@ -152,7 +152,13 @@
     "success_status": "✅ Showing data from {} to {}",
     "empty_status": "ℹ️ No data available in selected time range.",
     "deposit": "Deposit",
-    "withdrawal": "Withdrawal"
+    "withdrawal": "Withdrawal",
+
+    "top_depositors": "Top 10 $COTI Depositors",
+    "top_withdrawers": "Top 10 $COTI Withdrawers",
+    "deposits": "Deposits",
+    "withdrawals": "Withdrawals",
+    "address_summary": "Address Summary"
   },
     
   "gcotiforwalletoverview": {
