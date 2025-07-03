@@ -197,14 +197,8 @@ Widget buildAddressList(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        addr,
-                        style: text.bodySmall?.copyWith(color: color.onSurface),
-                      ),
-                      Text(
-                        '${tr('gcotichart.$typeKey')}: $value',
-                        style: text.bodySmall?.copyWith(color: color.primary),
-                      ),
+                      Text(addr, style: text.bodySmall?.copyWith(color: color.onSurface)),
+                      Text('${tr('gcotichart.$typeKey')}: $value', style: text.bodySmall?.copyWith(color: color.primary)),
                     ],
                   ),
                 ),
@@ -213,15 +207,19 @@ Widget buildAddressList(
                     padding: const EdgeInsets.only(right: 4),
                     child: leaderboardIcon,
                   ),
-                IconButton(
-                  icon: Icon(Icons.copy, size: 16, color: color.secondary),
-                  onPressed: () => Clipboard.setData(ClipboardData(text: addr)),
-                  tooltip: 'Copy',
-                ),
-                IconButton(
-                  icon: Icon(Icons.open_in_new, size: 16, color: color.secondary),
-                  onPressed: () => launchUrl(Uri.parse('https://mainnet.cotiscan.io/address/$addr')),
-                  tooltip: 'Open',
+                Column(
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.copy, size: 16, color: color.secondary),
+                      onPressed: () => Clipboard.setData(ClipboardData(text: addr)),
+                      tooltip: 'Copy',
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.open_in_new, size: 16, color: color.secondary),
+                      onPressed: () => launchUrl(Uri.parse('https://mainnet.cotiscan.io/address/$addr')),
+                      tooltip: 'Open',
+                    ),
+                  ],
                 ),
               ],
             ),

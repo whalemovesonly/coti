@@ -166,77 +166,80 @@ class _CotiChartPageState extends State<CotiChartPage> {
   }
 
   Widget buildAddressList(List<MapEntry<String, double>> list, String title, String typeKey, ColorScheme color, TextTheme text) {
-    return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(title, style: text.titleSmall?.copyWith(color: color.primary)),
-          const SizedBox(height: 8),
-          ...list.asMap().entries.map((entry) {
-            final index = entry.key; // ✅ Now this is 0, 1, 2, ...
-            final addr = entry.value.key;
-            final value = entry.value.value.toStringAsFixed(4);
+  return Expanded(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(title, style: text.titleSmall?.copyWith(color: color.primary)),
+        const SizedBox(height: 8),
+        ...list.asMap().entries.map((entry) {
+          final index = entry.key;
+          final addr = entry.value.key;
+          final value = entry.value.value.toStringAsFixed(4);
 
-                      // Determine the leaderboard icon with tooltip
-            Widget? leaderboardIcon;
-            if (index == 0) {
-              leaderboardIcon = Tooltip(
-                message: '🥇 Rank #1',
-                child: const Text('🥇', style: TextStyle(fontSize: 36)),
-              );
-            } else if (index == 1) {
-              leaderboardIcon = Tooltip(
-                message: '🥈 Rank #2',
-                child: const Text('🥈', style: TextStyle(fontSize: 34)),
-              );
-            } else if (index == 2) {
-              leaderboardIcon = Tooltip(
-                message: '🥉 Rank #3',
-                child: const Text('🥉', style: TextStyle(fontSize: 32)),
-              );
-            }
+          Widget? leaderboardIcon;
+          if (index == 0) {
+            leaderboardIcon = Tooltip(
+              message: '🥇 Rank #1',
+              child: const Text('🥇', style: TextStyle(fontSize: 36)),
+            );
+          } else if (index == 1) {
+            leaderboardIcon = Tooltip(
+              message: '🥈 Rank #2',
+              child: const Text('🥈', style: TextStyle(fontSize: 34)),
+            );
+          } else if (index == 2) {
+            leaderboardIcon = Tooltip(
+              message: '🥉 Rank #3',
+              child: const Text('🥉', style: TextStyle(fontSize: 32)),
+            );
+          }
 
-            return Container(
-              margin: const EdgeInsets.symmetric(vertical: 4),
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: color.surfaceVariant,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(addr, style: text.bodySmall?.copyWith(color: color.onSurface)),
-                        Text('${tr('cotichart.$typeKey')}: $value', style: text.bodySmall?.copyWith(color: color.primary)),
-                      ],
-                    ),
+          return Container(
+            margin: const EdgeInsets.symmetric(vertical: 4),
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: color.surfaceVariant,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(addr, style: text.bodySmall?.copyWith(color: color.onSurface)),
+                      Text('${tr('cotichart.$typeKey')}: $value', style: text.bodySmall?.copyWith(color: color.primary)),
+                    ],
                   ),
-                  if (leaderboardIcon != null)
+                ),
+                if (leaderboardIcon != null)
                   Padding(
                     padding: const EdgeInsets.only(right: 4),
                     child: leaderboardIcon,
                   ),
-                  IconButton(
-                    icon: Icon(Icons.copy, size: 16, color: color.secondary),
-                    onPressed: () => Clipboard.setData(ClipboardData(text: addr)),
-                    tooltip: 'Copy',
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.open_in_new, size: 16, color: color.secondary),
-                    onPressed: () => launchUrl(Uri.parse('https://mainnet.cotiscan.io/address/$addr')),
-                    tooltip: 'Open',
-                  ),
-                ],
-              ),
-            );
-          }),
-        ],
-      ),
-    );
-  }
+                Column(
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.copy, size: 16, color: color.secondary),
+                      onPressed: () => Clipboard.setData(ClipboardData(text: addr)),
+                      tooltip: 'Copy',
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.open_in_new, size: 16, color: color.secondary),
+                      onPressed: () => launchUrl(Uri.parse('https://mainnet.cotiscan.io/address/$addr')),
+                      tooltip: 'Open',
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        }),
+      ],
+    ),
+  );
+}
 
   Widget buildChart(BuildContext context) {
     if (labels.isEmpty) return const SizedBox.shrink();
