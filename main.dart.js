@@ -40972,25 +40972,26 @@ s.toString
 return s},
 $S:36}
 A.aqk.prototype={
-$1(a){var s,r,q,p,o,n,m,l=null,k=a.a,j=a.b,i=j.a,h=J.hZ(j.b,4)
-if(k===0)s=A.v8(B.Gv,"\ud83e\udd47 Rank #1")
-else if(k===1)s=A.v8(B.Gx,"\ud83e\udd48 Rank #2")
-else s=k===2?A.v8(B.Gw,"\ud83e\udd49 Rank #3"):l
-j=this.a
-r=j.k4
-if(r==null)r=j.k2
+$1(a){var s,r,q,p,o,n,m,l,k=null,j=a.a,i=a.b,h=i.a,g=J.hZ(i.b,4)
+if(j===0)s=A.v8(B.Gv,"\ud83e\udd47 Rank #1")
+else if(j===1)s=A.v8(B.Gx,"\ud83e\udd48 Rank #2")
+else s=j===2?A.v8(B.Gw,"\ud83e\udd49 Rank #3"):k
+i=this.a
+r=i.k4
+if(r==null)r=i.k2
 q=A.f0(8)
 p=this.b.Q
 o=p==null
-n=A.aB(i,l,l,l,o?l:p.b2(j.k3),l,l)
-m=A.ao("cotichart."+this.c,l,l,l,l)
-p=o?l:p.b2(j.b)
+n=A.aB(h,k,k,k,o?k:p.b2(i.k3),k,k)
+m=this.c
+l=A.ao("cotichart."+m,k,k,k,k)
+p=o?k:p.b2(i.b)
 o=t.p
-p=A.a([A.i9(A.cD(A.a([n,A.aB(m+": "+h,l,l,l,p,l,l)],o),B.bG,B.F,B.A))],o)
-if(s!=null)p.push(new A.bA(B.e1,s,l))
-j=j.y
-p.push(A.cD(A.a([A.fu(l,l,A.fX(B.lm,j,l,16),l,l,new A.aqi(i),l,l,"Copy"),A.fu(l,l,A.fX(B.ln,j,l,16),l,l,new A.aqj(i),l,l,"Open")],o),B.z,B.F,B.A))
-return A.dn(l,A.eb(p,B.z,B.F,B.A),B.y,l,new A.d9(r,l,l,q,l,l,B.aA),l,l,B.oE,B.dg,l)},
+p=A.a([A.i9(A.cD(A.a([n,A.aB(l+": "+g,k,k,k,p,k,k)],o),B.bG,B.F,B.A))],o)
+if(s!=null&&m==="deposits")p.push(new A.bA(B.e1,s,k))
+i=i.y
+p.push(A.cD(A.a([A.fu(k,k,A.fX(B.lm,i,k,16),k,k,new A.aqi(h),k,k,"Copy"),A.fu(k,k,A.fX(B.ln,i,k,16),k,k,new A.aqj(h),k,k,"Open")],o),B.z,B.F,B.A))
+return A.dn(k,A.eb(p,B.z,B.F,B.A),B.y,k,new A.d9(r,k,k,q,k,k,B.aA),k,k,B.oE,B.dg,k)},
 $S:601}
 A.aqi.prototype={
 $0(){return A.oV(new A.kJ(this.a))},
@@ -41922,27 +41923,27 @@ s=J.ac(s,"withdrawals")
 return s==null?0:s},
 $S:36}
 A.at_.prototype={
-$1(a){var s,r,q,p,o,n,m,l=null,k=a.a,j=a.b,i=j.a,h=this.a
-j=J.ac(j.b,h)
-s=B.d.af(j==null?0:j,4)
-if(k===0)r=A.v8(B.Gv,"\ud83e\udd47 Rank #1")
-else if(k===1)r=A.v8(B.Gx,"\ud83e\udd48 Rank #2")
-else r=k===2?A.v8(B.Gw,"\ud83e\udd49 Rank #3"):l
-j=this.b
-q=j.k4
-if(q==null)q=j.k2
+$1(a){var s,r,q,p,o,n,m,l,k=null,j=a.a,i=a.b,h=i.a,g=this.a
+i=J.ac(i.b,g)
+s=B.d.af(i==null?0:i,4)
+if(j===0)r=A.v8(B.Gv,"\ud83e\udd47 Rank #1")
+else if(j===1)r=A.v8(B.Gx,"\ud83e\udd48 Rank #2")
+else r=j===2?A.v8(B.Gw,"\ud83e\udd49 Rank #3"):k
+i=this.b
+q=i.k4
+if(q==null)q=i.k2
 p=A.f0(8)
 o=this.c.Q
 n=o==null
-m=A.aB(i,l,l,l,n?l:o.b2(j.k3),l,l)
-h=A.ao("gcotichart."+h,l,l,l,l)
-o=n?l:o.b2(j.b)
+m=A.aB(h,k,k,k,n?k:o.b2(i.k3),k,k)
+l=A.ao("gcotichart."+g,k,k,k,k)
+o=n?k:o.b2(i.b)
 n=t.p
-o=A.a([A.i9(A.cD(A.a([m,A.aB(h+": "+s,l,l,l,o,l,l)],n),B.bG,B.F,B.A))],n)
-if(r!=null)o.push(new A.bA(B.e1,r,l))
-j=j.y
-o.push(A.cD(A.a([A.fu(l,l,A.fX(B.lm,j,l,16),l,l,new A.asY(i),l,l,"Copy"),A.fu(l,l,A.fX(B.ln,j,l,16),l,l,new A.asZ(i),l,l,"Open")],n),B.z,B.F,B.A))
-return A.dn(l,A.eb(o,B.z,B.F,B.A),B.y,l,new A.d9(q,l,l,p,l,l,B.aA),l,l,B.oE,B.dg,l)},
+o=A.a([A.i9(A.cD(A.a([m,A.aB(l+": "+s,k,k,k,o,k,k)],n),B.bG,B.F,B.A))],n)
+if(r!=null&&g==="deposits")o.push(new A.bA(B.e1,r,k))
+i=i.y
+o.push(A.cD(A.a([A.fu(k,k,A.fX(B.lm,i,k,16),k,k,new A.asY(h),k,k,"Copy"),A.fu(k,k,A.fX(B.ln,i,k,16),k,k,new A.asZ(h),k,k,"Open")],n),B.z,B.F,B.A))
+return A.dn(k,A.eb(o,B.z,B.F,B.A),B.y,k,new A.d9(q,k,k,p,k,k,B.aA),k,k,B.oE,B.dg,k)},
 $S:585}
 A.asY.prototype={
 $0(){return A.oV(new A.kJ(this.a))},
