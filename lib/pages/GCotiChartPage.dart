@@ -10,6 +10,8 @@ import '../layouts/main_layout.dart';
 import '../layouts/SecurityNote.dart';
 import '../layouts/contactAnddonate.dart';
 
+import '../layouts/ShakeWidget.dart';
+
 class GCotiChartPage extends StatefulWidget {
   const GCotiChartPage({super.key});
 
@@ -170,17 +172,17 @@ Widget buildAddressList(
           if (index == 0) {
             leaderboardIcon = Tooltip(
               message: '🥇 Rank #1',
-              child: const Text('🥇', style: TextStyle(fontSize: 36)),
+              child: ShakeWidget(child: const Text('🥇', style: TextStyle(fontSize: 36))),
             );
           } else if (index == 1) {
             leaderboardIcon = Tooltip(
               message: '🥈 Rank #2',
-              child: const Text('🥈', style: TextStyle(fontSize: 34)),
+              child: ShakeWidget(child: const Text('🥈', style: TextStyle(fontSize: 34))),
             );
           } else if (index == 2) {
             leaderboardIcon = Tooltip(
               message: '🥉 Rank #3',
-              child: const Text('🥉', style: TextStyle(fontSize: 32)),
+              child: ShakeWidget(child: const Text('🥉', style: TextStyle(fontSize: 32))),
             );
           }
 
