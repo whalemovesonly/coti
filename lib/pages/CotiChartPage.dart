@@ -167,6 +167,35 @@ class _CotiChartPageState extends State<CotiChartPage> {
     });
   }
 
+Future<String?> fetchZnsDomainsOfanAddress(String address) async {
+
+    final proxyUrl = Uri.parse(
+      'https://zns.bio/api/resolveAddress?chain=2632500&address=$address',
+    );
+
+    try {
+      final response = await http.get(proxyUrl);
+      if (response.statusCode == 200) {
+          final json = jsonDecode(response.body);
+          print('json = $json');
+          // Check if 'primaryDomain' exists and is not empty
+          if (json['primaryDomain'] != null && json['primaryDomain'].toString().isNotEmpty) {
+            return json['primaryDomain'];
+          }
+
+          // Check if 'userOwnedDomains' is a non-empty list
+          if (json['userOwnedDomains'] is List && json['userOwnedDomains'].isNotEmpty) {
+            return json['userOwnedDomains'][0].toString();
+          }
+      } else {
+        print('Failed: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+    return null;
+  }
+
   Widget buildAddressList(List<MapEntry<String, double>> list, String title, String typeKey, ColorScheme color, TextTheme text) {
   return Expanded(
     child: Column(
@@ -198,47 +227,58 @@ class _CotiChartPageState extends State<CotiChartPage> {
             );
           }
 
-          return Container(
-            margin: const EdgeInsets.symmetric(vertical: 4),
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: color.surfaceVariant,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(addr, style: text.bodySmall?.copyWith(color: color.onSurface)),
-                      Text('${tr('cotichart.$typeKey')}: $value', style: text.bodySmall?.copyWith(color: color.primary)),
-                    ],
-                  ),
+          return FutureBuilder<String?>(
+            future: fetchZnsDomainsOfanAddress(addr),
+            builder: (context, snapshot) {
+              final domain = (snapshot.connectionState == ConnectionState.waiting)
+                  ? ''
+                  : (snapshot.hasData && snapshot.data != null)
+                      ? snapshot.data!
+                      : '';
+
+              return Container(
+                margin: const EdgeInsets.symmetric(vertical: 4),
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: color.surfaceVariant,
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                if (leaderboardIcon != null && typeKey == 'deposits')
-                  Padding(
-                    padding: const EdgeInsets.only(right: 4),
-                    child: leaderboardIcon,
-                  ),
-                Column(
+                child: Row(
                   children: [
-                    IconButton(
-                      icon: Icon(Icons.copy, size: 16, color: color.secondary),
-                      onPressed: () => Clipboard.setData(ClipboardData(text: addr)),
-                      tooltip: 'Copy',
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(domain == '' ? addr : domain, style: text.bodySmall?.copyWith(color: color.onSurface)),
+                          Text('${tr('cotichart.$typeKey')}: $value', style: text.bodySmall?.copyWith(color: color.primary)),
+                        ],
+                      ),
                     ),
-                    IconButton(
-                      icon: Icon(Icons.open_in_new, size: 16, color: color.secondary),
-                      onPressed: () => launchUrl(Uri.parse('https://mainnet.cotiscan.io/address/$addr')),
-                      tooltip: 'Open',
+                    if (leaderboardIcon != null && typeKey == 'deposits')
+                      Padding(
+                        padding: const EdgeInsets.only(right: 4),
+                        child: leaderboardIcon,
+                      ),
+                    Column(
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.copy, size: 16, color: color.secondary),
+                          onPressed: () => Clipboard.setData(ClipboardData(text: addr)),
+                          tooltip: 'Copy',
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.open_in_new, size: 16, color: color.secondary),
+                          onPressed: () => launchUrl(Uri.parse('https://mainnet.cotiscan.io/address/$addr')),
+                          tooltip: 'Open',
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
+              );
+            },
           );
-        }),
+        }).toList(),
       ],
     ),
   );
