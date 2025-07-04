@@ -19,10 +19,10 @@ class ZNSDomainsViewer extends StatefulWidget {
 class _ZNSDomainsViewerState extends State<ZNSDomainsViewer> {
   final TextEditingController _controller = TextEditingController();
   String? loadingStatusKey;
-  String? resultAddress;
+  List<String> domains = [];
+  bool hasPrimary = false;
 
-Future<String?> fetchZnsDomainsOfanAddress(String address) async {
-
+  Future<Map<String, dynamic>?> fetchZnsDomainsOfAnAddress(String address) async {
     if (address.isEmpty || !RegExp(r'^0x[a-fA-F0-9]{40}$').hasMatch(address)) {
       return null;
     }
@@ -34,23 +34,36 @@ Future<String?> fetchZnsDomainsOfanAddress(String address) async {
     try {
       final response = await http.get(proxyUrl);
       if (response.statusCode == 200) {
-          final json = jsonDecode(response.body);
-          print('json = $json');
-          // Check if 'primaryDomain' exists and is not empty
-          if (json['primaryDomain'] != null && json['primaryDomain'].toString().isNotEmpty) {
-            return json['primaryDomain'];
-          }
+        final json = jsonDecode(response.body);
+        final List<String> domains = [];
+        final primaryDomain = json['primaryDomain'];
+        final hasPrimary = primaryDomain != null && primaryDomain.toString().isNotEmpty;
 
-          // Check if 'userOwnedDomains' is a non-empty list
-          if (json['userOwnedDomains'] is List && json['userOwnedDomains'].isNotEmpty) {
-            return json['userOwnedDomains'][0].toString();
+        if (hasPrimary) {
+          domains.add(primaryDomain.toString());
+        }
+
+        if (json['userOwnedDomains'] is List) {
+          for (var domain in json['userOwnedDomains']) {
+            if (domain is String &&
+                domain.isNotEmpty &&
+                (!hasPrimary || domain != primaryDomain)) {
+              domains.add(domain);
+            }
           }
+        }
+
+        return {
+          'domains': domains,
+          'hasPrimary': hasPrimary,
+        };
       } else {
         print('Failed: ${response.statusCode}');
       }
     } catch (e) {
       print('Error: $e');
     }
+
     return null;
   }
 
@@ -59,7 +72,8 @@ Future<String?> fetchZnsDomainsOfanAddress(String address) async {
 
     setState(() {
       loadingStatusKey = 'znsdomains.status.fetching';
-      resultAddress = null;
+      domains = [];
+      hasPrimary = false;
     });
 
     final input = _controller.text.trim();
@@ -70,15 +84,17 @@ Future<String?> fetchZnsDomainsOfanAddress(String address) async {
       return;
     }
 
-    final address = await fetchZnsDomainsOfanAddress(input);
+    final result = await fetchZnsDomainsOfAnAddress(input);
 
     setState(() {
-      if (address != null) {
+      if (result != null && result['domains'] is List<String>) {
+        domains = List<String>.from(result['domains']);
+        hasPrimary = result['hasPrimary'] == true;
         loadingStatusKey = 'znsdomains.status.success';
-        resultAddress = address;
       } else {
         loadingStatusKey = 'znsdomains.status.not_found';
-        resultAddress = null;
+        domains = [];
+        hasPrimary = false;
       }
     });
   }
@@ -90,8 +106,8 @@ Future<String?> fetchZnsDomainsOfanAddress(String address) async {
     );
   }
 
-  void _openExplorerLink(String address) async {
-    final url = Uri.parse('https://mainnet.cotiscan.io/address/$address');
+  void _openExplorerLink(String domain) async {
+    final url = Uri.parse('https://zns.bio/$domain');
     if (await canLaunchUrl(url)) {
       await launchUrl(url);
     } else {
@@ -100,7 +116,6 @@ Future<String?> fetchZnsDomainsOfanAddress(String address) async {
       );
     }
   }
-  
 
   @override
   void dispose() {
@@ -160,33 +175,56 @@ Future<String?> fetchZnsDomainsOfanAddress(String address) async {
                       style: text.bodyMedium?.copyWith(color: color.tertiary),
                       textAlign: TextAlign.center,
                     ),
-                  const SizedBox(height: 10),
-                  if (resultAddress != null)
-                    Column(
-                      children: [
-                        Text(
-                          resultAddress!,
-                          style: text.bodyLarge,
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            ElevatedButton.icon(
-                              onPressed: () => _copyToClipboard(resultAddress!),
-                              icon: const Icon(Icons.copy),
-                              label: Text(tr('znsdomains.button.copy')),
+                  const SizedBox(height: 20),
+                  if (domains.isNotEmpty)
+                    Wrap(
+                      spacing: 12,
+                      runSpacing: 12,
+                      alignment: WrapAlignment.center,
+                      children: domains.map((domain) {
+                        final isPrimary = hasPrimary && domain == domains.first;
+                        return Card(
+                          color: isPrimary ? color.primaryContainer : color.surface,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                          elevation: isPrimary ? 6 : 2,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  domain,
+                                  style: text.titleMedium?.copyWith(
+                                    color: isPrimary ? color.onPrimaryContainer : color.primary,
+                                    fontWeight: isPrimary ? FontWeight.bold : FontWeight.normal,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(Icons.copy),
+                                      tooltip: tr('znsdomains.button.copy'),
+                                      onPressed: () => _copyToClipboard(domain),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.open_in_new),
+                                      tooltip: tr('znsdomains.button.open'),
+                                      onPressed: () => _openExplorerLink('$domain.coti'),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
-                            const SizedBox(width: 12),
-                            ElevatedButton.icon(
-                              onPressed: () => _openExplorerLink(resultAddress!),
-                              icon: const Icon(Icons.open_in_new),
-                              label: Text(tr('znsdomains.button.open')),
-                            ),
-                          ],
-                        ),
-                      ],
+                          ),
+                        );
+                      }).toList(),
+                    )
+                  else if (loadingStatusKey == 'znsdomains.status.success')
+                    Text(
+                      tr('znsdomains.status.not_found'),
+                      style: text.bodyMedium?.copyWith(color: color.tertiary),
                     ),
                   const SizedBox(height: 30),
                   const SecurityNote(),
