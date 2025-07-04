@@ -221,5 +221,32 @@
   "error": {
     "cannot_open_link": "Impossible d'ouvrir le lien"
   }
+},
+"znsdomains": {
+  "title": {
+    "get_zns_address": "Visionneuse de domaines ZNS"
+  },
+  "label": {
+    "enter_zns_domain": "Entrer l'adresse"
+  },
+  "hint": {
+    "coti_domain": "0x..."
+  },
+  "button": {
+    "copy": "Copier",
+    "open": "Ouvrir"
+  },
+  "status": {
+    "fetching": "Récupération de l'adresse...",
+    "success": "Succès !",
+    "not_found": "Entrée invalide",
+    "empty_input": "Veuillez entrer un domaine"
+  },
+  "clipboard": {
+    "copied": "Copié dans le presse-papiers"
+  },
+  "error": {
+    "cannot_open_link": "Impossible d'ouvrir le lien"
+  }
 }
 }

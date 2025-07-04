@@ -225,5 +225,32 @@
   "error": {
     "cannot_open_link": "Could not open link"
   }
+},
+"znsdomains":{
+  "title": {
+    "get_zns_address": "ZNS Domains Viewer"
+  },
+  "label": {
+    "enter_zns_domain": "Enter Address"
+  },
+  "hint": {
+    "coti_domain": "0x..."
+  },
+  "button": {
+    "copy": "Copy",
+    "open": "Open"
+  },
+  "status": {
+    "fetching": "Fetching address...",
+    "success": "Success!",
+    "not_found": "Invalid input",
+    "empty_input": "Please enter a domain"
+  },
+  "clipboard": {
+    "copied": "Copied to clipboard"
+  },
+  "error": {
+    "cannot_open_link": "Could not open link"
+  }
 }
 }

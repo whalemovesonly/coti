@@ -100,6 +100,14 @@ class MainLayout extends StatelessWidget {
                 Navigator.pop(context);
                 Navigator.pushReplacementNamed(context, '/GetAddressOfZNSDomain');
               }),
+              ListTile(
+              leading: const Icon(Icons.fiber_manual_record),
+              title: Text(tr('znsdomains.title.get_zns_address')),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, '/ZNSDomainsViewer');
+              }),
+              
             ListTile(
               leading: const Icon(Icons.fiber_manual_record),
               title: Text(tr('add_coti.title')),
