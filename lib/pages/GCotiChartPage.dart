@@ -202,7 +202,7 @@ Widget buildAddressList(
                     ],
                   ),
                 ),
-                if (leaderboardIcon != null)
+                if (leaderboardIcon != null && typeKey == 'deposits')
                   Padding(
                     padding: const EdgeInsets.only(right: 4),
                     child: leaderboardIcon,
