@@ -146,10 +146,9 @@ Future<String?> fetchZnsAddress(String domainInput) async {
             ? 'cotiforwallet.no_tx_found'
             : 'cotiforwallet.success_status';
         result = txs.isEmpty ? null : total;
+        isLoading = false;
       });
     } catch (e) {
-      setState(() => statusKey = 'cotiforwallet.error_status');
-    } finally {
       setState((){
           statusKey = 'cotiforwallet.error_status';
           isLoading = false;
