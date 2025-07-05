@@ -138,6 +138,7 @@
     "success_status": "✅ Showing data from {} to {}",
     "empty_status": "ℹ️ No data available in selected time range.",
     "deposits": "Deposit",
+    "error_status": "❌ Error fetching data.",
     "withdrawals": "Withdrawal",
     "address_summary": "Address Summary",
     "top_depositors": "Top 10 $gCOTI Depositors",
@@ -153,7 +154,7 @@
     "empty_status": "ℹ️ No data available in selected time range.",
     "deposit": "Deposit",
     "withdrawal": "Withdrawal",
-
+"error_status": "❌ Error fetching data.",
     "top_depositors": "Top 10 $COTI Depositors",
     "top_withdrawers": "Top 10 $COTI Withdrawers",
     "deposits": "Deposits",
