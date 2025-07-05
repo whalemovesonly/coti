@@ -263,7 +263,9 @@ Widget buildAddressList(
                       children: [
                         IconButton(
                           icon: Icon(Icons.copy, size: 16, color: color.secondary),
-                          onPressed: () => Clipboard.setData(ClipboardData(text: addr)),
+                          onPressed: (){ Clipboard.setData(ClipboardData(text: addr));ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(tr('znsdomains.clipboard.copied'))),
+    );},
                           tooltip: 'Copy',
                         ),
                         IconButton(
