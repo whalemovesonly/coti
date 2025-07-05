@@ -231,7 +231,7 @@
     "get_zns_address": "ZNS Domains Viewer"
   },
   "label": {
-    "enter_zns_domain": "Enter Address"
+    "enter_zns_domain": "Enter Wallet Address or ZNS domains"
   },
   "hint": {
     "coti_domain": "0x..."
@@ -243,7 +243,7 @@
   "status": {
     "fetching": "Fetching address...",
     "success": "Success!",
-    "not_found": "Invalid input",
+    "not_found": "No address found or invalid input",
     "empty_input": "Please enter a domain"
   },
   "clipboard": {

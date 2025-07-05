@@ -227,7 +227,7 @@
     "get_zns_address": "Visionneuse de domaines ZNS"
   },
   "label": {
-    "enter_zns_domain": "Entrer l'adresse"
+    "enter_zns_domain": "Entrez l'adresse du portefeuille ou les domaines ZNS"
   },
   "hint": {
     "coti_domain": "0x..."
@@ -239,7 +239,7 @@
   "status": {
     "fetching": "Récupération de l'adresse...",
     "success": "Succès !",
-    "not_found": "Entrée invalide",
+    "not_found": "Aucune adresse trouvée ou entrée invalide",
     "empty_input": "Veuillez entrer un domaine"
   },
   "clipboard": {
