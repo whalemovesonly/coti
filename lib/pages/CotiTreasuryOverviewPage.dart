@@ -46,7 +46,9 @@ class _CotiTreasuryOverviewPageState extends State<CotiTreasuryOverviewPage> {
     }
 print("url = $url");
       final response = await http.get(Uri.parse(url), headers: {'accept': 'application/json'});
-      if (response.statusCode != 200) break;
+      if (response.statusCode != 200) {
+        throw Exception('cotiforwallet.error_status'.tr(args: [response.statusCode.toString()]));
+      }
 
       final data = jsonDecode(response.body);
       final transactions = data['items'] as List<dynamic>? ?? [];

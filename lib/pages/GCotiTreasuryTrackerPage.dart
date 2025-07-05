@@ -147,17 +147,20 @@ Future<String?> fetchZnsAddress(String domainInput) async {
       final totalValueRaw = sumTransactionValues(txs);
       final totalValue = totalValueRaw / 1e18;
 
+
       setState(() {
-        statusKey = txs.isEmpty ? 'gcotiforwallet.no_tx_found' : 'gcotiforwallet.success_status';
-        resultValue = txs.isEmpty ? null : totalValue;
-        isLoading = false;
+          statusKey = txs.isEmpty ? 'gcotiforwallet.no_tx_found' : 'gcotiforwallet.success_status';
+          resultValue = txs.isEmpty ? null : totalValue;
+          isLoading = false;
       });
+      
     } catch (_) {
-      setState(() {
-        statusKey = 'gcotiforwallet.error_status';
-        resultValue = null;
-        isLoading = false;
-      });
+
+        setState(() {
+            statusKey = 'gcotiforwallet.error_status';
+            resultValue = null;
+            isLoading = false;
+        });
     }
   }
 

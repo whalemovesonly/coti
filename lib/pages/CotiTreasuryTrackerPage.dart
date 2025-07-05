@@ -40,8 +40,7 @@ class _HtmlCotiConversionPageState extends State<CotiTreasuryTrackerPage> {
 
       final response = await http.get(Uri.parse(url), headers: {'accept': 'application/json'});
       if (response.statusCode != 200) {
-        setState(() => statusKey = 'cotiforwallet.error_status');
-        break;
+        throw Exception('cotiforwallet.error_status'.tr(args: [response.statusCode.toString()]));
       }
 
       final data = jsonDecode(response.body);
@@ -151,7 +150,10 @@ Future<String?> fetchZnsAddress(String domainInput) async {
     } catch (e) {
       setState(() => statusKey = 'cotiforwallet.error_status');
     } finally {
-      setState(() => isLoading = false);
+      setState((){
+          statusKey = 'cotiforwallet.error_status';
+          isLoading = false;
+      }); 
     }
   }
 
