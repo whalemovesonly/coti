@@ -22,9 +22,56 @@ class _ZNSDomainsViewerState extends State<ZNSDomainsViewer> {
   List<String> domains = [];
   bool hasPrimary = false;
 
+  Future<String?> fetchZnsAddress(String domainInput) async {
+
+      if (domainInput.isEmpty || RegExp(r'^0x[a-fA-F0-9]{40}$').hasMatch(domainInput)) {
+        return null;
+      }
+
+    final cleanedDomain = domainInput.toLowerCase().endsWith('.coti')
+        ? domainInput.substring(0, domainInput.length - 5)
+        : domainInput;
+    final proxyUrl = Uri.parse(
+      'https://zns.bio/api/resolveDomain?chain=2632500&domain=$cleanedDomain',
+    );
+
+    try {
+      final response = await http.get(proxyUrl);
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        if (data is Map && data.containsKey('address')) {
+          return data['address'];
+        }
+      } else {
+        print('Failed: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+    
+    return null;
+  }
+
   Future<Map<String, dynamic>?> fetchZnsDomainsOfAnAddress(String address) async {
     if (address.isEmpty || !RegExp(r'^0x[a-fA-F0-9]{40}$').hasMatch(address)) {
-      return null;
+
+      if(!address.isEmpty && !RegExp(r'^0x[a-fA-F0-9]{40}$').hasMatch(address))
+      {
+              final tmp = address;
+              final address1 = address;
+              final address2 = await fetchZnsAddress(address1); // or 'example.coti'
+              if (address2 != null)
+              {
+                  address = address2;
+              }else
+              {
+                address = tmp;
+              }
+              print('===>>>>>>>>address: $address');
+      }else
+      {
+              return null;
+      }
     }
 
     final proxyUrl = Uri.parse(
