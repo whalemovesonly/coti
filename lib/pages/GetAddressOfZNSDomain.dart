@@ -65,6 +65,7 @@ class _GetAddressOfZNSDomainState extends State<GetAddressOfZNSDomain> {
       setState(() {
         loadingStatusKey = 'znsaddress.status.empty_input';
         isLoading = false;
+        resultAddress = null;
       });
       return;
     }

@@ -131,6 +131,8 @@ class _ZNSDomainsViewerState extends State<ZNSDomainsViewer> {
       setState(() {
         loadingStatusKey = 'znsdomains.status.empty_input';
         isLoading = false;
+        hasPrimary = false;
+        domains = [];
       });
       return;
     }

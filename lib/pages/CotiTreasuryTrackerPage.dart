@@ -152,6 +152,7 @@ Future<String?> fetchZnsAddress(String domainInput) async {
       setState((){
           statusKey = 'cotiforwallet.error_status';
           isLoading = false;
+          result = null;
       }); 
     }
   }

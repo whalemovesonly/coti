@@ -203,7 +203,11 @@ Future<String?> fetchZnsAddress(String domainInput) async {
       setState(() {
         statusKey = 'gcotiforwalletoverview.error_status';
         resultText = null;
+        deposits.clear();
+        withdrawals.clear();
+        labels.clear();
         isLoading = false;
+        statusArgs = [];
       });
     }
   }
