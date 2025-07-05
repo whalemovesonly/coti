@@ -124,6 +124,7 @@ class _CotiChartPageState extends State<CotiChartPage> {
       statusArgs = [];
     });
 
+try {
     List<dynamic> combined = [];
     for (final address in addressesToWatch) {
       final txs = await fetchTransactionsWithinDays(address, selectedDays);
@@ -165,6 +166,15 @@ class _CotiChartPageState extends State<CotiChartPage> {
       }
       isLoading = false;
     });
+    } catch (e) {
+
+      setState(() {
+        statusKey = 'cotichart.error_status';
+        statusArgs = [];
+        isLoading = false;
+      });
+
+    }
   }
 
 Future<String?> fetchZnsDomainsOfanAddress(String address) async {

@@ -107,7 +107,7 @@ class _GCotiChartPageState extends State<GCotiChartPage> {
       statusKey = 'gcotichart.fetching_status';
       statusArgs = [];
     });
-
+try {
     List<dynamic> combined = [];
     for (final address in addressesToWatch) {
       final txs = await fetchTransactionsWithinDays(address, selectedDays);
@@ -149,6 +149,16 @@ class _GCotiChartPageState extends State<GCotiChartPage> {
       }
       isLoading = false;
     });
+
+    } catch (e) {
+
+      setState(() {
+        statusKey = 'gcotichart.error_status';
+        statusArgs = [];
+        isLoading = false;
+      });
+
+    }
   }
 
   Future<String?> fetchZnsDomainsOfanAddress(String address) async {
