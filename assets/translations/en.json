@@ -234,7 +234,7 @@
     "enter_zns_domain": "Enter Wallet Address or ZNS domains"
   },
   "hint": {
-    "coti_domain": "0x..."
+    "coti_domain": "0x... || .coti"
   },
   "button": {
     "copy": "Copy",

@@ -20,6 +20,7 @@ class _GetAddressOfZNSDomainState extends State<GetAddressOfZNSDomain> {
   final TextEditingController _controller = TextEditingController();
   String? loadingStatusKey;
   String? resultAddress;
+  bool isLoading = false;
 
   Future<String?> fetchZnsAddress(String domainInput) async {
     if (domainInput.isEmpty || RegExp(r'^0x[a-fA-F0-9]{40}$').hasMatch(domainInput)) {
@@ -56,12 +57,14 @@ class _GetAddressOfZNSDomainState extends State<GetAddressOfZNSDomain> {
     setState(() {
       loadingStatusKey = 'znsaddress.status.fetching';
       resultAddress = null;
+      isLoading = true;
     });
 
     final input = _controller.text.trim();
     if (input.isEmpty) {
       setState(() {
         loadingStatusKey = 'znsaddress.status.empty_input';
+        isLoading = false;
       });
       return;
     }
@@ -76,6 +79,7 @@ class _GetAddressOfZNSDomainState extends State<GetAddressOfZNSDomain> {
         loadingStatusKey = 'znsaddress.status.not_found';
         resultAddress = null;
       }
+      isLoading = false;
     });
   }
 
@@ -130,6 +134,7 @@ class _GetAddressOfZNSDomainState extends State<GetAddressOfZNSDomain> {
                     width: 400,
                     child: TextField(
                       controller: _controller,
+                      enabled: !isLoading,
                       onSubmitted: (_) => _handleFetch(),
                       style: text.bodyMedium?.copyWith(color: color.primary),
                       decoration: InputDecoration(
@@ -143,7 +148,7 @@ class _GetAddressOfZNSDomainState extends State<GetAddressOfZNSDomain> {
                         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         suffixIcon: IconButton(
                           icon: const Icon(Icons.search),
-                          onPressed: _handleFetch,
+                          onPressed: isLoading ? null : _handleFetch,
                         ),
                       ),
                     ),

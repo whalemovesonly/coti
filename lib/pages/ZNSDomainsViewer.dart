@@ -22,6 +22,8 @@ class _ZNSDomainsViewerState extends State<ZNSDomainsViewer> {
   List<String> domains = [];
   bool hasPrimary = false;
 
+  bool isLoading = false;
+
   Future<String?> fetchZnsAddress(String domainInput) async {
 
       if (domainInput.isEmpty || RegExp(r'^0x[a-fA-F0-9]{40}$').hasMatch(domainInput)) {
@@ -121,12 +123,14 @@ class _ZNSDomainsViewerState extends State<ZNSDomainsViewer> {
       loadingStatusKey = 'znsdomains.status.fetching';
       domains = [];
       hasPrimary = false;
+      isLoading = true;
     });
 
     final input = _controller.text.trim();
     if (input.isEmpty) {
       setState(() {
         loadingStatusKey = 'znsdomains.status.empty_input';
+        isLoading = false;
       });
       return;
     }
@@ -143,6 +147,7 @@ class _ZNSDomainsViewerState extends State<ZNSDomainsViewer> {
         domains = [];
         hasPrimary = false;
       }
+      isLoading = false;
     });
   }
 
@@ -197,6 +202,7 @@ class _ZNSDomainsViewerState extends State<ZNSDomainsViewer> {
                     width: 400,
                     child: TextField(
                       controller: _controller,
+                      enabled: !isLoading,
                       onSubmitted: (_) => _handleFetch(),
                       style: text.bodyMedium?.copyWith(color: color.primary),
                       decoration: InputDecoration(
@@ -210,7 +216,7 @@ class _ZNSDomainsViewerState extends State<ZNSDomainsViewer> {
                         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         suffixIcon: IconButton(
                           icon: const Icon(Icons.search),
-                          onPressed: _handleFetch,
+                          onPressed: isLoading ? null : _handleFetch,
                         ),
                       ),
                     ),
