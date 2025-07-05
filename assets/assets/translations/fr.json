@@ -230,7 +230,7 @@
     "enter_zns_domain": "Entrez l'adresse du portefeuille ou les domaines ZNS"
   },
   "hint": {
-    "coti_domain": "0x..."
+    "coti_domain": "0x... || .coti"
   },
   "button": {
     "copy": "Copier",
