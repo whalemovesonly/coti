@@ -10,3 +10,6 @@ We understand crypto users are cautious. Please feel free to inspect the code be
 Public GitHub Page:
 • Release Branch: version2.0
 • Flutter Source Code Branches: main, flutter_version
+
+## 🔧 Live Tools Site
+👉 https://coti.tools – explore gCOTI, ZNS, and COTI analytics
