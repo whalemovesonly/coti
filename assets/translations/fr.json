@@ -272,5 +272,16 @@
     "success_status": "✅ Données récupérées avec succès !",
     "error_status": "❌ Échec de la récupération des données. Code de statut : {}",
     "result_text": "🌍 Un total de {} $COTI a été transféré d'Ethereum vers le réseau COTI au cours des {} derniers jour(s)."
-  }
+  },
+  "gcoti_bridge": {
+  "title": "Total de $gCOTI transférés depuis Ethereum vers le réseau $COTI",
+  "status": {
+    "loading": "⏳ Chargement des données depuis le réseau COTI...",
+    "fetching": "⏳ Récupération des données depuis le réseau COTI...",
+    "success": "✅ Données récupérées avec succès !",
+    "error": "❌ Échec de la récupération des données depuis le réseau COTI"
+  },
+  "dropdown_label": "Derniers {days} jour(s)",
+  "result": "🌍 Un total de {amount} $gCOTI ont été transférés depuis Ethereum vers le réseau $COTI au cours des {days} dernier(s) jour(s)."
+}
 }

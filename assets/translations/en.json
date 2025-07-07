@@ -275,5 +275,16 @@
     "success_status": "✅ Data fetched successfully!",
     "error_status": "❌ Failed to fetch data. Status code: {}",
     "result_text": "🌍 A total of {} $COTI was bridged from Ethereum to the $COTI network in the last {} day(s)."
-  }
+  },
+  "gcoti_bridge": {
+  "title": "Total $gCOTI bridged from Ethereum to the $COTI network",
+  "status": {
+    "loading": "⏳ Loading data from COTI network...",
+    "fetching": "⏳ Fetching data from COTI network...",
+    "success": "✅ Data fetched successfully!",
+    "error": "❌ Failed to fetch data from COTI network"
+  },
+  "dropdown_label": "Last {days} day(s)",
+  "result": "🌍 A total of {amount} $gCOTI was bridged from Ethereum to the $COTI network in the last {days} day(s)."
+}
 }
