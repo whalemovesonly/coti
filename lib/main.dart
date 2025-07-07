@@ -19,6 +19,8 @@ import 'pages/CotiTreasuryOverviewPage.dart';
 import 'pages/CotiChartPage.dart';
 import 'pages/ZNSDomainsViewer.dart';
 import 'pages/CotiBridgePage.dart';
+import 'pages/CotiBridgeTrackerPage.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -107,6 +109,9 @@ class MyApp extends StatelessWidget {
         },
         '/CotiBridgePage': (context) {
           return CotiBridgePage();
+        },
+        '/CotiBridgeTrackerPage': (context) {
+          return CotiBridgeTrackerPage();
         }, 
       },
     );

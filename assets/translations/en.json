@@ -264,5 +264,16 @@
       "error": "❌ Error occurred while fetching data"
     },
     "result": "🌍 A total of {amount} $COTI was bridged in the last {days} day(s)."
+  },
+    "cotibridge": {
+    "bridge_tracker_title": "Track $COTI bridged from Ethereum To COTI For Any Wallet",
+    "enter_wallet": "Enter Wallet Address or ZNS domains",
+    "day_option": "Last {} day(s)",
+    "fetching_status": "⏳ Fetching data from COTI network...",
+    "invalid_address": "❌ Invalid wallet address format.",
+    "no_tx_found": "✅ No $COTI bridged from Ethereum to the $COTI network in the selected time range.",
+    "success_status": "✅ Data fetched successfully!",
+    "error_status": "❌ Failed to fetch data. Status code: {}",
+    "result_text": "🌍 A total of {} $COTI was bridged from Ethereum to the $COTI network in the last {} day(s)."
   }
 }
