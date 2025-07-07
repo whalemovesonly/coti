@@ -20,6 +20,8 @@ import 'pages/CotiChartPage.dart';
 import 'pages/ZNSDomainsViewer.dart';
 import 'pages/CotiBridgePage.dart';
 import 'pages/CotiBridgeTrackerPage.dart';
+import 'pages/GcotiBridgePage.dart';
+import 'pages/GCotiBridgeTrackerPage.dart';
 
 
 void main() async {
@@ -112,6 +114,12 @@ class MyApp extends StatelessWidget {
         },
         '/CotiBridgeTrackerPage': (context) {
           return CotiBridgeTrackerPage();
+        }, 
+        '/GcotiBridgePage': (context) {
+          return GcotiBridgePage();
+        }, 
+        '/GCotiBridgeTrackerPage': (context) {
+          return GCotiBridgeTrackerPage();
         }, 
       },
     );

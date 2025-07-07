@@ -272,5 +272,29 @@
     "success_status": "✅ Données récupérées avec succès !",
     "error_status": "❌ Échec de la récupération des données. Code de statut : {}",
     "result_text": "🌍 Un total de {} $COTI a été transféré d'Ethereum vers le réseau COTI au cours des {} derniers jour(s)."
+  },
+  "gcoti_bridge": {
+  "title": "Total de $gCOTI transférés depuis Ethereum vers le réseau $COTI",
+  "status": {
+    "loading": "⏳ Chargement des données depuis le réseau COTI...",
+    "fetching": "⏳ Récupération des données depuis le réseau COTI...",
+    "success": "✅ Données récupérées avec succès !",
+    "error": "❌ Échec de la récupération des données depuis le réseau COTI"
+  },
+  "dropdown_label": "Derniers {days} jour(s)",
+  "result": "🌍 Un total de {amount} $gCOTI ont été transférés depuis Ethereum vers le réseau $COTI au cours des {days} dernier(s) jour(s)."
+},
+  "cotigbridge": {
+    "title": "Suivez les $gCOTI transférés d’Ethereum vers le réseau COTI pour n’importe quel portefeuille",
+    "hint": "0x... || .coti",
+    "enter_wallet": "Entrez l'adresse du portefeuille ou les domaines ZNS",
+    "fetching": "⏳ Récupération des données depuis le réseau COTI...",
+    "invalid": "❌ Adresse de portefeuille invalide.",
+    "no_result": "✅ Aucun $gCOTI transféré durant cette période.",
+    "success": "✅ Données récupérées avec succès !",
+    "error": "❌ Erreur : une erreur est survenue.",
+    "result_text": "🌍 Un total de {} $gCOTI a été transféré au cours des {} dernier(s) jour(s).",
+    "day_option": "Derniers {} jour(s)",
+    "page_title": "Suivi du pont $gCOTI"
   }
 }
