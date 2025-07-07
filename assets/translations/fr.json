@@ -283,5 +283,18 @@
   },
   "dropdown_label": "Derniers {days} jour(s)",
   "result": "🌍 Un total de {amount} $gCOTI ont été transférés depuis Ethereum vers le réseau $COTI au cours des {days} dernier(s) jour(s)."
-}
+},
+  "cotigbridge": {
+    "title": "Suivez les $gCOTI transférés d’Ethereum vers le réseau COTI pour n’importe quel portefeuille",
+    "hint": "0x... || .coti",
+    "enter_wallet": "Entrez l'adresse du portefeuille ou les domaines ZNS",
+    "fetching": "⏳ Récupération des données depuis le réseau COTI...",
+    "invalid": "❌ Adresse de portefeuille invalide.",
+    "no_result": "✅ Aucun $gCOTI transféré durant cette période.",
+    "success": "✅ Données récupérées avec succès !",
+    "error": "❌ Erreur : une erreur est survenue.",
+    "result_text": "🌍 Un total de {} $gCOTI a été transféré au cours des {} dernier(s) jour(s).",
+    "day_option": "Derniers {} jour(s)",
+    "page_title": "Suivi du pont $gCOTI"
+  }
 }

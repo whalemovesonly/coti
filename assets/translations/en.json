@@ -286,5 +286,18 @@
   },
   "dropdown_label": "Last {days} day(s)",
   "result": "🌍 A total of {amount} $gCOTI was bridged from Ethereum to the $COTI network in the last {days} day(s)."
-}
+},
+  "cotigbridge": {
+    "title": "Track $gCOTI bridged from Ethereum to the COTI network For Any Wallet",
+    "hint": "0x... || .coti",
+    "enter_wallet": "Enter Wallet Address or ZNS domains",
+    "fetching": "⏳ Fetching data from COTI network...",
+    "invalid": "❌ Invalid wallet address.",
+    "no_result": "✅ No $gCOTI bridged in selected time range.",
+    "success": "✅ Data fetched successfully!",
+    "error": "❌ Error: something went wrong.",
+    "result_text": "🌍 A total of {} $gCOTI was bridged in the last {} day(s).",
+    "day_option": "Last {} day(s)",
+    "page_title": "Track $gCOTI Bridge"
+  }
 }
