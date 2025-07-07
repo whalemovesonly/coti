@@ -61,6 +61,7 @@ class MainLayout extends StatelessWidget {
                 Navigator.pushReplacementNamed(context, '/GCotiDepositsPage');
               },
             ),
+            const Divider(),
             ListTile(
               leading: const Icon(Icons.fiber_manual_record),
               title: Text(tr('cotiforwallet.treasury_tracker_title')),
@@ -107,7 +108,7 @@ class MainLayout extends StatelessWidget {
                 Navigator.pop(context);
                 Navigator.pushReplacementNamed(context, '/CotiBridgeTrackerPage');
               }),
-              
+              const Divider(),
               ListTile(
               leading: const Icon(Icons.fiber_manual_record),
               title: Text(tr('znsaddress.title.get_zns_address')),
@@ -122,7 +123,7 @@ class MainLayout extends StatelessWidget {
                 Navigator.pop(context);
                 Navigator.pushReplacementNamed(context, '/ZNSDomainsViewer');
               }),
-              
+              const Divider(),
             ListTile(
               leading: const Icon(Icons.fiber_manual_record),
               title: Text(tr('add_coti.title')),
