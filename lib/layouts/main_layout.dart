@@ -95,6 +95,13 @@ class MainLayout extends StatelessWidget {
               }),
               ListTile(
               leading: const Icon(Icons.fiber_manual_record),
+              title: Text(tr('coti_bridge.title')),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, '/CotiBridgePage');
+              }),
+              ListTile(
+              leading: const Icon(Icons.fiber_manual_record),
               title: Text(tr('znsaddress.title.get_zns_address')),
               onTap: () {
                 Navigator.pop(context);

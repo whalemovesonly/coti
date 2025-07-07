@@ -253,5 +253,16 @@
   "error": {
     "cannot_open_link": "Could not open link"
   }
-}
+},
+  "coti_bridge": {
+    "title": "Total $COTI bridged from Ethereum to COTI",
+    "dropdown_label": "Last {days} day(s)",
+    "status": {
+      "loading": "⏳ Loading data from COTI network...",
+      "fetching": "⏳ Fetching data from COTI network...",
+      "success": "✅ Data fetched successfully!",
+      "error": "❌ Error occurred while fetching data"
+    },
+    "result": "🌍 A total of {amount} $COTI was bridged in the last {days} day(s)."
+  }
 }
