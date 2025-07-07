@@ -18,6 +18,9 @@ import 'pages/GetAddressOfZNSDomain.dart';
 import 'pages/CotiTreasuryOverviewPage.dart';
 import 'pages/CotiChartPage.dart';
 import 'pages/ZNSDomainsViewer.dart';
+import 'pages/CotiBridgePage.dart';
+import 'pages/CotiBridgeTrackerPage.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -103,6 +106,12 @@ class MyApp extends StatelessWidget {
         }, 
         '/ZNSDomainsViewer': (context) {
           return ZNSDomainsViewer();
+        },
+        '/CotiBridgePage': (context) {
+          return CotiBridgePage();
+        },
+        '/CotiBridgeTrackerPage': (context) {
+          return CotiBridgeTrackerPage();
         }, 
       },
     );
