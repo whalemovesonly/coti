@@ -250,5 +250,27 @@
   "error": {
     "cannot_open_link": "Impossible d'ouvrir le lien"
   }
-}
+},
+  "coti_bridge": {
+    "title": "Total de $COTI transféré d'Ethereum vers COTI",
+    "dropdown_label": "{days} dernier(s) jour(s)",
+    "status": {
+      "loading": "⏳ Chargement des données du réseau COTI...",
+      "fetching": "⏳ Récupération des données du réseau COTI...",
+      "success": "✅ Données récupérées avec succès !",
+      "error": "❌ Une erreur s'est produite lors de la récupération des données"
+    },
+    "result": "🌍 Un total de {amount} $COTI a été ponté au cours des {days} dernier(s) jour(s)."
+  },
+    "cotibridge": {
+    "bridge_tracker_title": "Suivre les $COTI bridgés d'Ethereum vers COTI pour n'importe quel portefeuille",
+    "enter_wallet": "Entrez l'adresse du portefeuille ou les domaines ZNS",
+    "day_option": "Derniers {} jour(s)",
+    "fetching_status": "⏳ Récupération des données depuis le réseau COTI...",
+    "invalid_address": "❌ Format d'adresse de portefeuille invalide.",
+    "no_tx_found": "✅ Aucun $COTI transféré d'Ethereum vers le réseau COTI dans la période sélectionnée.",
+    "success_status": "✅ Données récupérées avec succès !",
+    "error_status": "❌ Échec de la récupération des données. Code de statut : {}",
+    "result_text": "🌍 Un total de {} $COTI a été transféré d'Ethereum vers le réseau COTI au cours des {} derniers jour(s)."
+  }
 }
